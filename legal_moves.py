@@ -24,11 +24,11 @@ def legal_moves(board: List[List[str]]) -> List[int]:
                         ans.append((row, col, row, col+1))
 
                     # Diagonal Left
-                    if row-1 >= 0 and col-1 >= 0 and (board[row-1][col-1] == 'r' or board[row-1][col-1] == 'rb' or board[row-1][col-1] == 'rr'):
+                    if row-1 >= 0 and col-1 >= 0 and (board[row-1][col-1] == 'r' or board[row-1][col-1] == 'br' or board[row-1][col-1] == 'rr'):
                         ans.append((row, col, row-1, col-1))
 
                     # Diagonal Right
-                    if row-1 >= 0 and col+1 < 8 and (board[row-1][col+1] == 'r' or board[row-1][col+1] == 'rb' or board[row-1][col+1] == 'rr'):
+                    if row-1 >= 0 and col+1 < 8 and (board[row-1][col+1] == 'r' or board[row-1][col+1] == 'br' or board[row-1][col+1] == 'rr'):
                         ans.append((row, col, row-1, col+1))
                     
                     
@@ -38,19 +38,19 @@ def legal_moves(board: List[List[str]]) -> List[int]:
 
                        
                 
-                if board[row][col] == 'bb' or board[row][col] == 'br':
+                if board[row][col] == 'bb' or board[row][col] == 'rb':
 
                     # Going Up and Left
-                    if row-2 >= 0 and col-1 >= 0 and (board[row-2][col-1] == '0' or board[row-2][col-1] == 'b' or board[row-2][col-1] == 'r' or board[row-2][col-1] == 'rb' or board[row-2][col-1] == 'rr'):
+                    if row-2 >= 0 and col-1 >= 0 and (board[row-2][col-1] == '0' or board[row-2][col-1] == 'b' or board[row-2][col-1] == 'r' or board[row-2][col-1] == 'br' or board[row-2][col-1] == 'rr'):
                         ans.append((row, col, row-2, col-1))
                     # Going Up and Right
-                    if row-2 >= 0 and col+1 < 8 and (board[row-2][col+1] == '0' or board[row-2][col+1] == 'b' or board[row-2][col+1] == 'r' or board[row-2][col+1] == 'rb' or board[row-2][col+1] == 'rr'):
+                    if row-2 >= 0 and col+1 < 8 and (board[row-2][col+1] == '0' or board[row-2][col+1] == 'b' or board[row-2][col+1] == 'r' or board[row-2][col+1] == 'br' or board[row-2][col+1] == 'rr'):
                         ans.append((row, col, row-2, col+1))
                     # Going Left and Up
-                    if row-1 >= 0 and col-2 >= 0 and (board[row-1][col-2] == '0' or board[row-1][col-2] == 'b' or board[row-1][col-2] == 'r' or board[row-1][col-2] == 'rb' or board[row-1][col-2] == 'rr'):
+                    if row-1 >= 0 and col-2 >= 0 and (board[row-1][col-2] == '0' or board[row-1][col-2] == 'b' or board[row-1][col-2] == 'r' or board[row-1][col-2] == 'br' or board[row-1][col-2] == 'rr'):
                         ans.append((row, col, row-1, col-2))
                     # Going Right and Up
-                    if row-1 >= 0 and col+2 < 8 and (board[row-1][col+2] == '0' or board[row-1][col+2] == 'b' or board[row-1][col+2] == 'r' or board[row-1][col+2] == 'rb' or board[row-1][col+2] == 'rr'):
+                    if row-1 >= 0 and col+2 < 8 and (board[row-1][col+2] == '0' or board[row-1][col+2] == 'b' or board[row-1][col+2] == 'r' or board[row-1][col+2] == 'br' or board[row-1][col+2] == 'rr'):
                         ans.append((row, col, row-1, col+2))
                     
                     # Horse (walks in L shape, forward and left/right, left/right and forward)
@@ -81,18 +81,18 @@ def legal_moves(board: List[List[str]]) -> List[int]:
                     if row+1 < 8 and col+1 < 8 and (board[row+1][col+1] == 'b' or board[row+1][col+1] == 'rb' or board[row+1][col+1] == 'bb'):
                         ans.append((row, col, row+1, col+1))
                 
-                if board[row][col] == 'rr' or board[row][col] == 'rb':
+                if board[row][col] == 'rr' or board[row][col] == 'br':
                     # Going Down and Left
-                    if row+2 < 8 and col-1 >= 0 and (board[row+2][col-1] == '0' or board[row+2][col-1] == 'r' or board[row+2][col-1] == 'b' or board[row+2][col-1] == 'br' or board[row+2][col-1] == 'bb'):
+                    if row+2 < 8 and col-1 >= 0 and (board[row+2][col-1] == '0' or board[row+2][col-1] == 'r' or board[row+2][col-1] == 'b' or board[row+2][col-1] == 'rb' or board[row+2][col-1] == 'bb'):
                         ans.append((row, col, row+2, col-1))
                     # Going Down and Right
-                    if row+2 < 8 and col+1 < 8 and (board[row+2][col+1] == '0' or board[row+2][col+1] == 'r' or board[row+2][col+1] == 'b' or board[row+2][col+1] == 'br' or board[row+2][col+1] == 'bb'):
+                    if row+2 < 8 and col+1 < 8 and (board[row+2][col+1] == '0' or board[row+2][col+1] == 'r' or board[row+2][col+1] == 'b' or board[row+2][col+1] == 'rb' or board[row+2][col+1] == 'bb'):
                         ans.append((row, col, row+2, col+1))
                     # Going Left and Down
-                    if row+1 < 8 and col-2 >= 0 and (board[row+1][col-2] == '0' or board[row+1][col-2] == 'r' or board[row+1][col-2] == 'b' or board[row+1][col-2] == 'br' or board[row+1][col-2] == 'bb'):
+                    if row+1 < 8 and col-2 >= 0 and (board[row+1][col-2] == '0' or board[row+1][col-2] == 'r' or board[row+1][col-2] == 'b' or board[row+1][col-2] == 'rb' or board[row+1][col-2] == 'bb'):
                         ans.append((row, col, row+1, col-2))
                     # Going Right and Down
-                    if row+1 < 8 and col+2 < 8 and (board[row+1][col+2] == '0' or board[row+1][col+2] == 'r' or board[row+1][col+2] == 'b' or board[row+1][col+2] == 'br' or board[row+1][col+2] == 'bb'):
+                    if row+1 < 8 and col+2 < 8 and (board[row+1][col+2] == '0' or board[row+1][col+2] == 'r' or board[row+1][col+2] == 'b' or board[row+1][col+2] == 'rb' or board[row+1][col+2] == 'bb'):
                         ans.append((row, col, row+1, col+2))
                     
                     # Horse (walks in L shape, forward and left/right, left/right and forward)
@@ -105,7 +105,7 @@ def legal_moves(board: List[List[str]]) -> List[int]:
 
 def game_over(board: List[List[str]]) -> bool:
     for i in range(1, 7):
-        if board[0][i] == 'b' or board[0][i] == 'bb' or board[0][i] == 'br' or board[7][i] == 'r' or board[7][i] == 'rr' or board[7][i] == 'rb':
+        if board[0][i] == 'b' or board[0][i] == 'bb' or board[0][i] == 'rb' or board[7][i] == 'r' or board[7][i] == 'rr' or board[7][i] == 'br':
             return True
         
         # Check if opponent can make a move
@@ -131,9 +131,9 @@ def update_board(board, move):
     # Move can be made by (b, bb, br)or (r, rr, rb)
     if old_field == 'b' or old_field == 'r':
         board[row][col] = '0'
-    elif old_field == 'bb' or old_field == 'rb':
+    elif old_field == 'bb' or old_field == 'br':
         board[row][col] = 'b'
-    elif old_field == 'rr' or old_field == 'br':
+    elif old_field == 'rr' or old_field == 'rb':
         board[row][col] = 'r'
 
     if target_field == '0':
@@ -155,17 +155,17 @@ def update_board(board, move):
         else:
             board[new_row][new_col] = 'rr'
     
-    if target_field == 'bb' or target_field == 'rb':
-        if player:
-            board[new_row][new_col] = 'bb'
-        else:
-            board[new_row][new_col] = 'rb'
+    if target_field == 'rr' and player:
+        board[new_row][new_col] = 'rb'
     
-    if target_field == 'rr' or target_field == 'br':
-        if player:
-            board[new_row][new_col] = 'br'
-        else:
-            board[new_row][new_col] = 'rr'
+    if target_field == 'bb' and not player:
+        board[new_row][new_col] = 'br'
+
+    if target_field == 'br' and player:
+        board[new_row][new_col] = 'bb'
+    
+    if target_field == 'rb' and not player:
+        board[new_row][new_col] = 'rr'
     
     # Change player
     board[0][0] = 'R' if board[0][0] == 'B' else 'B'
