@@ -1,3 +1,4 @@
+/*
 
 import dummy_ai as da
 import string_conversion as sc
@@ -42,3 +43,19 @@ print(moves)
 for move in moves:
     print(translate_move(move), end=" ")
 """
+*/
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+#include <algorithm>
+#include <tuple>
+#include <queue>
+#include <set>
+#include <unordered_set>
+#include <unordered_map>
+#include <stack>
+#include <list>
+
+#include "ai.h"
+#include "string_conversion.h"
