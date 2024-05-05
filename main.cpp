@@ -27,7 +27,6 @@ int main(){
     Board board("6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b");
     // print
     board.printBoard();
-    std::cout << "Bitboard" << std::endl;
     board.printBitBoard();
     //std::cout << board.boardFen() << std::endl;
     // board.print_blockedfields();

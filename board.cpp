@@ -1,11 +1,11 @@
 #include "board.hpp"
 
 Board::Board(std::string fen) {
-    fenBoard(fen);
+    fenBitboard(fen);
+    // fenBoard(fen);
     // blocked_fields = 1000000100000000000000000000000000000000000000000000000010000001;
     // boardBitBoard();
 }
-
 /*
 void Board::fenBoard(std::string fen){
     // Read Player
@@ -60,13 +60,39 @@ void boardBitboard(){
 void Board::fenBitboard(std::string fen){
     turn = (fen[fen.size()-1] == 'b');
     std::string fen_new = fen.substr(0, fen.size()-2);
+    int pos = 1;
+    for (u_long i = 0; i < fen_new.length(); i++) {
+        char c = fen_new[i];
+        std::cout << c;
+        if (isdigit(c)) {
+            pos += std::stoi(std::string(1, c));
+        } else if (c == 'b') {
+            char temp = fen_new[i++];
+            if (temp == 'b') {
+                blue_blue_knight |= 1ull << pos;
+            } else if (temp == 'r') {
+                blue_red_knight |= 1ull << pos;
+            } else {
+                blue_pawns |= 1ull << pos;
+            }
+            pos++;
+        } else if (c == 'r') {
+            char temp = fen_new[i++];
+            if (temp == 'b') {
+                red_blue_knight |= 1ull << pos;
+            } else if (temp == 'r') {
+                red_red_knight |= 1ull << pos;
+            } else {
+                red_pawns |= 1ull << pos;
+            }
+            pos++;
+        }
 
-    for (std::string row : split(fen_new, '/')) {
-        for (u_long i = 0; i < row.length(); i++) {    
+        if (pos == 56 || pos == 7 || pos == 63) {
+            pos++;
         }
     }
 }
-
 
 void Board::printBitBoard(){
     std::cout << "Red Pawns: " << red_pawns << std::endl;
@@ -76,6 +102,7 @@ void Board::printBitBoard(){
         }
         std::cout << ((red_pawns >> i) & 1);
     }
+    std::cout << std::endl;
 }
 
 
@@ -85,6 +112,7 @@ void Board::printBoard(){
             std::cout << field << " ";
         }
         std::cout << std::endl;
+        std::cout << "";
     }
 }
 
@@ -96,8 +124,10 @@ void Board::print_blockedfields(){
             std::cout << std::endl;
         }
         std::cout << ((blocked_fields >> i) & 1);
+        
     }
 }
+
 
 std::vector<std::string> Board::split(std::string str, char delimiter) {
     std::vector<std::string> ans;
