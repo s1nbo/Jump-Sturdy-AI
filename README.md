@@ -17,11 +17,11 @@ University Project
 8. Close connection
 
 
-Andere Sache TODO
+Other things TODO
 - Benchmarks 
 - Video
-- Fen Stringstesten
-- Performance-Messungen (für Zuggenerator)
+- Fen String Tests
+- Performance-Measurements for Turn Generation
 
 
 

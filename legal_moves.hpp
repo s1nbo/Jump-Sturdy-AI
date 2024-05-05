@@ -176,3 +176,8 @@ class move:
 
 
 */
+
+#ifndef LEGAL_MOVES_HPP
+#define LEGAL_MOVES_HPP
+
+#endif

@@ -1,5 +1,4 @@
-#include <vector>
-#include <unordered_map>
+#ifndef AI_HPP
+#define AI_HPP
 
-
-class ai;
+#endif

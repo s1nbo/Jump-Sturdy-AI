@@ -1,6 +1,6 @@
-
-
 #include "ai.hpp"
+
+/*
 class ai {
 public:
     ai() {}
@@ -17,3 +17,4 @@ public:
         return ans;
     }
 };
+*/
