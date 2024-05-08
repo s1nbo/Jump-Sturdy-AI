@@ -1,18 +1,16 @@
 University Project
 
+1. Connect to Server  
+1a. Start Game
+2. Get FEN from Server 
+
+3. Convert FEN to Board
+3a. Check if game is over
 
 
-1. Connect to Server  (TODO)
-1a. Start Game (TODO)
-2. Get FEN from Server (TODO)
-
-3. Convert FEN to Board (DONE)
-3a. Check if game is over (DONE)
-
-
-4. Get legal moves from Board (DONE)
-5. Choose a move from legal moves (DONE)
-6. Send move to Server (TODO)
+4. Get legal moves from Board
+5. Choose a move from legal moves 
+6. Send move to Server 
 7. Repeat from 2 until game is over
 8. Close connection
 
@@ -31,24 +29,26 @@ Main
 
 
 Connect
-- Connect to Server
-- Start Game
-- Receive FEN from Server
-- Send Fen to Server
+- Connect to Server (TODO)
+- Start Game (TODO)
+- Receive FEN from Server (TODO)
+- Send Fen to Server (TODO)
 
 
-Board Functions
-- Fen to Board
-- Board to Fen
-- Check if Game is over
-- Update Board with Move
-- Print Board (heloer function)
-- Translate Move to Algebraic Notation (Helper Function)
+Board
+- Fen to Board (Done)
+- Board to Fen (Done)
+- Print Board (Done)
+- Translate Move to Algebraic Notation (TODO)
+
+Moves
+- Check if Game is over (TODO)
+- Update Board with Move (TODO)
+- Get Legal Moves from Board (TODO)
 
 AI
-- Get Legal Moves from Board
-- Rate a Board/ Move 
-- AI to choose a Move
+- Rate a Board (TODO)
+- AI to choose a Move (MiniMax) (TODO)
 
 
 

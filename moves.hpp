@@ -180,4 +180,23 @@ class move:
 #ifndef MOVES_HPP
 #define MOVES_HPP
 
+#include <vector>
+#include <cstdint>
+
+class Moves{
+    Moves();
+    bool gameOver();
+    std::vector<uint16_t> generateMoves();
+    uint16_t filterMoves(uint16_t move);
+
+    void updateBoard();
+
+
+
+
+
+};
+
+
+
 #endif
