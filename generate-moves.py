@@ -34,7 +34,7 @@ for piece in possible:
             elif piece == "red_knight":
                 pass
             
-            elif piece = "blue_knight":
+            elif piece == "blue_knight":
                 pass
 
         
