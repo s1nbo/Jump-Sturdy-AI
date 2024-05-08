@@ -58,64 +58,94 @@ void boardBitboard(){
 */
 
 void Board::fenBitboard(std::string fen){
+    // First line is the last line in the board (8th row)
+
     turn = (fen[fen.size()-1] == 'b');
     std::string fen_new = fen.substr(0, fen.size()-2);
-    int pos = 1;
+    int pos = 57;
     for (u_long i = 0; i < fen_new.length(); i++) {
+        
         char c = fen_new[i];
-        std::cout << c;
-        if (isdigit(c)) {
+
+        if(pos == 63){
+            pos = 48;
+        } else if(pos == 0){
+            pos = 1;
+        } else if(c == '/') {
+            pos -= 16;
+        } else if (isdigit(c)) {
             pos += std::stoi(std::string(1, c));
         } else if (c == 'b') {
-            char temp = fen_new[i++];
+            char temp = fen_new[++i];
             if (temp == 'b') {
                 blue_blue_knight |= 1ull << pos;
             } else if (temp == 'r') {
                 blue_red_knight |= 1ull << pos;
-            } else {
+            } else if (temp == '0') {
                 blue_pawns |= 1ull << pos;
             }
             pos++;
         } else if (c == 'r') {
-            char temp = fen_new[i++];
+            char temp = fen_new[++i];
             if (temp == 'b') {
                 red_blue_knight |= 1ull << pos;
             } else if (temp == 'r') {
                 red_red_knight |= 1ull << pos;
-            } else {
+            } else if (temp == '0') {
                 red_pawns |= 1ull << pos;
             }
-            pos++;
-        }
-
-        if (pos == 56 || pos == 7 || pos == 63) {
             pos++;
         }
     }
 }
 
-void Board::printBitBoard(){
-    std::cout << "Red Pawns: " << red_pawns << std::endl;
+void Board::printBitboard(){
+
+    std::cout << "Red Pawns: " << red_pawns;
     for(int i = 0; i < 64; i++){
         if(i % 8 == 0){
             std::cout << std::endl;
         }
         std::cout << ((red_pawns >> i) & 1);
     }
+    std::cout << std::endl << "Blue Pawns: " << blue_pawns ;
+    for (int i = 0; i < 64; i++) {
+        if (i % 8 == 0) {
+            std::cout << std::endl;
+        }
+        std::cout << ((blue_pawns >> i) & 1);
+    }
+    std::cout << std::endl << "Red Red Knight: " << red_red_knight;
+    for (int i = 0; i < 64; i++) {
+        if (i % 8 == 0) {
+            std::cout << std::endl;
+        }
+        std::cout << ((red_red_knight >> i) & 1);
+    }
+    std::cout << std::endl << "Red Blue Knight: " << red_blue_knight;
+    for (int i = 0; i < 64; i++) {
+        if (i % 8 == 0) {
+            std::cout << std::endl;
+        }
+        std::cout << ((red_blue_knight >> i) & 1);
+    }
+    std::cout << std::endl << "Blue Red Knight: " << blue_red_knight;
+    for (int i = 0; i < 64; i++) {
+        if (i % 8 == 0) {
+            std::cout << std::endl;
+        }
+        std::cout << ((blue_red_knight >> i) & 1);
+    }
+    std::cout << std::endl << "Blue Blue Knight: " << blue_blue_knight;
+    for (int i = 0; i < 64; i++) {
+        if (i % 8 == 0) {
+            std::cout << std::endl;
+        }
+        std::cout << ((blue_blue_knight >> i) & 1);
+    }
+
     std::cout << std::endl;
 }
-
-
-void Board::printBoard(){
-    for (std::vector<std::string> row : board) {
-        for (std::string field : row) {
-            std::cout << field << " ";
-        }
-        std::cout << std::endl;
-        std::cout << "";
-    }
-}
-
 
 void Board::print_blockedfields(){
     // print uint64_t blocked_fields in 8x8 
@@ -128,21 +158,43 @@ void Board::print_blockedfields(){
     }
 }
 
+/* */
 
-std::vector<std::string> Board::split(std::string str, char delimiter) {
-    std::vector<std::string> ans;
-    std::string temp = "";
-    for (u_long i = 0; i < str.length(); i++) {
-        if (str[i] == delimiter) {
-            ans.push_back(temp);
-            temp = "";
+std::string Board::bitboardFen(){
+    std::string fen = "";
+    std::vector<int> order = {56, 57, 58, 59, 60, 61, 62, 63, 48, 49, 50, 51, 52, 53, 54, 55, 40, 41, 42, 43, 44, 45, 46, 47, 32, 33, 34, 35, 36, 37, 38, 39, 
+    for (int i = 0; i < 64; i++) {
+        if (i % 8 == 0 && i != 0) {
+            fen += "/";
+        }
+        if ((red_pawns >> i) & 1) {
+            fen += "r0";
+        } else if ((blue_pawns >> i) & 1) {
+            fen += "b0";
+        } else if ((red_red_knight >> i) & 1) {
+            fen += "rr";
+        } else if ((red_blue_knight >> i) & 1) {
+            fen += "rb";
+        } else if ((blue_red_knight >> i) & 1) {
+            fen += "br";
+        } else if ((blue_blue_knight >> i) & 1) {
+            fen += "bb";
         } else {
-            temp += str[i];
+            if(!(i == 63 || i == 0 || i == 7 || i == 56)){
+                fen += "0";
+            }
         }
     }
-    ans.push_back(temp);
-    return ans;
+
+    // reverse the string
+    std::reverse(fen.begin(), fen.end());
+    fen += " ";
+    fen += turn ? "b" : "r";
+    return fen;
 }
+
+
+
 
 
 /*
