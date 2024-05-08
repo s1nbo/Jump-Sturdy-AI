@@ -19,7 +19,7 @@ public:
     uint64_t blue_red_knight = 0u;
     uint64_t blocked_fields = 9295429630892703873u;
 
-    std::vector<int> order = {
+    const std::vector<int> order = {
         57, 58, 59, 60, 61, 62,
     48, 49, 50, 51, 52, 53, 54, 55, 
     40, 41, 42, 43, 44, 45, 46, 47, 
@@ -38,10 +38,6 @@ public:
     void printBitboard();
     void print_blockedfields();
     std::string bitboardFen();
-    std::string addCounter(int counter);
-
-    uint64_t getRedPawns();
-    
-    bool getTurn();
+    std::string addCounter(int &counter);
 };
 #endif
