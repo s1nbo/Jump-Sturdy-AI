@@ -10,8 +10,7 @@ void Board::fenBitboard(std::string fen){
     std::string fen_new = fen.substr(0, fen.size()-2);
     int pos = 0;
     
-    for (auto i = 0; i < fen_new.length(); i++) {
-        int cur = order[pos];
+    for (size_t i = 0; i < fen_new.length(); i++) {
         char c = fen_new[i];
 
         if (isdigit(c)) {
@@ -25,6 +24,7 @@ void Board::fenBitboard(std::string fen){
             } else if (temp == '0') {
                 blue_pawns |= 1ull << order[pos];
             }
+            pos++;
         } else if (c == 'r') {
             char temp = fen_new[++i];
             if (temp == 'b') {
@@ -34,8 +34,8 @@ void Board::fenBitboard(std::string fen){
             } else if (temp == '0') {
                 red_pawns |= 1ull << order[pos];
             }
+            pos++;
         }
-        pos++;
     }
 }
 
@@ -103,8 +103,8 @@ std::string Board::bitboardFen(){
     std::string fen = "";
     int counter = 0;
     
-    for (int i = 0; i < 64; i++) {
-        if (i % 8 == 0 && i != 0) {
+    for (auto i : order) {
+        if (i % 8 == 0 || i == 1) {
             fen += addCounter(counter);
             fen += "/";
         }
@@ -130,7 +130,7 @@ std::string Board::bitboardFen(){
             counter++;
         }
     }
-
+    fen += addCounter(counter);
     fen += " ";
     fen += turn ? "b" : "r";
     return fen;
@@ -138,8 +138,10 @@ std::string Board::bitboardFen(){
 
 std::string Board::addCounter(int &counter){
     if(counter > 0){
+        int temp = counter;
         counter = 0;
-        return std::to_string(counter);
+        return std::to_string(temp);
+        
     }
     return "";
 };

@@ -1,6 +1,6 @@
 #include "ai.hpp"
 #include "board.hpp"
-#include "legal_moves.hpp"
+#include "moves.hpp"
 #include "connect.hpp"
 
 #include <string>
@@ -24,13 +24,12 @@
 
 int main(){
     // class board with 6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8r0r0r0r0r0r0 b
-    Board board("6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b");
-    // print
-    board.printBoard();
-    board.printBitBoard();
-    //std::cout << board.boardFen() << std::endl;
-    // board.print_blockedfields();
+    std::string fen = "6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b";
 
+    Board board(fen);
+    std::cout << fen << std::endl;
+    std::cout << board.bitboardFen() << std::endl;
+    board.printBitboard();
     return 0;
 }
 
