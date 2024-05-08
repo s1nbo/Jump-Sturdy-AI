@@ -40,7 +40,6 @@ for piece in possible:
         
 
 
-
             
 
 
