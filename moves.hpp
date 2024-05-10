@@ -179,22 +179,26 @@ class move:
 
 #ifndef MOVES_HPP
 #define MOVES_HPP
+#define lookup static constexpr std::array<std::array<std::array<uint16_t, 32>, 256>, 8>
 
 #include <vector>
 #include <cstdint>
+#include <array>
 
-class Moves{
+class Moves {
+public:
     Moves();
+    lookup red_pawn_side = {};
+    lookup blue_pawn_side = {};
+    lookup red_pawn_down = {}; // Validity has to be checked
+    lookup blue_pawn_up = {}; // Validity has to be checked
+    lookup red_knight = {};
+    lookup blue_knight = {};
+
     bool gameOver();
     std::vector<uint16_t> generateMoves();
     uint16_t filterMoves(uint16_t move);
-
     void updateBoard();
-
-
-
-
-
 };
 
 

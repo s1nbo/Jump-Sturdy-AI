@@ -1,47 +1,17 @@
 
-possible = ["red_pawn", "blue_pawn", "red_knight", "blue_knight"]
+possible = ["red_pawn", "blue_pawn", "blue_attack", "red_attack", "red_knight", "blue_knight"]
 ans = []
 
-for piece in possible:
-    for row in range(8):
-        for variant in range(256):
-            # create binary list out of 256
-            cur = [int(x) for x in bin(variant)[2:]]
-            cur = [0]*(8-len(cur)) + cur
+piece = possible[0] # iterate over manually 
 
-            # check if the piece can move
-            if piece == "red_pawn":
-                for col in range(8):
-                    if col> 0 and cur[col-1]:
-                        # move left
-                        pass
-                    if col < 7 and cur[col+1]:
-                        # move right
-                        pass
-                    if row < 7:
-                        # move down
-                        pass
-                    if row < 7 and not(row == 6 and col == 6) and col < 7:
-                        # move diagonal right down
-                        pass
-                    if row < 7 and not(row == 6 and col == 1) and col > 0:
-                        # move diagonal left down
-                        pass
-
-            elif piece == "blue_pawn":
-                pass
-            
-            elif piece == "red_knight":
-                pass
-            
-            elif piece == "blue_knight":
-                pass
-
-        
-
-
-            
-
+name_id = {
+    "blue_pawn": 0,
+    "red_pawn": 4,
+    "blue_knight": 1,
+    "red_knight": 5,
+    "blue_red_knight": 2,
+    "red_blue_knight": 6
+}
 
 
 """
@@ -60,3 +30,97 @@ bits 12-14 Type of Piece
 
 bit 15: Empty (Can be filled later)
 """
+
+
+
+for row in range(8): # iterate over rows 1-6 or (2-7 for non computer science people)
+    temp3 = ["X"] # list of moves for each row
+    for variant in range(256):
+        # create binary list out of 256
+        cur = [int(x) for x in bin(variant)[2:]]
+        cur = [0]*(8-len(cur)) + cur
+        temp2 = ["Y"] # list of moves for each variant of the row
+        
+
+        # All the possible moves for the red_pawn piece
+        # if row is 8 tiles long
+        if piece == "red_pawn":
+            for col in range(8):
+                temp ="Z"
+                if cur[col] == 1 and col > 0: # move left
+                    start = row*8 + col
+                    end = row*8 + col - 1
+                    # make them 6 bits long
+                    temp = bin(end)[2:]
+                    while len(temp) < 6:
+                        temp = "0" + temp
+                    # add the start position
+                    temp = bin(start)[2:] + temp
+                    # make them 6 bits long
+                    while len(temp) < 12:
+                        temp = "0" + temp
+                    # add the piece id
+                    temp += ("100" + "0")
+                    # add to the list
+                    temp += "Z"
+                    temp2.append(temp)
+
+
+                if col < 7 and cur[col] == 1: # move right
+                    start = row*8 + col
+                    end = row*8 + col + 1
+                    # make them 6 bits long
+                    temp = bin(end)[2:]
+                    while len(temp) < 6:
+                        temp = "0" + temp
+                    # add the start position
+                    temp = bin(start)[2:] + temp
+                    # make them 6 bits long
+                    while len(temp) < 12:
+                        temp = "0" + temp
+                    # add the piece id
+                    temp += ("100" + "0")
+                    # add to the list
+                    temp2.append(temp)
+                
+                
+
+            temp2.append("Y")
+       
+        
+
+
+
+        elif piece == "blue_pawn":
+            pass
+
+        elif piece == "blue_attack":
+            pass
+        
+        elif piece == "red_attack":
+            pass
+
+        
+        elif piece == "red_knight":
+            pass
+        
+        elif piece == "blue_knight":
+            pass
+        
+        
+        temp3.append(temp2)
+        temp3.append("Z")
+    ans.append(temp3)
+
+
+
+# print ans into file
+
+with open("moves.txt", "w") as f:
+    f.write(str(ans))
+    f.close()
+
+
+
+
+

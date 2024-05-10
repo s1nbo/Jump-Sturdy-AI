@@ -19,7 +19,7 @@ public:
     uint64_t blue_red_knight = 0u;
     uint64_t blocked_fields = 9295429630892703873u;
 
-    const std::vector<int> order = {
+    static constexpr int order[60] = {
         57, 58, 59, 60, 61, 62,
     48, 49, 50, 51, 52, 53, 54, 55, 
     40, 41, 42, 43, 44, 45, 46, 47, 
@@ -40,4 +40,10 @@ public:
     std::string bitboardFen();
     std::string addCounter(int &counter);
 };
+
+
+
 #endif
+
+
+    
