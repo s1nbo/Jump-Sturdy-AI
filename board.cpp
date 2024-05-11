@@ -1,12 +1,12 @@
 #include "board.hpp"
 
-Board::Board(std::string fen) {
-    fenBitboard(fen);
+Board::Board(std::string fen, bitboard &board) {
+    fenBitboard(fen, board);
 
 }
-void Board::fenBitboard(std::string fen){
+void Board::fenBitboard(std::string fen, bitboard &board){
 
-    turn = (fen[fen.size()-1] == 'b');
+    board.turn = (fen[fen.size()-1] == 'b');
     std::string fen_new = fen.substr(0, fen.size()-2);
     int pos = 0;
     
@@ -18,21 +18,21 @@ void Board::fenBitboard(std::string fen){
         } else if (c == 'b') {
             char temp = fen_new[++i];
             if (temp == 'b') {
-                blue_blue_knight |= 1ull << order[pos];
+                board.blue_blue_knight |= 1ull << order[pos];
             } else if (temp == 'r') {
-                blue_red_knight |= 1ull << order[pos];
+                board.blue_red_knight |= 1ull << order[pos];
             } else if (temp == '0') {
-                blue_pawns |= 1ull << order[pos];
+                board.blue_pawns |= 1ull << order[pos];
             }
             pos++;
         } else if (c == 'r') {
             char temp = fen_new[++i];
             if (temp == 'b') {
-                red_blue_knight |= 1ull << order[pos];
+                board.red_blue_knight |= 1ull << order[pos];
             } else if (temp == 'r') {
-                red_red_knight |= 1ull << order[pos];
+                board.red_red_knight |= 1ull << order[pos];
             } else if (temp == '0') {
-                red_pawns |= 1ull << order[pos];
+                board.red_pawns |= 1ull << order[pos];
             }
             pos++;
         }
@@ -40,66 +40,66 @@ void Board::fenBitboard(std::string fen){
 }
 
 
-void Board::printBitboard(){
+void Board::printBitboard(bitboard &board){
 
-    std::cout << "Red Pawns: " << red_pawns;
+    std::cout << "Red Pawns: " <<  board.red_pawns;
     for(int i = 0; i < 64; i++){
         if(i % 8 == 0){
             std::cout << std::endl;
         }
-        std::cout << ((red_pawns >> i) & 1);
+        std::cout << ((board.red_pawns >> i) & 1);
     }
-    std::cout << std::endl << "Blue Pawns: " << blue_pawns ;
+    std::cout << std::endl << "Blue Pawns: " << board.blue_pawns ;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
             std::cout << std::endl;
         }
-        std::cout << ((blue_pawns >> i) & 1);
+        std::cout << ((board.blue_pawns >> i) & 1);
     }
-    std::cout << std::endl << "Red Red Knight: " << red_red_knight;
+    std::cout << std::endl << "Red Red Knight: " << board.red_red_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
             std::cout << std::endl;
         }
-        std::cout << ((red_red_knight >> i) & 1);
+        std::cout << ((board.red_red_knight >> i) & 1);
     }
-    std::cout << std::endl << "Red Blue Knight: " << red_blue_knight;
+    std::cout << std::endl << "Red Blue Knight: " << board.red_blue_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
             std::cout << std::endl;
         }
-        std::cout << ((red_blue_knight >> i) & 1);
+        std::cout << ((board.red_blue_knight >> i) & 1);
     }
-    std::cout << std::endl << "Blue Red Knight: " << blue_red_knight;
+    std::cout << std::endl << "Blue Red Knight: " << board.blue_red_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
             std::cout << std::endl;
         }
-        std::cout << ((blue_red_knight >> i) & 1);
+        std::cout << ((board.blue_red_knight >> i) & 1);
     }
-    std::cout << std::endl << "Blue Blue Knight: " << blue_blue_knight;
+    std::cout << std::endl << "Blue Blue Knight: " << board.blue_blue_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
             std::cout << std::endl;
         }
-        std::cout << ((blue_blue_knight >> i) & 1);
+        std::cout << ((board.blue_blue_knight >> i) & 1);
     }
 
     std::cout << std::endl;
 }
 
-void Board::print_blockedfields(){
+void Board::print_blockedfields(bitboard &board){
     // print uint64_t blocked_fields in 8x8 
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
             std::cout << std::endl;
         }
-        std::cout << ((blocked_fields >> i) & 1);
+        std::cout << ((board.blocked_fields >> i) & 1);
         
     }
 }
 
-std::string Board::bitboardFen(){
+std::string Board::bitboardFen(bitboard &board){
     std::string fen = "";
     int counter = 0;
     
@@ -108,22 +108,22 @@ std::string Board::bitboardFen(){
             fen += addCounter(counter);
             fen += "/";
         }
-        if ((red_pawns >> i) & 1) {
+        if ((board.red_pawns >> i) & 1) {
             fen += addCounter(counter);
             fen += "r0";
-        } else if ((blue_pawns >> i) & 1) {
+        } else if ((board.blue_pawns >> i) & 1) {
             fen += addCounter(counter);
             fen += "b0";
-        } else if ((red_red_knight >> i) & 1) {
+        } else if ((board.red_red_knight >> i) & 1) {
             fen += addCounter(counter);
             fen += "rr";
-        } else if ((red_blue_knight >> i) & 1) {
+        } else if ((board.red_blue_knight >> i) & 1) {
             fen += addCounter(counter);
             fen += "rb";
-        } else if ((blue_red_knight >> i) & 1) {
+        } else if ((board.blue_red_knight >> i) & 1) {
             fen += addCounter(counter);
             fen += "br";
-        } else if ((blue_blue_knight >> i) & 1) {
+        } else if ((board.blue_blue_knight >> i) & 1) {
             fen += addCounter(counter);
             fen += "bb";
         } else {
@@ -132,7 +132,7 @@ std::string Board::bitboardFen(){
     }
     fen += addCounter(counter);
     fen += " ";
-    fen += turn ? "b" : "r";
+    fen += board.turn ? "b" : "r";
     return fen;
 }
 

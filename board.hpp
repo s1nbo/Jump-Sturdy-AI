@@ -8,9 +8,7 @@
 #include <cstdint>
 
 
-
-class Board {
-public:
+struct bitboard{ 
     uint64_t blue_pawns = 0u;
     uint64_t red_pawns = 0u;
     uint64_t blue_blue_knight = 0u;
@@ -18,7 +16,12 @@ public:
     uint64_t red_blue_knight = 0u;
     uint64_t blue_red_knight = 0u;
     uint64_t blocked_fields = 9295429630892703873u;
+    bool turn;
+};
 
+class Board {
+public:
+    
     static constexpr int order[60] = {
         57, 58, 59, 60, 61, 62,
     48, 49, 50, 51, 52, 53, 54, 55, 
@@ -29,15 +32,14 @@ public:
     8, 9, 10, 11, 12, 13, 14, 15, 
         1, 2, 3, 4, 5, 6};
     
-    bool turn;
-    std::vector<std::vector<std::string>> board;
+    
 
-    Board(std::string fen);
-    void fenBitboard(std::string fen);
+    Board(std::string fen, bitboard &board);
+    void fenBitboard(std::string fen, bitboard &board);
 
-    void printBitboard();
-    void print_blockedfields();
-    std::string bitboardFen();
+    void printBitboard(bitboard &board);
+    void print_blockedfields(bitboard &board);
+    std::string bitboardFen(bitboard &board);
     std::string addCounter(int &counter);
 };
 

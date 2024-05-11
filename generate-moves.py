@@ -34,19 +34,20 @@ bit 15: Empty (Can be filled later)
 
 
 for row in range(8): # iterate over rows 1-6 or (2-7 for non computer science people)
-    temp3 = ["X"] # list of moves for each row
+    temp3 = [] # list of moves for each row
     for variant in range(256):
         # create binary list out of 256
         cur = [int(x) for x in bin(variant)[2:]]
         cur = [0]*(8-len(cur)) + cur
-        temp2 = ["Y"] # list of moves for each variant of the row
+        temp2 = [] # list of moves for each variant of the row
         
 
         # All the possible moves for the red_pawn piece
         # if row is 8 tiles long
         if piece == "red_pawn":
             for col in range(8):
-                temp ="Z"
+                temp = ""
+
                 if cur[col] == 1 and col > 0: # move left
                     start = row*8 + col
                     end = row*8 + col - 1
@@ -62,7 +63,6 @@ for row in range(8): # iterate over rows 1-6 or (2-7 for non computer science pe
                     # add the piece id
                     temp += ("100" + "0")
                     # add to the list
-                    temp += "Z"
                     temp2.append(temp)
 
 
@@ -85,7 +85,7 @@ for row in range(8): # iterate over rows 1-6 or (2-7 for non computer science pe
                 
                 
 
-            temp2.append("Y")
+            temp2.append(temp)
        
         
 
@@ -109,7 +109,7 @@ for row in range(8): # iterate over rows 1-6 or (2-7 for non computer science pe
         
         
         temp3.append(temp2)
-        temp3.append("Z")
+      
     ans.append(temp3)
 
 

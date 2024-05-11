@@ -22,14 +22,16 @@
 8. Close connection
 */
 
+
 int main(){
     // class board with 6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8r0r0r0r0r0r0 b
     std::string fen = "6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b";
+    bitboard bitboard;
 
-    Board board(fen);
+    Board board(fen, bitboard);
     std::cout << fen << std::endl;
-    std::cout << board.bitboardFen() << std::endl;
-    board.printBitboard();
+    std::cout << board.bitboardFen(bitboard) << std::endl;
+    board.printBitboard(bitboard);
     return 0;
 }
 
