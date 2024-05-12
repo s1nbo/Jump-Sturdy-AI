@@ -52,7 +52,7 @@ std::vector<int> answers(){
 int main(){
     std::vector<std::string> test = tests();
     std::vector<int> answer = answers();
-    for(auto i = 0; i < test.size(); i++){
+    for(size_t i = 0; i < test.size(); i++){
         bitboard bitboard;
         Moves moves;
         Board board(test[i], bitboard);
