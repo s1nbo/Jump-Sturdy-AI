@@ -80,24 +80,15 @@ std::vector<uint16_t> Moves::pawnMovesDiagonal(uint64_t start, uint64_t valid, b
     return ans;
 }
 
-std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t blocked, bool turn){
+std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t vaild, bool turn){
     std::vector<uint16_t> ans;
     std::vector<uint64_t> bits = getBits(start); // every pawn position
     std::vector<std::vector<uint16_t>> moves;
-    // print blocked fields
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
-            std::cout << ((blocked >> (i*8 + j)) & 1);
-        }
-        std::cout << std::endl;
-    }
-
     if(turn){
         for(uint16_t bit : bits){
-            
-            uint16_t move = (bit << 8) & blocked; // move one field forward
-            uint16_t move_left = (bit << 1) & blocked; // move one field left
-            uint16_t move_right = (bit >> 1) & blocked; // move one field right
+            uint16_t move = (bit << 8) & vaild; // move one field forward
+            uint16_t move_left = (bit << 1) & vaild; // move one field left
+            uint16_t move_right = (bit >> 1) & vaild; // move one field right
             if(move) moves.push_back({move, bit});
             if(move_left) moves.push_back({move_left, bit});
             if(move_right) moves.push_back({move_right, bit});
@@ -106,35 +97,41 @@ std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t blocked, bool tu
     } else {
         for(uint64_t bit : bits){
             uint16_t start = bit;
+            // move one field forward
+            uint16_t move = start+8;
+            if(move < 64 && move > 0 && ((vaild >> move) & 1)){
+                moves.push_back({move, start});
+                std::cout << "Move: " << move << " Start: " << start << std::endl;
+        
+            }
+            uint16_t move_left = start-1;
+            // check if move_left bit is 0 or 1 in valid
+            if(move_left < 64 && move_left > 0 && ((vaild >> move_left) & 1)){
+                moves.push_back({move_left, start});
+                std::cout << "Left: " << move_left << " Start: " << start << std::endl;
 
-            std:: cout << "Start: " << start <<  " Bit: " << bit << std::endl;
-            uint16_t move = (bit << 8) & blocked; // move one field forward if not blocked
-
-            uint16_t move_left = (bit << 1) & blocked; // move one field left
-            uint16_t move_right = (bit >> 1) & blocked; // move one field right
-            std:: cout << "Move: " << move << " Move Left: " << move_left << " Move Right: " << move_right << std::endl;
-            if(move) moves.push_back({move, start});
-            if(move_left) moves.push_back({move_left, start});
-            if(move_right) moves.push_back({move_right, start});
+            }
+            uint16_t move_right = start+1;
+            if(move_right < 64 && move_right > 0 && ((vaild >> move_right) & 1)){
+                moves.push_back({move_right, start});
+                std::cout << "Right: " << move_right << " Start: " << start << std::endl;
+            }
         }
-        for(auto move : moves) ans.push_back(generateMove(move[0], move[1], 4));
-    }
-    for (auto move : ans) {
-        std::cout << "Move: " << move << std::endl;
+        for(auto move : moves) ans.push_back(generateMove(move[1], move[0], 4));
     }
     return ans;
 }
 
-std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t blocked, bool turn){
+std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t vaild, bool turn){
     std::vector<uint16_t> ans;
     std::vector<uint64_t> bits = getBits(start); // every knight position
     std::vector<uint16_t> moves;
     if(turn){
         for(uint16_t bit : bits){
-            uint16_t move_up_left = (bit << 15) & blocked;
-            uint16_t move_up_right = (bit << 17) & blocked;
-            uint16_t move_left_up = (bit << 6) & blocked;
-            uint16_t move_right_up = (bit << 10) & blocked;
+            uint16_t move_up_left = (bit << 15) & vaild;
+            uint16_t move_up_right = (bit << 17) & vaild;
+            uint16_t move_left_up = (bit << 6) & vaild;
+            uint16_t move_right_up = (bit << 10) & vaild;
             if(move_up_left) moves.push_back(move_up_left);
             if(move_up_right) moves.push_back(move_up_right);
             if(move_left_up) moves.push_back(move_left_up);
@@ -143,10 +140,10 @@ std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t blocked, bool 
         for(auto move : moves) ans.push_back(generateMove(start, move, 1));
     } else {
         for(uint16_t bit : bits){
-            uint16_t move_down_left = (bit >> 15) & blocked;
-            uint16_t move_down_right = (bit >> 17) & blocked;
-            uint16_t move_left_down = (bit >> 6) & blocked;
-            uint16_t move_right_down = (bit >> 10) & blocked;
+            uint16_t move_down_left = (bit >> 15) & vaild;
+            uint16_t move_down_right = (bit >> 17) & vaild;
+            uint16_t move_left_down = (bit >> 6) & vaild;
+            uint16_t move_right_down = (bit >> 10) & vaild;
             if(move_down_left) moves.push_back(move_down_left);
             if(move_down_right) moves.push_back(move_down_right);
             if(move_left_down) moves.push_back(move_left_down);
