@@ -195,25 +195,48 @@ public:
 
     std::vector<uint16_t> generateMoves(bitboard &board);
 
-    std::vector<uint16_t> pawnMoves(uint64_t pawn_diagonal, uint64_t pawn_not_diagonal, uint64_t pawn, bool turn);
-    std::vector<uint16_t> knightMoves(uint64_t knight, bool turn);
+    std::vector<uint16_t> pawnMovesDiagonal(uint64_t start, uint64_t valid, bool turn);
+    std::vector<uint16_t> pawnMoves(uint64_t start, uint64_t blocked, bool turn);
+    std::vector<uint16_t> knightMoves(uint64_t start, uint64_t blocked, bool turn);
 
     bitboard updateBoard(bitboard board, uint16_t move);
 
     void printMoves(std::vector<uint16_t> moves);
 
     // fill from bottom left to top right
-    const std::array<uint64_t, 64> knightTable = {
-        0x0000000000020400, 0x0000000000050800, 0x00000000000a1100, 0x0000000000142200, 0x0000000000284400, 0x0000000000508800, 0x0000000000a01000, 0x0000000000402000,
-        0x0000000002040004, 0x0000000005080008, 0x000000000a110011, 0x0000000014220022, 0x0000000028440044, 0x0000000050880088, 0x00000000a0100010, 0x0000000040200020,
-        0x0000000204000402, 0x0000000508000805, 0x0000000a1100110a, 0x0000001422002214, 0x0000002844004428, 0x0000005088008850, 0x000000a0100010a0, 0x0000004020002040,
-        0x0000020400040200, 0x0000050800080500, 0x00000a1100110a00, 0x0000142200221400, 0x0000284400442800, 0x0000508800885000, 0x0000a0100010a000, 0x0000402000204000,
-        0x0002040004020000, 0x0005080008050000, 0x000a1100110a0000, 0x0014220022140000, 0x0028440044280000, 0x0050880088500000, 0x00a0100010a00000, 0x0040200020400000,
-        0x0204000402000000, 0x0508000805000000, 0x0a1100110a000000, 0x1422002214000000, 0x2844004428000000, 0x5088008850000000, 0xa0100010a0000000, 0x402000
-    }
+    const std::array<uint64_t, 64> redKnightTable = {
+    };
+    const std::array<uint64_t, 64> blueKnightTable = {
+    };
+    const std::array<uint64_t, 64> redPawnTable = {
+    };
+    const std::array<uint64_t, 64> bluePawnTable = {
+    };
+    const std::array<uint64_t, 64> bluePawnDiagonalTable = {
+    };
+    const std::array<uint64_t, 64> redPawnDiagonalTable = {
+    };
 
+    // return every 1 bit in bitboard fast way
+    std::vector<int> getBits(uint64_t board);
+    
     uint16_t generateMove(int start, int end, int type);
 };
 
 
 #endif
+
+/*
+Moves are stored as an 16 bit Integer
+
+bits:0-5 End Position {0,...,63} \ {0, 7, 56, 63}
+bits 6-11 Start Position {0,...,63} \ {0, 7, 56, 63}
+bits 12-14 Type of Piece
+        000: blue_pawns
+        100: red_pawns
+        001: blue_blue_knights
+        101: red_red_knights
+        010: blue_red_knights
+        110: red_blue_knigts
+bit 15: Empty (Can be filled later)
+*/
