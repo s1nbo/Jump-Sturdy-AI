@@ -25,7 +25,7 @@
 
 int main(){
     // class board with 6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8r0r0r0r0r0r0 b
-    std::string fen = "6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 r";
+    std::string fen = "6/1bbbbbbbbbbbb1/8/3r04/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 r";
     bitboard bitboard;
 
     Moves moves;

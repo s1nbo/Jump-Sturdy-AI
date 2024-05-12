@@ -57,7 +57,9 @@ std::vector<uint16_t> Moves::generateMoves(bitboard &board){
 }
 
 std::vector<uint16_t> Moves::pawnMovesDiagonal(uint64_t start, uint64_t valid, bool turn){
-    std::vector<uint16_t> ans;
+    
+    std::vector<uint16_t> ans = {};
+    /*
     std::vector<uint64_t> bits = getBits(start);
     std::vector<uint16_t> moves;
     if(turn){
@@ -77,61 +79,77 @@ std::vector<uint16_t> Moves::pawnMovesDiagonal(uint64_t start, uint64_t valid, b
         }
         for(auto move : moves) ans.push_back(generateMove(start, move, 4));
     }
+    */
+    return ans;
+    
+}
+
+
+std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, bool turn){
+    std::vector<uint16_t> ans;
+    std::vector<uint16_t> bits = getBits(start);
+    std::vector<std::vector<uint16_t>> moves;
+    
+    uint16_t pawn = turn ? 0 : 4;
+    uint16_t sign = turn ? -1 : 1;
+
+    for(uint16_t bit : bits){
+        uint16_t move = bit+8*sign;
+        uint16_t move_left = bit-1;
+        uint16_t move_right = bit+1; 
+        
+        if(move < 64 && move > 0 && ((valid >> move) & 1)) moves.push_back({move, bit});
+        if(move_left < 64 && move_left > 0 && ((valid >> move_left) & 1)) moves.push_back({move_left, bit});
+        if(move_right < 64 && move_right > 0 && ((valid >> move_right) & 1)) moves.push_back({move_right, bit});
+    }
+    for(auto move : moves) ans.push_back(generateMove(move[1], move[0], pawn));
     return ans;
 }
 
-std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t vaild, bool turn){
+/*
+std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, bool turn){
     std::vector<uint16_t> ans;
-    std::vector<uint64_t> bits = getBits(start); // every pawn position
+    std::vector<uint16_t> bits = getBits(start); // every pawn position
     std::vector<std::vector<uint16_t>> moves;
     if(turn){
-        for(uint16_t bit : bits){
-            uint16_t move = (bit << 8) & vaild; // move one field forward
-            uint16_t move_left = (bit << 1) & vaild; // move one field left
-            uint16_t move_right = (bit >> 1) & vaild; // move one field right
-            if(move) moves.push_back({move, bit});
-            if(move_left) moves.push_back({move_left, bit});
-            if(move_right) moves.push_back({move_right, bit});
-        }
-        for(auto move : moves) ans.push_back(generateMove(move[0], move[1], 0));
+       return ans;
     } else {
-        for(uint64_t bit : bits){
-            uint16_t start = bit;
+        for(uint16_t bit : bits){
             // move one field forward
-            uint16_t move = start+8;
-            if(move < 64 && move > 0 && ((vaild >> move) & 1)){
-                moves.push_back({move, start});
-                std::cout << "Move: " << move << " Start: " << start << std::endl;
-        
+            uint16_t move = bit+8;
+            if(move < 64 && move > 0 && ((valid >> move) & 1)){
+                moves.push_back({move, bit});
             }
-            uint16_t move_left = start-1;
+
+            uint16_t move_left = bit-1;
             // check if move_left bit is 0 or 1 in valid
-            if(move_left < 64 && move_left > 0 && ((vaild >> move_left) & 1)){
-                moves.push_back({move_left, start});
-                std::cout << "Left: " << move_left << " Start: " << start << std::endl;
+            if(move_left < 64 && move_left > 0 && ((valid >> move_left) & 1)){
+                moves.push_back({move_left, bit});
+               
 
             }
-            uint16_t move_right = start+1;
-            if(move_right < 64 && move_right > 0 && ((vaild >> move_right) & 1)){
-                moves.push_back({move_right, start});
-                std::cout << "Right: " << move_right << " Start: " << start << std::endl;
+            uint16_t move_right = bit+1;
+            if(move_right < 64 && move_right > 0 && ((valid >> move_right) & 1)){
+                moves.push_back({move_right, bit});
+               
             }
         }
         for(auto move : moves) ans.push_back(generateMove(move[1], move[0], 4));
     }
     return ans;
 }
+*/
 
-std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t vaild, bool turn){
+std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool turn){
     std::vector<uint16_t> ans;
-    std::vector<uint64_t> bits = getBits(start); // every knight position
+    std::vector<uint16_t> bits = getBits(start); // every knight position
     std::vector<uint16_t> moves;
     if(turn){
         for(uint16_t bit : bits){
-            uint16_t move_up_left = (bit << 15) & vaild;
-            uint16_t move_up_right = (bit << 17) & vaild;
-            uint16_t move_left_up = (bit << 6) & vaild;
-            uint16_t move_right_up = (bit << 10) & vaild;
+            uint16_t move_up_left = (bit << 15) & valid;
+            uint16_t move_up_right = (bit << 17) & valid;
+            uint16_t move_left_up = (bit << 6) & valid;
+            uint16_t move_right_up = (bit << 10) & valid;
             if(move_up_left) moves.push_back(move_up_left);
             if(move_up_right) moves.push_back(move_up_right);
             if(move_left_up) moves.push_back(move_left_up);
@@ -140,10 +158,10 @@ std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t vaild, bool tu
         for(auto move : moves) ans.push_back(generateMove(start, move, 1));
     } else {
         for(uint16_t bit : bits){
-            uint16_t move_down_left = (bit >> 15) & vaild;
-            uint16_t move_down_right = (bit >> 17) & vaild;
-            uint16_t move_left_down = (bit >> 6) & vaild;
-            uint16_t move_right_down = (bit >> 10) & vaild;
+            uint16_t move_down_left = (bit >> 15) & valid;
+            uint16_t move_down_right = (bit >> 17) & valid;
+            uint16_t move_left_down = (bit >> 6) & valid;
+            uint16_t move_right_down = (bit >> 10) & valid;
             if(move_down_left) moves.push_back(move_down_left);
             if(move_down_right) moves.push_back(move_down_right);
             if(move_left_down) moves.push_back(move_left_down);
@@ -160,10 +178,10 @@ uint16_t Moves::generateMove(uint16_t start, uint16_t end, uint16_t type){
 }
 
 // return every 1 bit in bitboard fast way - This Works
-std::vector<uint64_t> Moves::getBits(uint64_t board){
-    std::vector<uint64_t> ans;
+std::vector<uint16_t> Moves::getBits(uint64_t board){
+    std::vector<uint16_t> ans;
     while(board){
-        uint64_t bit = __builtin_ctzll(board);
+        uint16_t bit = __builtin_ctzll(board);
         ans.push_back(bit);
         board &= board - 1;
     }
