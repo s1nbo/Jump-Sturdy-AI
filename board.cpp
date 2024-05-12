@@ -40,7 +40,7 @@ void Board::fenBitboard(std::string fen, bitboard &board){
 }
 
 
-void Board::printBitboard(bitboard &board){
+void Board::printBitboard(bitboard board){
 
     std::cout << "Red Pawns: " <<  board.red_pawns;
     for(int i = 0; i < 64; i++){

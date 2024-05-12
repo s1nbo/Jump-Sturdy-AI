@@ -37,7 +37,7 @@ public:
     Board(std::string fen, bitboard &board);
     void fenBitboard(std::string fen, bitboard &board);
 
-    void printBitboard(bitboard &board);
+    void printBitboard(bitboard board);
     void print_blockedfields(bitboard &board);
     std::string bitboardFen(bitboard &board);
     std::string addCounter(int &counter);
