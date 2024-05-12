@@ -1,7 +1,6 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-#include <bitset>
 #include <iostream>
 #include <vector>
 #include <string>

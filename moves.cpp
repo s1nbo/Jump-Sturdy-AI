@@ -120,7 +120,6 @@ std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool tu
     return ans;
 }
 
-
 uint16_t Moves::generateMove(uint16_t start, uint16_t end, uint16_t type){
     // Format: 0-5 end, 6-11 start, 12-14 type, 15 = 0
     return (end & 0x3f) | ((start & 0x3f) << 6) | ((type & 0x7) << 13) | (0 << 15);
@@ -134,7 +133,6 @@ std::vector<uint16_t> Moves::getBits(uint64_t board){
         ans.push_back(bit);
         board &= board - 1;
     }
-    std::cout << "Bits: " << ans.size() << std::endl;
     return ans;
 }
 
@@ -197,10 +195,12 @@ bitboard Moves::updateBoard(bitboard board, uint16_t move){
 void Moves::printMoves(std::vector<uint16_t> moves){
     std::cout << "Number of Moves: " << moves.size() << std::endl;
     // print in A1 - H8 format
+    /*
     for(auto move : moves){
         int start = (move >> 6) & 0x3f;
         int end = move & 0x3f;
         int figure = (move >> 13) & 0x7;
         std::cout << "Move: " << start << " -> " << end << " Type: " << figure << std::endl;
     }
+    */
 }
