@@ -233,7 +233,7 @@ void Moves::printMoves(std::vector<uint16_t> moves){
     for(auto move : moves){
         int start = (move >> 6) & 0x3f;
         int end = move & 0x3f;
-        int figure = (move >> 12) & 0x7;
+        int figure = (move >> 13) & 0x7;
         std::cout << "Move: " << start << " -> " << end << " Type: " << figure << std::endl;
     }
 }
