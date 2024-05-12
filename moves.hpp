@@ -1,5 +1,3 @@
-
-
 #ifndef MOVES_HPP
 #define MOVES_HPP
 
@@ -19,7 +17,7 @@ public:
 
     std::vector<uint16_t> pawnMovesDiagonal(uint64_t start, uint64_t valid, bool turn);
     std::vector<uint16_t> pawnMoves(uint64_t start, uint64_t valid, bool turn);
-    std::vector<uint16_t> knightMoves(uint64_t start, uint64_t blocked, bool turn);
+    std::vector<uint16_t> knightMoves(uint64_t start, uint64_t blocked, bool turn, bool mixed);
 
     bitboard updateBoard(bitboard board, uint16_t move);
 
@@ -44,7 +42,6 @@ public:
     void printMoves(std::vector<uint16_t> moves);
     
 };
-
 
 #endif
 

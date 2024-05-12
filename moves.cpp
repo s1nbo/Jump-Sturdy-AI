@@ -30,8 +30,8 @@ std::vector<uint16_t> Moves::generateMoves(bitboard &board){
         moves.insert(moves.end(), pawn_not_diagonal_moves.begin(), pawn_not_diagonal_moves.end());
 
         // generate moves for blue knights
-        std::vector<uint16_t> knight_moves = knightMoves(board.blue_blue_knight, knight, board.turn);
-        std::vector<uint16_t> knight_moves2 = knightMoves(board.red_blue_knight, knight, board.turn);
+        std::vector<uint16_t> knight_moves = knightMoves(board.blue_blue_knight, knight, board.turn, false);
+        std::vector<uint16_t> knight_moves2 = knightMoves(board.red_blue_knight, knight, board.turn, true);
         moves.insert(moves.end(), knight_moves.begin(), knight_moves.end());
         moves.insert(moves.end(), knight_moves2.begin(), knight_moves2.end());
 
@@ -48,8 +48,8 @@ std::vector<uint16_t> Moves::generateMoves(bitboard &board){
         moves.insert(moves.end(), pawn_not_diagonal_moves.begin(), pawn_not_diagonal_moves.end());
 
         // generate moves for red knights
-        std::vector<uint16_t> knight_moves = knightMoves(board.red_red_knight, knight, board.turn);
-        std::vector<uint16_t> knight_moves2 = knightMoves(board.blue_red_knight, knight, board.turn);
+        std::vector<uint16_t> knight_moves = knightMoves(board.red_red_knight, knight, board.turn, false);
+        std::vector<uint16_t> knight_moves2 = knightMoves(board.blue_red_knight, knight, board.turn, true);
         moves.insert(moves.end(), knight_moves.begin(), knight_moves.end());
         moves.insert(moves.end(), knight_moves2.begin(), knight_moves2.end());
     }
@@ -96,11 +96,12 @@ std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, bool turn
     return ans;
 }
 
-std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool turn){
+std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool turn, bool mixed){
     std::vector<uint16_t> ans;
     std::vector<uint16_t> bits = getBits(start);
     std::vector<std::vector<uint16_t>> moves;
     
+
     uint16_t knight = turn ? 1 : 5;
     uint16_t sign = turn ? -1 : 1;
 
@@ -115,7 +116,7 @@ std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool tu
         if(move_hv1 < 64 && move_hv1 > 0 && ((valid >> move_hv1) & 1)) moves.push_back({move_hv1, bit});
         if(move_hv2 < 64 && move_hv2 > 0 && ((valid >> move_hv2) & 1)) moves.push_back({move_hv2, bit});
     }
-    for(auto move : moves) ans.push_back(generateMove(move[1], move[0], knight));
+    for(auto move : moves) ans.push_back(generateMove(move[1], move[0],( knight+mixed)));
     return ans;
 }
 

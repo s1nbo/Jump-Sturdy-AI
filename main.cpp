@@ -281,12 +281,14 @@ Moves are stored as an 16 bit Integer
 bits:0-5 End Position {0,...,63} \ {0, 7, 56, 63}
 bits 6-11 Start Position {0,...,63} \ {0, 7, 56, 63}
 bits 12-14 Type of Piece
-        000: blue_pawns
-        100: red_pawns
-        001: blue_blue_knights
-        101: red_red_knights
-        010: blue_red_knights
-        110: red_blue_knigts
+
+        000: blue_pawns 0
+        100: red_pawns 4
+        001: blue_blue_knights 1
+        101: red_red_knights 5
+        010: red_blue_knight 2
+        110: blue_red_knigts 6
+
 bit 15: Empty (Can be filled later)
 
 00 01 02 03 04 05 06 07
