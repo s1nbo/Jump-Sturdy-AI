@@ -57,21 +57,21 @@ std::vector<uint16_t> Moves::generateMoves(bitboard &board){
 }
 
 std::vector<uint16_t> Moves::pawnMovesDiagonal(uint64_t start, uint64_t valid, bool turn){
-    
     std::vector<uint16_t> ans = {};
     std::vector<uint16_t> bits = getBits(start);
     std::vector<std::vector<uint16_t>> moves;
 
-    uint16_t pawn = turn ? 0 : 4;
-    uint16_t sign = turn ? -1 : 1;
-
-    for(uint16_t bit : bits){
-        uint16_t move_left = bit+9*sign;
-        uint16_t move_right = bit+7*sign;
-        if(move_left < 64 && move_left > 0 && ((valid >> move_left) & 1)) moves.push_back({move_left, bit});
-        if(move_right < 64 && move_right > 0 && ((valid >> move_right) & 1)) moves.push_back({move_right, bit});
+    if(turn){
+        for (uint16_t bit : bits){
+            std::array<uint16_t, 2> move = bluePawnDiagonalTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 0));
+        }
+    } else {
+        for (uint16_t bit : bits){
+            std::array<uint16_t, 2> move = redPawnDiagonalTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 4));
+        }
     }
-    for(auto move : moves) ans.push_back(generateMove(move[1], move[0], pawn));
     return ans;
 }
 
@@ -79,20 +79,18 @@ std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, bool turn
     std::vector<uint16_t> ans;
     std::vector<uint16_t> bits = getBits(start);
     std::vector<std::vector<uint16_t>> moves;
-    
-    uint16_t pawn = turn ? 0 : 4;
-    uint16_t sign = turn ? -1 : 1;
-
-    for(uint16_t bit : bits){
-        uint16_t move = bit+8*sign;
-        uint16_t move_left = bit-1;
-        uint16_t move_right = bit+1; 
-        
-        if(move < 64 && move > 0 && ((valid >> move) & 1)) moves.push_back({move, bit});
-        if(move_left < 64 && move_left > 0 && ((valid >> move_left) & 1)) moves.push_back({move_left, bit});
-        if(move_right < 64 && move_right > 0 && ((valid >> move_right) & 1)) moves.push_back({move_right, bit});
+   
+    if (turn){
+        for(uint16_t bit : bits){
+            std::array<uint16_t, 3> move = bluePawnTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 0));
+        }
+    } else {
+        for(uint16_t bit : bits){
+            std::array<uint16_t, 3> move = redPawnTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 4));
+        }
     }
-    for(auto move : moves) ans.push_back(generateMove(move[1], move[0], pawn));
     return ans;
 }
 
@@ -100,23 +98,18 @@ std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool tu
     std::vector<uint16_t> ans;
     std::vector<uint16_t> bits = getBits(start);
     std::vector<std::vector<uint16_t>> moves;
-    
 
-    uint16_t knight = turn ? 1 : 5;
-    uint16_t sign = turn ? -1 : 1;
-
-    for(uint16_t bit : bits){
-        uint16_t move_vh1 = bit+15*sign;
-        uint16_t move_vh2 = bit+17*sign;
-        uint16_t move_hv1 = bit+6*sign;
-        uint16_t move_hv2 = bit+10*sign;
-
-        if(move_vh1 < 64 && move_vh1 > 0 && ((valid >> move_vh1) & 1)) moves.push_back({move_vh1, bit});
-        if(move_vh2 < 64 && move_vh2 > 0 && ((valid >> move_vh2) & 1)) moves.push_back({move_vh2, bit});
-        if(move_hv1 < 64 && move_hv1 > 0 && ((valid >> move_hv1) & 1)) moves.push_back({move_hv1, bit});
-        if(move_hv2 < 64 && move_hv2 > 0 && ((valid >> move_hv2) & 1)) moves.push_back({move_hv2, bit});
+    if(turn){
+        for (uint16_t bit : bits){
+            std::array<uint16_t, 4> move = blueKnightTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 1+mixed));
+        }
+    } else {
+        for (uint16_t bit : bits){
+            std::array<uint16_t, 4> move = redKnightTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 5+mixed));
+        }
     }
-    for(auto move : moves) ans.push_back(generateMove(move[1], move[0],( knight+mixed)));
     return ans;
 }
 
@@ -194,13 +187,27 @@ bitboard Moves::updateBoard(bitboard board, uint16_t move){
 
 void Moves::printMoves(std::vector<uint16_t> moves){
     std::cout << "Number of Moves: " << moves.size() << std::endl;
-    // print in A1 - H8 format
-    /*
+    // Chess board format
+    std::vector<std::string> format = {
+        "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
+        "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
+        "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6",
+        "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5",
+        "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4",
+        "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3",
+        "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
+        "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
+        
+    };
+    std::vector<std::string> figures = {
+        "blue_pawns", "blue_blue_knights", "red_blue_knight", "error", "red_pawns", "red_red_knights", "red_blue_knights"
+    };
+    
     for(auto move : moves){
         int start = (move >> 6) & 0x3f;
         int end = move & 0x3f;
         int figure = (move >> 13) & 0x7;
-        std::cout << "Move: " << start << " -> " << end << " Type: " << figure << std::endl;
+        std::cout << format[start] << " -> " << format[end] << " Type: " << figures[figure] << std::endl;
     }
-    */
+    
 }

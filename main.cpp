@@ -16,32 +16,61 @@
 
 
 4. Get legal moves from Board (DONE)
-5. Choose a move from legal moves (DONE)
+5. Choose a move from legal moves (TODO) (AI)
 6. Send move to Server (TODO)
 7. Repeat from 2 until game is over
 8. Close connection
 */
+std::vector<std::string> tests(){
+    return {
+    "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/r0r0r0r0r0r0r0r0/6 r",
+    "6/1bbbbbbbbbbbb1/8/3r04/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 r",
+    //"6/1b06/1r03bb2/2r02b02/8/5r0r01/2r0r04/6 r",
+    //"6/1b0b0b0b0b0b01/1b0b0b0b0b0b01/8/8/1r0r0r0r0r0r01/1r0r0r0r0r0r01/6 b",
+    //"b0b01b0b0b0/1b0b02b0b01/3b0b03/2b05/3r04/2r05/1r01rr1r0r01/r0r02r0r0 b",
+    //"6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b",
+    //"6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b"
+
+
+
+    };
+}
+
+std::vector<int> answers(){
+    return {
+        22,
+        17,
+        //36,
+        //35,
+        //22,
+        //8
+
+    };
+}
+
 
 
 int main(){
-    // class board with 6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8r0r0r0r0r0r0 b
-    std::string fen = "6/1bbbbbbbbbbbb1/8/3r04/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b";
-    bitboard bitboard;
+    std::vector<std::string> test = tests();
+    std::vector<int> answer = answers();
+        bitboard bitboard;
+        Moves moves;
+        Board board(test[1], bitboard);
+        board.printBitboard(bitboard);
+        std::vector<uint16_t> legal_moves = moves.generateMoves(bitboard);
+        std::cout << legal_moves.size() << " " << answer[1] <<  " " << (legal_moves.size() == answer[1]) << std::endl;
+        moves.printMoves(legal_moves);
+        
 
-    Moves moves;
-    Board board(fen, bitboard);
-    // std::cout << fen << std::endl;
-    // std::cout << board.bitboardFen(bitboard) << std::endl;
-    // board.printBitboard(bitboard);
-    // which turn is it?
-    std::vector<uint16_t> legal_moves = moves.generateMoves(bitboard);
-    std::cout << "Game Over: " << moves.gameOver(bitboard, legal_moves) << std::endl;
 
-    moves.printMoves(legal_moves);
-    
-
+            
     return 0;
+
 }
+
+
+
+
 
 /*
 Moves are stored as an 16 bit Integer
