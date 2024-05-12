@@ -106,40 +106,6 @@ std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, bool turn
     return ans;
 }
 
-/*
-std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, bool turn){
-    std::vector<uint16_t> ans;
-    std::vector<uint16_t> bits = getBits(start); // every pawn position
-    std::vector<std::vector<uint16_t>> moves;
-    if(turn){
-       return ans;
-    } else {
-        for(uint16_t bit : bits){
-            // move one field forward
-            uint16_t move = bit+8;
-            if(move < 64 && move > 0 && ((valid >> move) & 1)){
-                moves.push_back({move, bit});
-            }
-
-            uint16_t move_left = bit-1;
-            // check if move_left bit is 0 or 1 in valid
-            if(move_left < 64 && move_left > 0 && ((valid >> move_left) & 1)){
-                moves.push_back({move_left, bit});
-               
-
-            }
-            uint16_t move_right = bit+1;
-            if(move_right < 64 && move_right > 0 && ((valid >> move_right) & 1)){
-                moves.push_back({move_right, bit});
-               
-            }
-        }
-        for(auto move : moves) ans.push_back(generateMove(move[1], move[0], 4));
-    }
-    return ans;
-}
-*/
-
 std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool turn){
     std::vector<uint16_t> ans;
     std::vector<uint16_t> bits = getBits(start); // every knight position
