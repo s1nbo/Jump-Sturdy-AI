@@ -25,7 +25,7 @@
 
 int main(){
     // class board with 6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8r0r0r0r0r0r0 b
-    std::string fen = "6/1bbbbbbbbbbbb1/8/3r04/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 r";
+    std::string fen = "6/1bbbbbbbbbbbb1/8/3r04/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b";
     bitboard bitboard;
 
     Moves moves;
@@ -300,3 +300,30 @@ bit 15: Empty (Can be filled later)
 
 100011 111000 001 0
 */
+
+/*
+
+    if(turn){
+
+
+            if(move_up_left) moves.push_back(move_up_left);
+            if(move_up_right) moves.push_back(move_up_right);
+            if(move_left_up) moves.push_back(move_left_up);
+            if(move_right_up) moves.push_back(move_right_up);
+        }
+        for(auto move : moves) ans.push_back(generateMove(start, move, 1));
+    } else {
+        for(uint16_t bit : bits){
+            uint16_t move_down_left = (bit >> 15) & valid;
+            uint16_t move_down_right = (bit >> 17) & valid;
+            uint16_t move_left_down = (bit >> 6) & valid;
+            uint16_t move_right_down = (bit >> 10) & valid;
+            if(move_down_left) moves.push_back(move_down_left);
+            if(move_down_right) moves.push_back(move_down_right);
+            if(move_left_down) moves.push_back(move_left_down);
+            if(move_right_down) moves.push_back(move_right_down);
+        }
+        for(auto move : moves) ans.push_back(generateMove(start, move, 5));
+    }
+    return ans;
+    */
