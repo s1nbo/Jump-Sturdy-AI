@@ -88,17 +88,6 @@ void Board::printBitboard(bitboard board){
     std::cout << std::endl;
 }
 
-void Board::print_blockedfields(bitboard &board){
-    // print uint64_t blocked_fields in 8x8 
-    for (int i = 0; i < 64; i++) {
-        if (i % 8 == 0) {
-            std::cout << std::endl;
-        }
-        std::cout << ((board.blocked_fields >> i) & 1);
-        
-    }
-}
-
 std::string Board::bitboardFen(bitboard &board){
     std::string fen = "";
     int counter = 0;

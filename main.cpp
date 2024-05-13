@@ -4,6 +4,8 @@
 #include "connect.hpp"
 
 #include <string>
+#include <cassert>
+#include <chrono>
 // Main function
 
 /*
@@ -23,44 +25,48 @@
 */
 std::vector<std::string> tests(){
     return {
+    "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b",
     "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/r0r0r0r0r0r0r0r0/6 r",
     "6/1b06/1r03bb2/2r02b02/8/5r0r01/2r0r04/6 r",
     "6/1b0b0b0b0b0b01/1b0b0b0b0b0b01/8/8/1r0r0r0r0r0r01/1r0r0r0r0r0r01/6 b",
     "b0b01b0b0b0/1b0b02b0b01/3b0b03/2b05/3r04/2r05/1r01rr1r0r01/r0r02r0r0 b",
     "6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b",
-    "6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b"
-
-
-
+    "6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b",
+    "2b03/8/8/3b0b03/2b03b01/2r03r01/2r05/6 r"
     };
 }
 
 std::vector<int> answers(){
     return {
+        34,
         22,
         17,
         36,
         35,
         22,
-        8
-
+        8,
+        7
     };
 }
-
-
 
 int main(){
     std::vector<std::string> test = tests();
     std::vector<int> answer = answers();
+
+    
+
+    auto start = std::chrono::high_resolution_clock::now();
     for(size_t i = 0; i < test.size(); i++){
         bitboard bitboard;
         Moves moves;
         Board board(test[i], bitboard);
-        //board.printBitboard(bitboard);
         std::vector<uint16_t> legal_moves = moves.generateMoves(bitboard);
         std::cout << legal_moves.size() << " " << answer[i] <<  " " << std::endl;
-        // moves.printMoves(legal_moves);  
+        //assert(legal_moves.size() == answer[i]);
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
     return 0;
 }
 

@@ -16,8 +16,8 @@ public:
     std::vector<uint16_t> generateMoves(bitboard &board);
 
     std::vector<uint16_t> pawnMovesDiagonal(uint64_t start, uint64_t valid, bool turn);
-    std::vector<uint16_t> pawnMoves(uint64_t start, uint64_t valid, bool turn);
-    std::vector<uint16_t> knightMoves(uint64_t start, uint64_t blocked, bool turn, bool mixed);
+    std::vector<uint16_t> pawnMoves(uint64_t start, uint64_t valid, uint64_t diagonal, bool turn);
+    std::vector<uint16_t> knightMoves(uint64_t start, uint64_t mixed_start, uint64_t valid, bool turn);
 
     bitboard updateBoard(bitboard board, uint16_t move);
 

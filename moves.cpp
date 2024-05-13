@@ -16,102 +16,91 @@ bool Moves::gameOver(bitboard &board, std::vector<uint16_t> moves){
     return false;
 }
 
+// Refactor this function
 std::vector<uint16_t> Moves::generateMoves(bitboard &board){
     std::vector<uint16_t> moves;
+    moves.reserve(64);
+    
     if(board.turn){ // generate moves for blue
         uint64_t pawn_diagonal = board.red_pawns | board.red_red_knight | board.blue_red_knight; // fields blue pawn can move to diagonally
         uint64_t pawn_not_diagonal = ~(board.red_pawns | board.red_red_knight | board.red_blue_knight | board.blue_blue_knight | board.blue_red_knight | board.blocked_fields); // fields blue pawn can move to not diagonally
         uint64_t knight = ~(board.blue_blue_knight | board.red_blue_knight | board.blocked_fields); // knight can move to any field that is not a blocked field or another knight
         
-        // generate moves for blue pawns
-        std::vector<uint16_t> pawn_diagonal_moves = pawnMovesDiagonal(board.blue_pawns, pawn_diagonal, board.turn);
-        std::vector<uint16_t> pawn_not_diagonal_moves = pawnMoves(board.blue_pawns, pawn_not_diagonal, board.turn);
-        moves.insert(moves.end(), pawn_diagonal_moves.begin(), pawn_diagonal_moves.end());
-        moves.insert(moves.end(), pawn_not_diagonal_moves.begin(), pawn_not_diagonal_moves.end());
-
-        // generate moves for blue knights
-        std::vector<uint16_t> knight_moves = knightMoves(board.blue_blue_knight, knight, board.turn, false);
-        std::vector<uint16_t> knight_moves2 = knightMoves(board.red_blue_knight, knight, board.turn, true);
+        std::vector<uint16_t> pawn_moves = pawnMoves(board.blue_pawns, pawn_not_diagonal, pawn_diagonal, board.turn); // generate moves for blue pawns
+        std::vector<uint16_t> knight_moves = knightMoves(board.blue_blue_knight, board.red_blue_knight, knight, board.turn); // generate moves for blue knights
+        
+        moves.insert(moves.end(), pawn_moves.begin(), pawn_moves.end());
         moves.insert(moves.end(), knight_moves.begin(), knight_moves.end());
-        moves.insert(moves.end(), knight_moves2.begin(), knight_moves2.end());
 
     } else { // generate moves for red
         uint64_t pawn_diagonal = board.blue_pawns | board.blue_blue_knight | board.red_blue_knight; // fields red pawn can move to diagonally
         uint64_t pawn_not_diagonal = ~(board.blue_pawns | board.blue_red_knight | board.blue_blue_knight | board.red_blue_knight | board.red_red_knight | board.blocked_fields); // fields red pawn can move to not diagonally
         uint64_t knight = ~(board.red_red_knight | board.blue_red_knight | board.blocked_fields); // knight can move to any field that is not a blocked field or another knight
         
-        // generate moves for red pawns
-        std::vector<uint16_t> pawn_diagonal_moves = pawnMovesDiagonal(board.red_pawns, pawn_diagonal, board.turn);
-        std::vector<uint16_t> pawn_not_diagonal_moves = pawnMoves(board.red_pawns, pawn_not_diagonal, board.turn);
-        
-        moves.insert(moves.end(), pawn_diagonal_moves.begin(), pawn_diagonal_moves.end());
-        moves.insert(moves.end(), pawn_not_diagonal_moves.begin(), pawn_not_diagonal_moves.end());
+        std::vector<uint16_t> pawn_moves = pawnMoves(board.red_pawns, pawn_not_diagonal, pawn_diagonal, board.turn); // generate moves for red pawns
+        std::vector<uint16_t> knight_moves = knightMoves(board.red_red_knight, board.blue_red_knight, knight, board.turn); // generate moves for red knights
 
-        // generate moves for red knights
-        std::vector<uint16_t> knight_moves = knightMoves(board.red_red_knight, knight, board.turn, false);
-        std::vector<uint16_t> knight_moves2 = knightMoves(board.blue_red_knight, knight, board.turn, true);
+        moves.insert(moves.end(), pawn_moves.begin(), pawn_moves.end());
         moves.insert(moves.end(), knight_moves.begin(), knight_moves.end());
-        moves.insert(moves.end(), knight_moves2.begin(), knight_moves2.end());
     }
     return moves;
 }
 
-std::vector<uint16_t> Moves::pawnMovesDiagonal(uint64_t start, uint64_t valid, bool turn){
-    std::vector<uint16_t> ans = {};
-    std::vector<uint16_t> bits = getBits(start);
-    std::vector<std::vector<uint16_t>> moves;
-
-    if(turn){
-        for (uint16_t bit : bits){
-            std::array<uint16_t, 2> move = bluePawnDiagonalTable[bit];
-            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 0));
-        }
-    } else {
-        for (uint16_t bit : bits){
-            std::array<uint16_t, 2> move = redPawnDiagonalTable[bit];
-            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 4));
-        }
-    }
-    return ans;
-}
-
-std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, bool turn){
+std::vector<uint16_t> Moves::pawnMoves(uint64_t start, uint64_t valid, uint64_t diagonal, bool turn){
     std::vector<uint16_t> ans;
+    ans.reserve(64);
     std::vector<uint16_t> bits = getBits(start);
     std::vector<std::vector<uint16_t>> moves;
+    moves.reserve(64);
    
     if (turn){
         for(uint16_t bit : bits){
             std::array<uint16_t, 3> move = bluePawnTable[bit];
+            std::array<uint16_t, 2> move_diagonal = bluePawnDiagonalTable[bit];
             for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 0));
+            for(auto mov : move_diagonal) if(diagonal >> mov & 1) ans.push_back(generateMove(bit, mov, 0));
         }
     } else {
         for(uint16_t bit : bits){
             std::array<uint16_t, 3> move = redPawnTable[bit];
+            std::array<uint16_t, 2> move_diagonal = redPawnDiagonalTable[bit];
             for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 4));
+            for(auto mov : move_diagonal) if(diagonal >> mov & 1) ans.push_back(generateMove(bit, mov, 4));
         }
     }
     return ans;
 }
 
-std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t valid, bool turn, bool mixed){
+std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t mixed_start, uint64_t valid, bool turn){
     std::vector<uint16_t> ans;
+    ans.reserve(64);
     std::vector<uint16_t> bits = getBits(start);
+    std::vector<uint16_t> mixed_bits = getBits(mixed_start);
     std::vector<std::vector<uint16_t>> moves;
+    moves.reserve(64);
 
     if(turn){
         for (uint16_t bit : bits){
             std::array<uint16_t, 4> move = blueKnightTable[bit];
-            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 1+mixed));
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 1));
+        }
+        for (uint16_t bit : mixed_bits){
+            std::array<uint16_t, 4> move = blueKnightTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 2));
         }
     } else {
         for (uint16_t bit : bits){
             std::array<uint16_t, 4> move = redKnightTable[bit];
-            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 5+mixed));
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 5));
+        }
+        for (uint16_t bit : mixed_bits){
+            std::array<uint16_t, 4> move = redKnightTable[bit];
+            for(auto mov : move) if(valid >> mov & 1) ans.push_back(generateMove(bit, mov, 6));
         }
     }
     return ans;
 }
+
 
 uint16_t Moves::generateMove(uint16_t start, uint16_t end, uint16_t type){
     // Format: 0-5 end, 6-11 start, 12-14 type, 15 = 0
@@ -121,6 +110,7 @@ uint16_t Moves::generateMove(uint16_t start, uint16_t end, uint16_t type){
 // return every 1 bit in bitboard fast way - This Works
 std::vector<uint16_t> Moves::getBits(uint64_t board){
     std::vector<uint16_t> ans;
+    ans.reserve(64);
     while(board){
         uint16_t bit = __builtin_ctzll(board);
         ans.push_back(bit);
@@ -131,7 +121,6 @@ std::vector<uint16_t> Moves::getBits(uint64_t board){
 
 // TODO: update board
 bitboard Moves::updateBoard(bitboard board, uint16_t move){
-    // create new board
     bitboard new_board = board;
 
     // update move on new board
@@ -142,8 +131,6 @@ bitboard Moves::updateBoard(bitboard board, uint16_t move){
     // Read bits 0-5
     int end = move & 0x3f;
 
-    
-    
     switch (type)
     {
     case 0:
