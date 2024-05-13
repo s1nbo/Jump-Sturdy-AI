@@ -53,8 +53,6 @@ int main(){
     std::vector<std::string> test = tests();
     std::vector<int> answer = answers();
 
-    
-
     auto start = std::chrono::high_resolution_clock::now();
     for(size_t i = 0; i < test.size(); i++){
         bitboard bitboard;

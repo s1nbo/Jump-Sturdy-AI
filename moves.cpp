@@ -1,6 +1,5 @@
 #include "moves.hpp"
 
-
 Moves::Moves(){}
 
 bool Moves::gameOver(bitboard &board, std::vector<uint16_t> moves){
@@ -16,7 +15,6 @@ bool Moves::gameOver(bitboard &board, std::vector<uint16_t> moves){
     return false;
 }
 
-// Refactor this function
 std::vector<uint16_t> Moves::generateMoves(bitboard &board){
     std::vector<uint16_t> moves;
     moves.reserve(64);
@@ -101,13 +99,13 @@ std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t mixed_start, u
     return ans;
 }
 
-
+// Save move in 16 bit integer
 uint16_t Moves::generateMove(uint16_t start, uint16_t end, uint16_t type){
     // Format: 0-5 end, 6-11 start, 12-14 type, 15 = 0
     return (end & 0x3f) | ((start & 0x3f) << 6) | ((type & 0x7) << 13) | (0 << 15);
 }
 
-// return every 1 bit in bitboard fast way - This Works
+// return every 1 bit in bitboard fast way
 std::vector<uint16_t> Moves::getBits(uint64_t board){
     std::vector<uint16_t> ans;
     ans.reserve(64);

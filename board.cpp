@@ -7,16 +7,16 @@ Board::Board(std::string fen, bitboard &board) {
 void Board::fenBitboard(std::string fen, bitboard &board){
 
     board.turn = (fen[fen.size()-1] == 'b');
-    std::string fen_new = fen.substr(0, fen.size()-2);
+    //std::string fen = fen.substr(0, fen.size()-2);
     int pos = 0;
     
-    for (size_t i = 0; i < fen_new.length(); i++) {
-        char c = fen_new[i];
+    for (size_t i = 0; i < fen.length()-2; i++) {
+        char c = fen[i];
 
         if (isdigit(c)) {
             pos += std::stoi(std::string(1, c));
         } else if (c == 'b') {
-            char temp = fen_new[++i];
+            char temp = fen[++i];
             if (temp == 'b') {
                 board.blue_blue_knight |= 1ull << order[pos];
             } else if (temp == 'r') {
@@ -26,7 +26,7 @@ void Board::fenBitboard(std::string fen, bitboard &board){
             }
             pos++;
         } else if (c == 'r') {
-            char temp = fen_new[++i];
+            char temp = fen[++i];
             if (temp == 'b') {
                 board.red_blue_knight |= 1ull << order[pos];
             } else if (temp == 'r') {
