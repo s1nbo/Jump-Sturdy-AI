@@ -76,29 +76,6 @@ std::vector<uint16_t> Moves::knightMoves(uint64_t start, uint64_t mixed_start, u
     std::vector<uint16_t> mixed_bits = getBits(mixed_start);
     std::vector<std::vector<uint16_t>> moves;
     moves.reserve(64);
-    /*
-    const std::array<std::array<uint16_t, 4>, 64> table = turn ? blueKnightTable : redKnightTable;
-    uint16_t offset = turn ? 0 : 4;
-
-    for (uint16_t bit : bits){
-        std::array<uint16_t, 4> move = table[bit];
-        for(auto mov : move){
-            if(valid >> mov & 1) {
-                if (opponent >> mov & 1) ans.push_back(generateMove(bit, mov, offset + 1, 1));
-                else ans.push_back(generateMove(bit, mov, offset + 1, 0));
-            }
-        }
-    }
-    for (uint16_t bit : mixed_bits){
-        std::array<uint16_t, 4> move = table[bit];
-        for(auto mov : move){
-            if(valid >> mov & 1) {
-                if (opponent >> mov & 1) ans.push_back(generateMove(bit, mov, offset + 2, 1));
-                else ans.push_back(generateMove(bit, mov, offset + 2, 0));
-            }
-        }
-    }
-    */
     if(turn){
         for (uint16_t bit : bits){
             std::array<uint16_t, 4> move = blueKnightTable[bit];
