@@ -33,7 +33,7 @@ int Ai::rate_board(bitboard &board){
     for(auto bit : red_blue_knight) score += 2 * (7 - bit/8);
     for(auto bit : blue_red_knight) score -= 2 * (bit/8+1);
     // if a blue  figure is on the top row, it is worth 100 points
-    // if a red  figure is on the bottom row, it is worth -100 points
+    // if a red  figure is on the bottom row, it is worth -100 points 
     if((board.blue_pawns | board.blue_blue_knight | board.red_blue_knight) & 0xFF){
         score += 100;
     }
@@ -99,11 +99,11 @@ int Ai::negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, 
 
 
 
-uint16_t Ai::minimax_handler(bitboard &board){}
+uint16_t Ai::minimax_handler(bitboard &board){};
 
-int Ai::minimax(uint16_t move, int depth, bitboard &board, Moves m){}
+int Ai::minimax(uint16_t move, int depth, bitboard &board, Moves m){};
 
-uint16_t Ai::alphabeta_handler(bitboard &board){}
+uint16_t Ai::alphabeta_handler(bitboard &board){};
 
-int Ai::alphabeta(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){}
+int Ai::alphabeta(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){};
 

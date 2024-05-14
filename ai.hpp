@@ -18,10 +18,10 @@ public:
 
     uint16_t negamax_handler(bitboard &board);
     int negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
-    uint16_t minimax_handler(bitboard &board){}
-    int minimax(uint16_t move, int depth, bitboard &board, Moves m){}
-    uint16_t alphabeta_handler(bitboard &board){}
-    int alphabeta(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){}
+    uint16_t minimax_handler(bitboard &board);
+    int minimax(uint16_t move, int depth, bitboard &board, Moves m);
+    uint16_t alphabeta_handler(bitboard &board);
+    int alphabeta(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
 
 };
 

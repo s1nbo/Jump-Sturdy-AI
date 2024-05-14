@@ -65,12 +65,12 @@ int main(){
     Ai ai;
     Board board(test[0], current_board);
     int i = 0;
-    // auto start = std::chrono::high_resolution_clock::now();
-    while(true) {
-        auto start = std::chrono::high_resolution_clock::now();
-    
-        std::vector<uint16_t> legal_moves = moves.generateMoves(current_board); // generate legal moves
-        if (legal_moves.empty()){
+    auto start = std::chrono::high_resolution_clock::now();
+    while(i < 10000) {
+        /* auto start = std::chrono::high_resolution_clock::now();
+
+          // generate legal moves
+         if (legal_moves.empty()){
             break;
         }; // check if game is over
         uint16_t move = ai.negamax_handler(current_board); // choose a move
@@ -80,18 +80,26 @@ int main(){
         if(moves.gameOver(current_board, legal_moves)){
             break;
         }
-    
+       
+
         i++;
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
         std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+         */
+        // rate current_board
+        ai.rate_board(current_board);
+        // std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
+        i++;
     }
-    //auto end = std::chrono::high_resolution_clock::now();
-    // std::chrono::duration<double> elapsed = end - start;
-    // std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+    /*
     std::string fen = board.bitboardFen(current_board);
     std::cout << "Fen: " << fen << std::endl;
     std::cout << "Game Over: " << i << std::endl;
+    */
     return 0;
 }
 
