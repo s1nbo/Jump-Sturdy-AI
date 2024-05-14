@@ -32,7 +32,9 @@ std::vector<std::string> tests(){
     "b0b01b0b0b0/1b0b02b0b01/3b0b03/2b05/3r04/2r05/1r01rr1r0r01/r0r02r0r0 b",
     "6/1bbbbbbbbbbbb1/8/8/8/1r0r0r0r0r0r01/8/r0r0r0r0r0r0 b",
     "6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b",
-    "2b03/8/8/3b0b03/2b03b01/2r03r01/2r05/6 r"
+    "2b03/8/8/3b0b03/2b03b01/2r03r01/2r05/6 r",
+    "b03b01/3bb2bb1/2bb1br3/1b06/5r02/2rr5/1r02rr3/r0r02rr1 b",
+    "b03b01/3b02b01/r01b05/8/8/3rbb03/1r06/r03r01 b"
     };
 }
 
@@ -45,30 +47,47 @@ std::vector<int> answers(){
         35,
         22,
         8,
-        7
+        7,
+        19,
+        20
     };
 }
+
+
 
 int main(){
     std::vector<std::string> test = tests();
     std::vector<int> answer = answers();
-
-    auto start = std::chrono::high_resolution_clock::now();
-    for(size_t i = 0; i < test.size(); i++){
+    for (size_t i = 0; i < test.size(); i++){
         bitboard bitboard;
-        Moves moves;
         Board board(test[i], bitboard);
+        Moves moves;
         std::vector<uint16_t> legal_moves = moves.generateMoves(bitboard);
-        std::cout << legal_moves.size() << " " << answer[i] <<  " " << std::endl;
-        //assert(legal_moves.size() == answer[i]);
+        //std::cout << test[i] << std::endl;
+        std::cout << "Expected: " << answer[i] << std::endl;
+        moves.printMoves(legal_moves);
+        //bitboard = moves.updateBoard(bitboard, legal_moves[i]);
+        //std::cout << board.bitboardFen(bitboard) << std::endl;
+        std::cout << std::endl;
+        // board.printBitboard(bitboard);
     }
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+   
+   
+    
+
     return 0;
 }
 
+/*
+auto start = std::chrono::high_resolution_clock::now();
+    for(size_t i = 0; i < 100000; i++){
 
+}
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+
+*/
 
 
 
@@ -86,7 +105,8 @@ bits 12-14 Type of Piece
         010: red_blue_knight 2
         110: blue_red_knigts 6
 
-bit 15: Empty (Can be filled later)
+bit 15: Takes a piece
+
 
 00 01 02 03 04 05 06 07
 08 09 10 11 12 13 14 15

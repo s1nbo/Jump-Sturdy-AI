@@ -14,10 +14,8 @@ public:
     bool gameOver(bitboard &board, std::vector<uint16_t> moves);
 
     std::vector<uint16_t> generateMoves(bitboard &board);
-
-    std::vector<uint16_t> pawnMovesDiagonal(uint64_t start, uint64_t valid, bool turn);
     std::vector<uint16_t> pawnMoves(uint64_t start, uint64_t valid, uint64_t diagonal, bool turn);
-    std::vector<uint16_t> knightMoves(uint64_t start, uint64_t mixed_start, uint64_t valid, bool turn);
+    std::vector<uint16_t> knightMoves(uint64_t start, uint64_t mixed_start, uint64_t valid, uint64_t opponent, bool turn);
 
     bitboard updateBoard(bitboard board, uint16_t move);
 
@@ -92,7 +90,7 @@ public:
 
     // Helper
     std::vector<uint16_t> getBits(uint64_t board);
-    uint16_t generateMove(uint16_t start, uint16_t end, uint16_t type);
+    uint16_t generateMove(uint16_t start, uint16_t end, uint16_t type, bool take = false);
     void printMoves(std::vector<uint16_t> moves);
     
 };
