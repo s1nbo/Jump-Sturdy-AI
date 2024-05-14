@@ -65,25 +65,30 @@ int main(){
     Ai ai;
     Board board(test[0], current_board);
     int i = 0;
+    // auto start = std::chrono::high_resolution_clock::now();
     while(true) {
-    auto start = std::chrono::high_resolution_clock::now();
-    std::vector<uint16_t> legal_moves = moves.generateMoves(current_board); // generate legal moves
-    if (legal_moves.empty()){
-        break;
-    }; // check if game is over
-    uint16_t move = ai.choose_move(current_board); // choose a move
-    current_board = moves.updateBoard(current_board, move); // update board
-    std:: cout << "Turn: " << current_board.turn << std::endl;
-    moves.printMoves({move});
-    if(moves.gameOver(current_board, legal_moves)){
-        break;
-    }
+        auto start = std::chrono::high_resolution_clock::now();
     
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-    i++;
+        std::vector<uint16_t> legal_moves = moves.generateMoves(current_board); // generate legal moves
+        if (legal_moves.empty()){
+            break;
+        }; // check if game is over
+        uint16_t move = ai.negamax_handler(current_board); // choose a move
+        current_board = moves.updateBoard(current_board, move); // update board
+        //std:: cout << "Turn: " << current_board.turn << std::endl;
+        // moves.printMoves({move});
+        if(moves.gameOver(current_board, legal_moves)){
+            break;
+        }
+    
+        i++;
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
+        std::cout << "Elapsed time: " << elapsed.count() << " s\n";
     }
+    //auto end = std::chrono::high_resolution_clock::now();
+    // std::chrono::duration<double> elapsed = end - start;
+    // std::cout << "Elapsed time: " << elapsed.count() << " s\n";
     std::string fen = board.bitboardFen(current_board);
     std::cout << "Fen: " << fen << std::endl;
     std::cout << "Game Over: " << i << std::endl;
@@ -138,7 +143,7 @@ bit 15: Takes a piece
         std::vector<uint16_t> legal_moves = moves.generateMoves(bitboard);
         // rating of current board
         int rating = ai.rate_board(bitboard);
-        uint16_t move = ai.choose_move(bitboard, legal_moves);
+        uint16_t move = ai.negamax_handler(bitboard, legal_moves);
         bitboard = moves.updateBoard(bitboard, move);
         // new rating of board
         int new_rating = ai.rate_board(bitboard);

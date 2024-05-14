@@ -2,56 +2,6 @@
 
 
 Ai::Ai(){}
-uint16_t Ai::choose_move(bitboard &board){
-    int search_depth = 2;
-    // alpha beta
-    int alpha = -1000;
-    int beta = 1000;
-    
-    Moves m;
-    if(board.turn == 1){ // Blue turn max player
-        max(search_depth, alpha, beta, board, m);
-    } else { // Red turn min player
-        min(search_depth, alpha, beta, board, m);
-    }
-    return best_move;
-}
-    
-
-int Ai::max(int depth, int alpha, int beta, bitboard &board, Moves &m){
-    // generate moves
-    std::vector<uint16_t> moves = m.generateMoves(board);
-    if(depth == 0 or moves.size() == 0) return rate_board(board);
-    int max_score = alpha;
-    for(auto move : moves){
-        bitboard new_board = m.updateBoard(board, move);
-        int score = min(depth-1, max_score, beta, new_board, m);
-        if(score > max_score){
-            max_score = score;
-            best_move = move;
-        }
-        if(max_score >= beta) return max_score;
-    }
-    return max_score;
-}
-
-int Ai::min(int depth, int alpha, int beta, bitboard &board, Moves &m){
-    // generate moves
-    std::vector<uint16_t> moves = m.generateMoves(board);
-    if(depth == 0 or moves.size() == 0) return rate_board(board);
-    int min_score = beta;
-    for(auto move : moves){
-        bitboard new_board = m.updateBoard(board, move);
-        int score = max(depth-1, alpha, min_score, new_board, m);
-        if(score < min_score){
-            min_score = score;
-        }
-        if(min_score <= alpha) return min_score;
-    }
-    return min_score;
-}
-
-
 
 int Ai::rate_board(bitboard &board){
     // blue pawn = 1 * position from bottom to top
@@ -82,6 +32,14 @@ int Ai::rate_board(bitboard &board){
     for(auto bit : red_red_knight) score -= 3 * (bit/8+1);
     for(auto bit : red_blue_knight) score += 2 * (7 - bit/8);
     for(auto bit : blue_red_knight) score -= 2 * (bit/8+1);
+    // if a blue  figure is on the top row, it is worth 100 points
+    // if a red  figure is on the bottom row, it is worth -100 points
+    if((board.blue_pawns | board.blue_blue_knight | board.red_blue_knight) & 0xFF){
+        score += 100;
+    }
+    if((board.red_pawns | board.red_red_knight | board.blue_red_knight) & 0xFF00000000000000){
+        score -= 100;
+    }
     return score;
 }
 
@@ -95,4 +53,57 @@ std::vector<uint16_t> Ai::getBits(uint64_t board){
     }
     return ans;
 }
+
+uint16_t Ai::negamax_handler(bitboard &board){
+    int search_depth = 6;
+    int alpha = -1000;
+    int beta = 1000;
+    int best_value = -1000;
+    std::uint16_t best_move = 0;
+    Moves m;
+    auto childNodes = m.generateMoves(board);
+
+    for (auto child : childNodes){
+        int value = -negamax(child, search_depth-1, -beta, -alpha, board, m);
+        if(value > best_value){
+            best_value = value;
+            best_move = child;
+        }
+        alpha = std::max(best_value, alpha);
+        if(alpha >= beta){
+            break;
+        }
+    }
+    return best_move;
+}
+
+int Ai::negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){
+    bitboard updated_board = m.updateBoard(board, move);
+    if(depth == 0){
+        return rate_board(updated_board);
+    }
+    auto childNodes = m.generateMoves(updated_board);
+    int value = -1000;
+    for(auto child : childNodes){
+        value = std::max(value, -negamax(child, depth-1, -beta, -alpha, updated_board, m));
+        alpha = std::max(alpha, value);
+        if(alpha >= beta){
+            break;
+        }
+    }
+    return value;
+}
+
+
+    
+
+
+
+uint16_t Ai::minimax_handler(bitboard &board){}
+
+int Ai::minimax(uint16_t move, int depth, bitboard &board, Moves m){}
+
+uint16_t Ai::alphabeta_handler(bitboard &board){}
+
+int Ai::alphabeta(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){}
 
