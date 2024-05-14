@@ -1,0 +1,122 @@
+Number of Moves: 1
+b1 -> b2 Type: blue_pawns Take: 0
+Number of Moves: 1
+b8 -> b7 Type: red_pawns Take: 0
+Number of Moves: 1
+c1 -> c2 Type: blue_pawns Take: 0
+Number of Moves: 1
+c8 -> c7 Type: red_pawns Take: 0
+Number of Moves: 1
+d1 -> d2 Type: blue_pawns Take: 0
+Number of Moves: 1
+d8 -> d7 Type: red_pawns Take: 0
+Number of Moves: 1
+e1 -> e2 Type: blue_pawns Take: 0
+Number of Moves: 1
+e8 -> e7 Type: red_pawns Take: 0
+Number of Moves: 1
+f1 -> f2 Type: blue_pawns Take: 0
+Number of Moves: 1
+f8 -> f7 Type: red_pawns Take: 0
+Number of Moves: 1
+g1 -> g2 Type: blue_pawns Take: 0
+Number of Moves: 1
+g8 -> g7 Type: red_pawns Take: 0
+Number of Moves: 1
+b2 -> a4 Type: blue_blue_knights Take: 0
+Number of Moves: 1
+b7 -> c5 Type: red_red_knights Take: 0
+Number of Moves: 1
+a4 -> a5 Type: blue_pawns Take: 0
+Number of Moves: 1
+d7 -> c5 Type: red_red_knights Take: 0
+Number of Moves: 1
+a5 -> a6 Type: blue_pawns Take: 0
+Number of Moves: 1
+b7 -> a6 Type: red_pawns Take: 1
+Number of Moves: 1
+b2 -> b3 Type: blue_pawns Take: 0
+Number of Moves: 1
+c7 -> a6 Type: red_red_knights Take: 0
+Number of Moves: 1
+d2 -> b3 Type: blue_blue_knights Take: 0
+Number of Moves: 1
+c5 -> b3 Type: red_red_knights Take: 1
+Number of Moves: 1
+d2 -> d3 Type: blue_pawns Take: 0
+Number of Moves: 1
+c7 -> d7 Type: red_pawns Take: 0
+Number of Moves: 1
+f2 -> d3 Type: blue_blue_knights Take: 0
+Number of Moves: 1
+d7 -> c5 Type: red_red_knights Take: 0
+Number of Moves: 1
+d3 -> c5 Type: blue_blue_knights Take: 1
+Number of Moves: 1
+a6 -> c5 Type: red_red_knights Take: 1
+Number of Moves: 1
+d3 -> d4 Type: blue_pawns Take: 0
+Number of Moves: 1
+d7 -> d6 Type: red_pawns Take: 0
+Number of Moves: 1
+d4 -> c5 Type: blue_pawns Take: 1
+Number of Moves: 1
+d6 -> c5 Type: red_pawns Take: 1
+Number of Moves: 1
+f2 -> f3 Type: blue_pawns Take: 0
+Number of Moves: 1
+a6 -> a5 Type: red_pawns Take: 0
+Number of Moves: 1
+f3 -> f4 Type: blue_pawns Take: 0
+Number of Moves: 1
+a5 -> a4 Type: red_pawns Take: 0
+Number of Moves: 1
+e2 -> f4 Type: blue_blue_knights Take: 0
+Number of Moves: 1
+c5 -> a4 Type: red_red_knights Take: 0
+Number of Moves: 1
+e2 -> e3 Type: blue_pawns Take: 0
+Number of Moves: 1
+c5 -> c4 Type: red_pawns Take: 0
+Number of Moves: 1
+c2 -> e3 Type: blue_blue_knights Take: 0
+Number of Moves: 1
+c4 -> c3 Type: red_pawns Take: 0
+Number of Moves: 1
+c2 -> b3 Type: blue_pawns Take: 1
+Number of Moves: 1
+a4 -> c3 Type: red_red_knights Take: 0
+Number of Moves: 1
+g2 -> h4 Type: blue_blue_knights Take: 0
+Number of Moves: 1
+a4 -> b3 Type: red_pawns Take: 1
+Number of Moves: 1
+h4 -> h5 Type: blue_pawns Take: 0
+Number of Moves: 1
+g7 -> h5 Type: red_red_knights Take: 1
+Number of Moves: 1
+f4 -> h5 Type: blue_blue_knights Take: 1
+Number of Moves: 1
+g7 -> g6 Type: red_pawns Take: 0
+Number of Moves: 1
+h5 -> g6 Type: blue_pawns Take: 1
+Number of Moves: 1
+e7 -> g6 Type: red_red_knights Take: 1
+Number of Moves: 1
+f4 -> f5 Type: blue_pawns Take: 0
+Number of Moves: 1
+g6 -> f5 Type: red_pawns Take: 1
+Number of Moves: 1
+e3 -> f5 Type: blue_blue_knights Take: 1
+Number of Moves: 1
+e7 -> e6 Type: red_pawns Take: 0
+Number of Moves: 1
+f5 -> e6 Type: blue_pawns Take: 1
+Number of Moves: 1
+f7 -> g5 Type: red_red_knights Take: 0
+Number of Moves: 1
+e6 -> f7 Type: blue_pawns Take: 1
+Number of Moves: 1
+g5 -> g4 Type: red_pawns Take: 0
+Number of Moves: 1
+f7 -> f8 Type: blue_pawns Take: 0

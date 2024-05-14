@@ -25,7 +25,7 @@
 */
 std::vector<std::string> tests(){
     return {
-    "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b",
+    "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 r",
     "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/r0r0r0r0r0r0r0r0/6 r",
     "6/1b06/1r03bb2/2r02b02/8/5r0r01/2r0r04/6 r",
     "6/1b0b0b0b0b0b01/1b0b0b0b0b0b01/8/8/1r0r0r0r0r0r01/1r0r0r0r0r0r01/6 b",
@@ -58,23 +58,35 @@ std::vector<int> answers(){
 int main(){
     std::vector<std::string> test = tests();
     std::vector<int> answer = answers();
-    for (size_t i = 0; i < test.size(); i++){
-        bitboard bitboard;
-        Board board(test[i], bitboard);
-        Moves moves;
-        std::vector<uint16_t> legal_moves = moves.generateMoves(bitboard);
-        //std::cout << test[i] << std::endl;
-        std::cout << "Expected: " << answer[i] << std::endl;
-        moves.printMoves(legal_moves);
-        //bitboard = moves.updateBoard(bitboard, legal_moves[i]);
-        //std::cout << board.bitboardFen(bitboard) << std::endl;
-        std::cout << std::endl;
-        // board.printBitboard(bitboard);
-    }
-   
-   
-    
 
+    // full game loop with test[0]
+    bitboard current_board;
+    Moves moves;
+    Ai ai;
+    Board board(test[0], current_board);
+    int i = 0;
+    while(true) {
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<uint16_t> legal_moves = moves.generateMoves(current_board); // generate legal moves
+    if (legal_moves.empty()){
+        break;
+    }; // check if game is over
+    uint16_t move = ai.choose_move(current_board); // choose a move
+    current_board = moves.updateBoard(current_board, move); // update board
+    std:: cout << "Turn: " << current_board.turn << std::endl;
+    moves.printMoves({move});
+    if(moves.gameOver(current_board, legal_moves)){
+        break;
+    }
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+    i++;
+    }
+    std::string fen = board.bitboardFen(current_board);
+    std::cout << "Fen: " << fen << std::endl;
+    std::cout << "Game Over: " << i << std::endl;
     return 0;
 }
 
@@ -83,9 +95,7 @@ auto start = std::chrono::high_resolution_clock::now();
     for(size_t i = 0; i < 100000; i++){
 
 }
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+   
 
 */
 
@@ -116,4 +126,25 @@ bit 15: Takes a piece
 40 41 42 43 44 45 46 47
 48 49 50 51 52 53 54 55
 56 57 58 59 60 61 62 63
+*/
+
+/*
+
+ for (size_t i = 0; i < test.size(); i++){
+        bitboard bitboard;
+        Board board(test[i], bitboard);
+        Moves moves;
+        Ai ai;
+        std::vector<uint16_t> legal_moves = moves.generateMoves(bitboard);
+        // rating of current board
+        int rating = ai.rate_board(bitboard);
+        uint16_t move = ai.choose_move(bitboard, legal_moves);
+        bitboard = moves.updateBoard(bitboard, move);
+        // new rating of board
+        int new_rating = ai.rate_board(bitboard);
+
+        std::cout << "Rating: " << rating << " New Rating:" << new_rating << " Turn: " << bitboard.turn << std::endl;
+        // board.printBitboard(bitboard);
+    }
+
 */

@@ -171,7 +171,7 @@ bitboard Moves::updateBoard(bitboard board, uint16_t move){
                 new_board.red_red_knight &= ~(1ull << end);
                 new_board.red_blue_knight |= (1ull << end);
             } else if(new_board.blue_red_knight >> end & 1){
-                new_board.red_blue_knight &= ~(1ull << end);
+                new_board.blue_red_knight &= ~(1ull << end);
                 new_board.blue_blue_knight |= (1ull << end);
             }
         } else {
