@@ -1,8 +1,6 @@
 #include "ai.hpp"
 
 
-Ai::Ai(){}
-
 int Ai::rate_board(bitboard &board){
     // blue pawn = 1 * position from bottom to top
     // red pawn = -1 * position from top to bottom
