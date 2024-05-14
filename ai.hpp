@@ -10,7 +10,7 @@
 
 class Ai{
 public:
-    Ai();
+    Ai() = default;
     
     
     int rate_board(bitboard &board);
