@@ -29,8 +29,34 @@
 
 
 int main(){
+    Test test;
+    // Milestone 1
+    std::cout << "Milestone 1\n" << "Test Ai vs Ai\n";
+    test.test_game(2);
+    std::cout << "Test Move Generation\n";
+    test.test_move_generation(false);
+    std::cout << "Test Move Generation Performance\n";
+    test.test_move_generation_performance(100000, 0);
+    test.test_move_generation_performance(100000, 10);
+    test.test_move_generation_performance(100000, 11);
 
-
+    // Milestone 2
+    std::cout << "Milestone 2\n" << "Test Rate Board\n";
+    test.test_rate_board(100000, 0);
+    test.test_rate_board(100000, 10);
+    test.test_rate_board(100000, 11);
+    std::cout << "Test Search Depth 4\n";
+    test.test_search_depth_minimax(4, 0);
+    test.test_search_depth_alphabeta(4, 0);
+    test.show_results();
+    std::cout << "Test Search Depth 5\n";
+    test.test_search_depth_minimax(5, 0);
+    test.test_search_depth_alphabeta(5, 0);
+    test.show_results();
+    std::cout << "Test Search Depth 6\n";
+    test.test_search_depth_minimax(6, 0);
+    test.test_search_depth_alphabeta(6, 0);
+    test.show_results();
     return 0;
 }
 

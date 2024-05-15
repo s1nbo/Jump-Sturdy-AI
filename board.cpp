@@ -45,47 +45,47 @@ void Board::printBitboard(bitboard board){
     std::cout << "Red Pawns: " <<  board.red_pawns;
     for(int i = 0; i < 64; i++){
         if(i % 8 == 0){
-            std::cout << std::endl;
+            std::cout << "\n";
         }
         std::cout << ((board.red_pawns >> i) & 1);
     }
-    std::cout << std::endl << "Blue Pawns: " << board.blue_pawns ;
+    std::cout << "\n" << "Blue Pawns: " << board.blue_pawns ;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
-            std::cout << std::endl;
+            std::cout << "\n";
         }
         std::cout << ((board.blue_pawns >> i) & 1);
     }
-    std::cout << std::endl << "Red Red Knight: " << board.red_red_knight;
+    std::cout << "\n" << "Red Red Knight: " << board.red_red_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
-            std::cout << std::endl;
+            std::cout << "\n";
         }
         std::cout << ((board.red_red_knight >> i) & 1);
     }
-    std::cout << std::endl << "Red Blue Knight: " << board.red_blue_knight;
+    std::cout << "\n" << "Red Blue Knight: " << board.red_blue_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
-            std::cout << std::endl;
+            std::cout << "\n";
         }
         std::cout << ((board.red_blue_knight >> i) & 1);
     }
-    std::cout << std::endl << "Blue Red Knight: " << board.blue_red_knight;
+    std::cout << "\n" << "Blue Red Knight: " << board.blue_red_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
-            std::cout << std::endl;
+            std::cout << "\n";
         }
         std::cout << ((board.blue_red_knight >> i) & 1);
     }
-    std::cout << std::endl << "Blue Blue Knight: " << board.blue_blue_knight;
+    std::cout << "\n" << "Blue Blue Knight: " << board.blue_blue_knight;
     for (int i = 0; i < 64; i++) {
         if (i % 8 == 0) {
-            std::cout << std::endl;
+            std::cout << "\n";
         }
         std::cout << ((board.blue_blue_knight >> i) & 1);
     }
 
-    std::cout << std::endl;
+    std::cout << "\n";
 }
 
 std::string Board::bitboardFen(bitboard &board){

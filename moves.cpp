@@ -2,7 +2,7 @@
 
 
 bool Moves::gameOver(bitboard &board, std::vector<uint16_t> moves){
-    uint64_t red = board.red_pawns | board.red_red_knight | board.red_blue_knight;
+    uint64_t red = board.red_pawns | board.red_red_knight | board.blue_red_knight;
     uint64_t blue = board.blue_pawns |board.red_blue_knight | board.blue_blue_knight;
     // if one player has piece on the last row
     if(red & 0xff00000000000000 || blue & 0xff){
@@ -146,6 +146,7 @@ The second pawn moves to the field the knight moves to.
 */
 bitboard Moves::updateBoard(bitboard board, uint16_t move){
     bitboard new_board = board;
+    if (move == 0) return new_board;
 
     // update move on new board
     // Read bits 12-14
@@ -305,7 +306,7 @@ bitboard Moves::updateBoard(bitboard board, uint16_t move){
 }
 
 void Moves::printMoves(std::vector<uint16_t> moves){
-    std::cout << "Number of Moves: " << moves.size() << std::endl;
+    // std::cout << "Number of Moves: " << moves.size() << "\n";
     // Chess board format
     std::vector<std::string> format = {
         "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
@@ -327,7 +328,7 @@ void Moves::printMoves(std::vector<uint16_t> moves){
         int end = move & 0x3f;
         int figure = (move >> 12) & 0x7;
         int take = (move >> 15) & 0x1;
-        std::cout << format[start] << " -> " << format[end] << " Type: " << figures[figure] << " Take: " << take << std::endl;
+        std::cout << format[start] << " -> " << format[end] << " Type: " << figures[figure] << " Take: " << take << "\n";
     }
     
 }
