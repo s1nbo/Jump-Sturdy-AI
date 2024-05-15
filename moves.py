@@ -1,7 +1,6 @@
 # Generate Moves
 
 """
-
 "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
 "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
 "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6",
@@ -19,28 +18,6 @@
 40 41 42 43 44 45 46 47
 48 49 50 51 52 53 54 55
 56 57 58 59 60 61 62 63
-
-
-    const std::array<std::array<uint16_t, 4>, 64> redKnightTable = {
-    };
-    const std::array<std::array<uint16_t, 4>, 64> blueKnightTable = {
-    };
-    const std::array<std::array<uint16_t, 3>, 64> redPawnTable =
-        {{
-            {},{2, 9},{1, 3, 10},{2, 4, 11},{3, 5, 12},{4, 6, 13},{5, 7, 14},{},
-            {9, 16},{8, 10, 17},{9, 11, 18},{10, 12, 19},{11, 13, 20},{12, 14, 21},{13, 15, 22},{14, 23},
-            {17, 24},{16, 18, 25},{17, 19, 26},{18, 20, 27},{19, 21, 28},{20, 22, 29},{21, 23, 30},{22, 31},
-            {25, 32},{24, 26, 33},{25, 27, 34},{26, 28, 35},{27, 29, 36},{28, 30, 37},{29, 31, 38},{30, 39},
-            {33, 40},{32, 34, 41},{33, 35, 42},{34, 36, 43},{35, 37, 44},{36, 38, 45},{37, 39, 46},{38, 47},
-            {41, 48},{40, 42, 49},{41, 43, 50},{42, 44, 51},{43, 45, 52},{44, 46, 53},{45, 47, 54},{46, 55},
-            {49, 56},{48, 50, 57},{49, 51, 58},{50, 52, 59},{51, 53, 60},{52, 54, 61},{53, 55, 62},{54, 63},
-            {},{56, 58},{57, 59},{58, 60},{59, 61},{60, 62},{61, 63},{}
-        }};
-    const std::array<std::array<uint16_t, 3>, 64> bluePawnTable = {
-    };
-    const std::array<std::array<uint16_t, 2>, 64> bluePawnDiagonalTable = {
-    };
-    const std::array<std::array<uint16_t, 2>, 64> redPawnDiagonalTable = {    };
 """
 
 
@@ -258,20 +235,6 @@ def generate_blue_pawn_diagonal():
         if i%8 == 7:
             print("")
 
-"""
-00 01 02 03 04 05 06 07
-08 09 10 11 12 13 14 15
-16 17 18 19 20 21 22 23
-24 25 26 27 28 29 30 31
-32 33 34 35 36 37 38 39
-40 41 42 43 44 45 46 47
-48 49 50 51 52 53 54 55
-56 57 58 59 60 61 62 63
-
-
-"""
-
-
 
 # can move in L shape up left, up right, left up, right up
 # 17 15 10 6 (negative for blue)
@@ -302,8 +265,6 @@ def generate_red_knight():
         if i%8 != 7 and i < 48:
             print(f"{i+17},", end ="")
         
-
-
         # add 15 down left
         # only works if not on the left edge and not second to last row or last row
         if i%8 != 0 and i < 48:
@@ -323,15 +284,6 @@ def generate_red_knight():
     
         if i%8 == 7:
             print("")
-
-
-
-    
-
-generate_red_knight()
-print("\n")
-generate_blue_knight()
-
 
 
          

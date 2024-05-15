@@ -1,6 +1,5 @@
 #include "moves.hpp"
 
-Moves::Moves(){}
 
 bool Moves::gameOver(bitboard &board, std::vector<uint16_t> moves){
     uint64_t red = board.red_pawns | board.red_red_knight | board.red_blue_knight;

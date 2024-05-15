@@ -9,7 +9,7 @@
 
 class Moves {
 public:
-    Moves();
+    Moves() = default;
 
     bool gameOver(bitboard &board, std::vector<uint16_t> moves);
 
