@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <vector>
 #include <iostream>
+#include <limits.h>
 
 class Ai{
 public:
@@ -20,9 +21,11 @@ public:
     uint16_t negamax_handler(bitboard &board, int search_depth);
     int negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
     uint16_t minimax_handler(bitboard &board, int search_depth);
-    int minimax(uint16_t move, int depth, bitboard &board, Moves m);
+    int maxi(uint16_t move, int depth, bitboard &board, Moves m);
+    int mini(uint16_t move, int depth, bitboard &board, Moves m);
     uint16_t alphabeta_handler(bitboard &board, int search_depth);
-    int alphabeta(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
+    int alphabetaMax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
+    int alphabetaMin(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
 
 };
 

@@ -33,12 +33,12 @@ int Ai::rate_board(bitboard &board){
     // if a blue  figure is on the top row, it is worth 100 points
     // if a red  figure is on the bottom row, it is worth -100 points 
     if((board.blue_pawns | board.blue_blue_knight | board.red_blue_knight) & 0xFF){
-        score += 100;
+        score += 1000;
     }
     if((board.red_pawns | board.red_red_knight | board.blue_red_knight) & 0xFF00000000000000){
-        score -= 100;
+        score -= 1000;
     }
-    return score;
+    return board.turn ? -score : score;
 }
 
 std::vector<uint16_t> Ai::getBits(uint64_t board){
@@ -58,6 +58,7 @@ uint16_t Ai::negamax_handler(bitboard &board, int search_depth){
     int best_value = -1000;
     std::uint16_t best_move = 0;
     Moves m;
+    analyzed_nodes = 0;
     auto childNodes = m.generateMoves(board);
 
     for (auto child : childNodes){
@@ -76,6 +77,7 @@ uint16_t Ai::negamax_handler(bitboard &board, int search_depth){
 
 int Ai::negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){
     bitboard updated_board = m.updateBoard(board, move);
+    analyzed_nodes++;
     if(depth == 0){
         return rate_board(updated_board);
     }
@@ -92,8 +94,6 @@ int Ai::negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, 
 }
 
 
-
-
 uint16_t Ai::minimax_handler(bitboard &board, int search_depth){
     int best_value = -1000;
     uint16_t best_move = 0;
@@ -102,7 +102,7 @@ uint16_t Ai::minimax_handler(bitboard &board, int search_depth){
     
     auto childNodes = m.generateMoves(board);
     for(auto child : childNodes){
-        int value = minimax(child, search_depth-1, board, m);
+        int value = maxi(child, search_depth-1, board, m);
         if(value > best_value){
             best_value = value;
             best_move = child;
@@ -112,24 +112,30 @@ uint16_t Ai::minimax_handler(bitboard &board, int search_depth){
 
 };
 
-int Ai::minimax(uint16_t move, int depth, bitboard &board, Moves m){
+int Ai::maxi(uint16_t move, int depth, bitboard &board, Moves m){
     bitboard updated_board = m.updateBoard(board, move);
     analyzed_nodes++;
-    if(depth == 0){
-        return rate_board(updated_board);
-    }
-    auto childNodes = m.generateMoves(updated_board);
-    int value = -1000;
-    for(auto child : childNodes){
-        value = std::max(value, -minimax(child, depth-1, updated_board, m));
-    }
-    return value;
+    if (depth == 0) return rate_board(updated_board);
+    // set to negative infinity
+    int max = INT_MIN;
+    for(auto child : m.generateMoves(updated_board)) max = std::max(max, mini(child, depth-1, updated_board, m));
+    return max;
 };
 
+int Ai::mini(uint16_t move, int depth, bitboard &board, Moves m){
+    bitboard updated_board = m.updateBoard(board, move);
+    analyzed_nodes++;
+    if (depth == 0) return -rate_board(updated_board);
+    int min = INT_MAX;
+    for(auto child : m.generateMoves(updated_board)) min = std::min(min, maxi(child, depth-1, updated_board, m));
+    return min;
+};
+
+
 uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth){
-    int alpha = -1000;
-    int beta = 1000;
-    int best_value = -1000;
+    int alpha = INT_MIN;
+    int beta = INT_MAX;
+    int best_value = INT_MIN;
     std::uint16_t best_move = 0;
     Moves m;
     analyzed_nodes = 0;
@@ -137,7 +143,7 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth){
     
     auto childNodes = m.generateMoves(board);
     for (auto child : childNodes){
-        int value = -alphabeta(child, search_depth-1, -beta, -alpha, board, m);
+        int value = alphabetaMax(child, search_depth-1, alpha, beta, board, m);
         if(value > best_value){
             best_value = value;
             best_move = child;
@@ -150,21 +156,32 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth){
     return best_move;
 };
 
-int Ai::alphabeta(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){
+
+
+int Ai::alphabetaMax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){
     bitboard updated_board = m.updateBoard(board, move);
     analyzed_nodes++;
-    if(depth == 0){
-        return rate_board(updated_board);
+    if(depth == 0) return rate_board(updated_board);
+
+    for(auto child : m.generateMoves(updated_board)){
+        int score = alphabetaMin(child, depth-1, alpha, beta, updated_board, m);
+        if(score >= beta) return beta;
+        alpha = std::max(alpha, score);
     }
-    auto childNodes = m.generateMoves(updated_board);
-    int value = -1000;
-    for(auto child : childNodes){
-        value = std::max(value, -alphabeta(child, depth-1, -beta, -alpha, updated_board, m));
-        alpha = std::max(alpha, value);
-        if(alpha >= beta){
-            break;
-        }
+    return alpha;
+};
+
+int Ai::alphabetaMin(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){
+    bitboard updated_board = m.updateBoard(board, move);
+    analyzed_nodes++;
+    if(depth == 0) return -rate_board(updated_board);
+
+    for(auto child : m.generateMoves(updated_board)){
+        int score = alphabetaMax(child, depth-1, alpha, beta, updated_board, m);
+        if(score <= alpha) return alpha;
+        beta = std::min(beta, score);
     }
-    return value;
+    return beta;
+   
 };
 

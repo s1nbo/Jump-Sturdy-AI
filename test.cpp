@@ -6,21 +6,27 @@ void Test::test_game(int depth){
     Moves moves;
     Ai ai;
 
-    int move_count = 0;
+    float move_count = 0;
     auto start = std::chrono::high_resolution_clock::now();
         
     while(true) {
         std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
-        uint16_t move = ai.minimax_handler(current_board, depth);
+        uint16_t move = ai.alphabeta_handler(current_board, depth);
         std::cout << " Move: " << move << " ";
+        move_count++;
         moves.printMoves({move});
         current_board = moves.updateBoard(current_board, move);
         if(moves.gameOver(current_board, legal_moves)) break;
+        if(move_count == 105) break;
+        if(move_count >= 100) board.printBitboard(current_board);
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Game with depth: " << depth << " Total moves" << move_count <<  " Elapsed time: " << elapsed.count() << " s\n";
+    
+    std::cout << "Game with depth: " << depth << " Total moves: " << move_count <<  " Elapsed time: " << elapsed.count() << " s\n";
     std::cout << "Moves per second: " << move_count / elapsed.count() << "\n";
+    std::cout << "\n";
+    board.printBitboard(current_board);
     std::cout << "\n";
 }
 
@@ -48,9 +54,9 @@ void Test::test_move_generation_performance(int amount, int board_number){
     auto end = std::chrono::high_resolution_clock::now();
     
     std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Generated " << amount << " times moves from board " << test[board_number] << " in " << elapsed.count() << " s\n";
+    std::cout << "Generated " << amount << " times moves from board " << test[board_number] << " in " << elapsed.count() << "s\n";
     std::cout << "Boards per second: " << amount / elapsed.count() << "\n";
-    std::cout << "Seconds per board: " <<  elapsed.count() / amount / 1000  << "\n";
+    std::cout << "Seconds per board: " <<  elapsed.count() / amount << "\n";
     std::cout << "\n";
 }
 
@@ -66,7 +72,7 @@ void Test::test_rate_board(int amount, int board_number){
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Rated " << amount << " times the board " << test[board_number] << " in " << elapsed.count() << " s\n";
     std::cout << "Boards rated per second: " << amount / elapsed.count() << "\n";
-    std::cout << "Seconds per board: " <<  elapsed.count() / amount / 1000 << "\n";
+    std::cout << "Seconds per board: " <<  elapsed.count() / amount << "\n";
     std::cout << "\n";
     
 }
@@ -80,13 +86,13 @@ void Test::test_search_depth_minimax(int depth, int board_number){
     uint16_t best_move = ai.minimax_handler(bitboard, depth);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Runtime" << elapsed.count() << " s\n";
+    std::cout << "Runtime: " << elapsed.count() << " s\n";
     std::cout << "Nodes analyzed: " << ai.analyzed_nodes << "\n";
     std::cout << "Nodes per second: " << ai.analyzed_nodes / elapsed.count() << "\n";
     std::cout << "Best move: ";
     moves.printMoves({best_move});
     std::cout << "\n";
-    minimax_score = ai.analyzed_nodes / elapsed.count();
+    minimax_score = ai.analyzed_nodes;
 }
 
 void Test::test_search_depth_alphabeta(int depth, int board_number){
@@ -95,7 +101,7 @@ void Test::test_search_depth_alphabeta(int depth, int board_number){
     Moves moves;
     Ai ai;
     auto start = std::chrono::high_resolution_clock::now();
-    uint16_t best_move = ai.negamax_handler(bitboard, depth);
+    uint16_t best_move = ai.alphabeta_handler(bitboard, depth);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Runtime: " << elapsed.count() << " s\n";
@@ -104,14 +110,15 @@ void Test::test_search_depth_alphabeta(int depth, int board_number){
     std::cout << "Best move: ";
     moves.printMoves({best_move});
     std::cout << "\n";
-    alphabeta_score = ai.analyzed_nodes / elapsed.count();
+    alphabeta_score = ai.analyzed_nodes;
 }
 
 void Test::show_results(){
-    std::cout << "Minimax: " << minimax_score << " Nodes per second\n";
-    std::cout << "Alphabeta: " << alphabeta_score << " Nodes per second\n";
-    // upspeed
-    std::cout << "Speedup (x/y): " << (float)(alphabeta_score / minimax_score) << "\n";
+    std::cout << "Minimax: " << minimax_score << " Nodes\n";
+    std::cout << "Alphabeta: " << alphabeta_score << " Nodes\n";
+    float improvement = minimax_score / alphabeta_score;
+    std::cout << "Improvement: " << improvement << "\n"; 
+    std::cout << "\n";
     alphabeta_score = 0;
     minimax_score = 0;
 }
