@@ -52,3 +52,17 @@ AI
 
 
 
+
+
+Next Steps:
+
+- Negamax
+- Iterative Deepening
+- Imporve Evaluation Function
+- Code Cleanup
+- Add Comments
+- Move order optimization
+- Transposition Table
+- Quiescence Search / Null Moves / Aspiration Windows
+- Documentation
+- Rate moves with a neural network
