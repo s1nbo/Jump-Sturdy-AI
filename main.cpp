@@ -32,7 +32,7 @@ int main(){
     Test test;
     // Milestone 1
     std::cout << "Milestone 1\n" << "Test Ai vs Ai\n";
-    test.test_game(6);
+    test.test_game(4);
     std::cout << "Test Move Generation\n";
     test.test_move_generation(false);
     std::cout << "Test Move Generation Performance\n";
@@ -49,16 +49,58 @@ int main(){
     test.test_search_depth_minimax(3, 0);
     test.test_search_depth_alphabeta(3, 0);
     test.show_results();
+    test.test_search_depth_minimax(3, 0);
+    test.test_search_depth_alphabeta(3, 0);
+    test.show_results();
+    test.test_search_depth_minimax(3, 10);
+    test.test_search_depth_alphabeta(3, 10);
+    test.show_results();
+    test.test_search_depth_minimax(3, 11);
+    test.test_search_depth_alphabeta(3, 11);
+    test.show_results();
     std::cout << "Test Search Depth 4\n";
     test.test_search_depth_minimax(4, 0);
     test.test_search_depth_alphabeta(4, 0);
+    test.show_results();
+    test.test_search_depth_minimax(4, 10);
+    test.test_search_depth_alphabeta(4, 10);
+    test.show_results();
+    test.test_search_depth_minimax(4, 11);
+    test.test_search_depth_alphabeta(4, 11);
     test.show_results();
     std::cout << "Test Search Depth 5\n";
     test.test_search_depth_minimax(5, 0);
     test.test_search_depth_alphabeta(5, 0);
     test.show_results();
+    test.test_search_depth_minimax(5, 10);
+    test.test_search_depth_alphabeta(5, 10);
+    test.show_results();
+    test.test_search_depth_minimax(5, 11);
+    test.test_search_depth_alphabeta(5, 11);
+    test.show_results();
     std::cout << "Test Search Depth 6\n";
     test.test_search_depth_alphabeta(6, 0);
+
+    std::cout << "Test Search Depth Performance 3\n";
+    test.test_search_depth_minimax_performance(3, 0, 1000);
+    test.test_search_depth_alphabeta_performance(3, 0, 1000);
+    test.test_search_depth_minimax_performance(3, 10, 1000);
+    test.test_search_depth_alphabeta_performance(3, 10, 1000);
+    test.test_search_depth_minimax_performance(3, 11, 1000);
+    test.test_search_depth_alphabeta_performance(3, 11, 1000);
+
+    std::cout << "Test Search Depth Performance 4\n";
+    test.test_search_depth_minimax_performance(4, 0, 1000);
+    test.test_search_depth_alphabeta_performance(4, 0, 1000);
+    test.test_search_depth_minimax_performance(4, 10, 1000);
+    test.test_search_depth_alphabeta_performance(4, 10, 1000);
+    test.test_search_depth_minimax_performance(4, 11, 1000);
+    test.test_search_depth_alphabeta_performance(4, 11, 1000);
+
+    std::cout << "Test Search Depth Performance 5\n";
+    test.test_search_depth_alphabeta_performance(5, 0, 1000);
+    test.test_search_depth_alphabeta_performance(5, 10, 1000);
+    test.test_search_depth_alphabeta_performance(5, 11, 1000);
     return 0;
 }
 

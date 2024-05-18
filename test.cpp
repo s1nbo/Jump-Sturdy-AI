@@ -95,6 +95,36 @@ void Test::test_search_depth_minimax(int depth, int board_number){
     minimax_score = ai.analyzed_nodes;
 }
 
+void Test::test_search_depth_minimax_performance(int depth, int board_number, int amount){
+    bitboard bitboard;
+    Board board(test[board_number], bitboard);
+    Moves moves;
+    Ai ai;
+    auto start = std::chrono::high_resolution_clock::now();
+    for(int i = 0; i < amount; i++) ai.minimax_handler(bitboard, depth);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Runtime: " << elapsed.count() << " s\n";
+    std::cout << "Runtime per move: " << elapsed.count() / amount << " s\n";
+    std::cout << "Nodes per second: " << ai.analyzed_nodes / elapsed.count() << "\n";
+    std::cout << "\n";
+}
+
+void Test::test_search_depth_alphabeta_performance(int depth, int board_number, int amount){
+    bitboard bitboard;
+    Board board(test[board_number], bitboard);
+    Moves moves;
+    Ai ai;
+    auto start = std::chrono::high_resolution_clock::now();
+    for(int i = 0; i < amount; i++) ai.alphabeta_handler(bitboard, depth);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Runtime: " << elapsed.count() << " s\n";
+    std::cout << "Runtime per move: " << elapsed.count() / amount << " s\n";
+    std::cout << "Nodes per second: " << ai.analyzed_nodes / elapsed.count() << "\n";
+    std::cout << "\n";
+}
+
 void Test::test_search_depth_alphabeta(int depth, int board_number){
     bitboard bitboard;
     Board board(test[board_number], bitboard);

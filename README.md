@@ -36,19 +36,19 @@ Connect
 
 
 Board
-- Fen to Board (Done)
-- Board to Fen (Done)
-- Print Board (Done)
-- Translate Move to Algebraic Notation (TODO)
+- Fen to Board (DONE)
+- Board to Fen (DONE)
+- Print Board (DONE)
+- Translate Move to Algebraic Notation (DONE)
 
 Moves
-- Check if Game is over (TODO)
-- Update Board with Move (TODO)
-- Get Legal Moves from Board (TODO)
+- Check if Game is over (DONE)
+- Update Board with Move (DONE)
+- Get Legal Moves from Board (DONE)
 
 AI
-- Rate a Board (TODO)
-- AI to choose a Move (MiniMax) (TODO)
+- Rate a Board (DONE)
+- AI to choose a Move (MiniMax) (DONE)
 
 
 

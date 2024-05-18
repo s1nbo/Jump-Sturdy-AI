@@ -140,7 +140,6 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth){
     Moves m;
     analyzed_nodes = 0;
 
-    
     auto childNodes = m.generateMoves(board);
     for (auto child : childNodes){
         int value = alphabetaMax(child, search_depth-1, alpha, beta, board, m);
