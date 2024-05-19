@@ -1,32 +1,31 @@
 #include "test.hpp"
 
-void Test::test_game(int depth){
+void Test::test_game(int depth, std::string board_number){
     bitboard current_board;
-    Board board(test[0], current_board);
+    Board board(board_number, current_board);
     Moves moves;
     Ai ai;
 
     float move_count = 0;
     auto start = std::chrono::high_resolution_clock::now();
         
-    while(true) {
+    while(move_count < 100) {
         std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
         uint16_t move = ai.alphabeta_handler(current_board, depth);
         std::cout << " Move: " << move << " ";
         move_count++;
         moves.printMoves({move});
-        current_board = moves.updateBoard(current_board, move);
+        moves.updateBoard(current_board, move);
         if(moves.gameOver(current_board, legal_moves)) break;
-        if(move_count == 105) break;
-        if(move_count >= 100) board.printBitboard(current_board);
+        
     }
+    board.printBitboard(current_board);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     
     std::cout << "Game with depth: " << depth << " Total moves: " << move_count <<  " Elapsed time: " << elapsed.count() << " s\n";
     std::cout << "Moves per second: " << move_count / elapsed.count() << "\n";
     std::cout << "\n";
-    board.printBitboard(current_board);
     std::cout << "\n";
 }
 
@@ -98,7 +97,6 @@ void Test::test_search_depth_minimax(int depth, int board_number){
 void Test::test_search_depth_minimax_performance(int depth, int board_number, int amount){
     bitboard bitboard;
     Board board(test[board_number], bitboard);
-    Moves moves;
     Ai ai;
     auto start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < amount; i++) ai.minimax_handler(bitboard, depth);
@@ -113,7 +111,6 @@ void Test::test_search_depth_minimax_performance(int depth, int board_number, in
 void Test::test_search_depth_alphabeta_performance(int depth, int board_number, int amount){
     bitboard bitboard;
     Board board(test[board_number], bitboard);
-    Moves moves;
     Ai ai;
     auto start = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < amount; i++) ai.alphabeta_handler(bitboard, depth);
@@ -151,4 +148,3 @@ void Test::show_results(){
     std::cout << "\n";
     alphabeta_score = 0;
     minimax_score = 0;
-}

@@ -16,7 +16,7 @@ public:
     Test() = default;
 
     // Milestone 1
-    void test_game(int depth); // play a game with test[0] AI vs AI
+    void test_game(int depth, std::string board_number); // play a game with test[0] AI vs AI
     void test_move_generation(bool print_moves); // unit test different position and the move generation
     void test_move_generation_performance(int amount, int board_number); // test move generation, time taken per moves generation
     
@@ -33,7 +33,7 @@ public:
     // * Saved time with Alphabeta pruning
 
     // Data 
-    const std::array<std::string, 12> test = {
+    const std::array<std::string, 14> test = {
     "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b",
     "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/r0r0r0r0r0r0r0r0/6 r",
     "6/1b06/1r03bb2/2r02b02/8/5r0r01/2r0r04/6 r",
@@ -45,10 +45,12 @@ public:
     "b03b01/3bb2bb1/2bb1br3/1b06/5r02/2rr5/1r02rr3/r0r02rr1 b",
     "b03b01/3b02b01/r01b05/8/8/3rbb03/1r06/r03r01 b",
     "3b02/2bb2b02/5b0bb1/2r0b04/2rb3b01/1rr1rr2r0r0/5r02/2rr3 b",
-    "6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b"
+    "6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b",
+    "1bb4/1b0b05/b01b0bb4/1b01b01b02/3r01rr2/b0r0r02rr2/4r01rr1/4r0r0 b",
+    "6/4bbb02/b02b01b02/1b02b03/2b01rrrr2/6r01/r01r0r0r03/5r0 r"
     };
 
-    const std::array<int, 12> answer = {
+    const std::array<int, 14> answer = {
         34,
         22,
         17,
@@ -60,12 +62,12 @@ public:
         19,
         20,
         24,
-        8
+        8,
+        25,
+        0
     };
 
     int minimax_score = 0;
     int alphabeta_score = 0;
 
 };
-
-#endif

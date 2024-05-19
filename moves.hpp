@@ -16,8 +16,10 @@ public:
     std::vector<uint16_t> generateMoves(bitboard &board);
     std::vector<uint16_t> pawnMoves(uint64_t start, uint64_t valid, uint64_t diagonal, bool turn);
     std::vector<uint16_t> knightMoves(uint64_t start, uint64_t mixed_start, uint64_t valid, uint64_t opponent, bool turn);
+    
+    void undoMove(bitboard &board, uint16_t undo_move, uint16_t old_field);
 
-    bitboard updateBoard(bitboard board, uint16_t move);
+    uint16_t updateBoard(bitboard &board, uint16_t move);
 
     
     // fill from bottom left to top right
@@ -92,6 +94,10 @@ public:
     std::vector<uint16_t> getBits(uint64_t board);
     uint16_t generateMove(uint16_t start, uint16_t end, uint16_t type, bool take = false);
     void printMoves(std::vector<uint16_t> moves);
+
+    int move_counter = 0;
+    int undo_counter = 0;
+
     
 };
 

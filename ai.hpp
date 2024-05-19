@@ -21,11 +21,11 @@ public:
     uint16_t negamax_handler(bitboard &board, int search_depth);
     int negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
     uint16_t minimax_handler(bitboard &board, int search_depth);
-    int maxi(uint16_t move, int depth, bitboard &board, Moves m);
-    int mini(uint16_t move, int depth, bitboard &board, Moves m);
+    int maxi(int depth, bitboard &board, Moves m);
+    int mini(int depth, bitboard &board, Moves m);
     uint16_t alphabeta_handler(bitboard &board, int search_depth);
-    int alphabetaMax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
-    int alphabetaMin(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m);
+    int alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, bool max_player);
+    int alphabetaMin(int depth, int alpha, int beta, bitboard &board, Moves &m, bool max_player);
 
 };
 

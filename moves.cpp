@@ -3,7 +3,7 @@
 
 bool Moves::gameOver(bitboard &board, std::vector<uint16_t> moves){
     uint64_t red = board.red_pawns | board.red_red_knight | board.blue_red_knight;
-    uint64_t blue = board.blue_pawns |board.red_blue_knight | board.blue_blue_knight;
+    uint64_t blue = board.blue_pawns | board.red_blue_knight | board.blue_blue_knight;
     // if one player has piece on the last row
     if(red & 0xff00000000000000 || blue & 0xff){
         return true;
@@ -144,10 +144,11 @@ The second pawn moves to the field the knight moves to.
 
 
 */
-bitboard Moves::updateBoard(bitboard board, uint16_t move){
-    bitboard new_board = board;
-    if (move == 0) return new_board;
-
+uint16_t Moves::updateBoard(bitboard &board, uint16_t move){
+    if (move == 0) return 0;
+    move_counter++;
+     
+   
     // update move on new board
     // Read bits 12-14
     uint16_t type = (move >> 12) & 0x7;
@@ -158,142 +159,151 @@ bitboard Moves::updateBoard(bitboard board, uint16_t move){
     // take
     bool take = (move >> 15) & 0x1;
 
+    // check what is currently on the end field
+    uint16_t end_piece = 7;
+    const std::array<uint64_t, 7> end_pieces = {board.blue_pawns, board.blue_blue_knight, board.red_blue_knight, 7, board.red_pawns, board.red_red_knight, board.blue_red_knight};
+    for (int i = 0; i < 7; i++){
+        if (end_pieces[i] >> end & 1){
+            end_piece = i;
+            break;
+        }
+    }
 
     switch (type)
     {
     case 0: // blue_pawns
-        new_board.blue_pawns &= ~(1ull << start);
+        board.blue_pawns &= ~(1ull << start);
         if (take){
-            if(new_board.red_pawns >> end & 1){
-                new_board.red_pawns &= ~(1ull << end);
-                new_board.blue_pawns |= (1ull << end);
-            } else if(new_board.red_red_knight >> end & 1){
-                new_board.red_red_knight &= ~(1ull << end);
-                new_board.red_blue_knight |= (1ull << end);
-            } else if(new_board.blue_red_knight >> end & 1){
-                new_board.blue_red_knight &= ~(1ull << end);
-                new_board.blue_blue_knight |= (1ull << end);
+            if(board.red_pawns >> end & 1){
+                board.red_pawns &= ~(1ull << end);
+                board.blue_pawns |= (1ull << end);
+            } else if(board.red_red_knight >> end & 1){
+                board.red_red_knight &= ~(1ull << end);
+                board.red_blue_knight |= (1ull << end);
+            } else if(board.blue_red_knight >> end & 1){
+                board.blue_red_knight &= ~(1ull << end);
+                board.blue_blue_knight |= (1ull << end);
             }
         } else {
-            if(new_board.blue_pawns >> end & 1){
-                new_board.blue_pawns &= ~(1ull << end);
-                new_board.blue_blue_knight |= (1ull << end);
+            if(board.blue_pawns >> end & 1){
+                board.blue_pawns &= ~(1ull << end);
+                board.blue_blue_knight |= (1ull << end);
             } else {
-                new_board.blue_pawns |= (1ull << end);
+                board.blue_pawns |= (1ull << end);
             }
         }
         break;
     case 1: // blue_blue_knights
-        new_board.blue_blue_knight &= ~(1ull << start);
-        new_board.blue_pawns |= (1ull << start);
+        board.blue_blue_knight &= ~(1ull << start);
+        board.blue_pawns |= (1ull << start);
         if (take){
-            if(new_board.red_pawns >> end & 1){
-                new_board.red_pawns &= ~(1ull << end);
-                new_board.blue_pawns |= (1ull << end);
-            } else if(new_board.red_red_knight >> end & 1){
-                new_board.red_red_knight &= ~(1ull << end);
-                new_board.red_blue_knight |= (1ull << end);
-            } else if(new_board.blue_red_knight >> end & 1){
-                new_board.blue_red_knight &= ~(1ull << end);
-                new_board.blue_blue_knight |= (1ull << end);
+            if(board.red_pawns >> end & 1){
+                board.red_pawns &= ~(1ull << end);
+                board.blue_pawns |= (1ull << end);
+            } else if(board.red_red_knight >> end & 1){
+                board.red_red_knight &= ~(1ull << end);
+                board.red_blue_knight |= (1ull << end);
+            } else if(board.blue_red_knight >> end & 1){
+                board.blue_red_knight &= ~(1ull << end);
+                board.blue_blue_knight |= (1ull << end);
             }
         } else {     
-            if(new_board.blue_pawns >> end & 1){      
-                new_board.blue_pawns &= ~(1ull << end);
-                new_board.blue_blue_knight |= (1ull << end);
+            if(board.blue_pawns >> end & 1){      
+                board.blue_pawns &= ~(1ull << end);
+                board.blue_blue_knight |= (1ull << end);
             } else {
-                new_board.blue_pawns |= (1ull << end);
+                board.blue_pawns |= (1ull << end);
             }
         }
         break;
     case 2: // red_blue_knight
-        new_board.red_blue_knight &= ~(1ull << start);
-        new_board.red_pawns |= (1ull << start);
+        board.red_blue_knight &= ~(1ull << start);
+        board.red_pawns |= (1ull << start);
         if (take){
-            if(new_board.red_pawns >> end & 1){
-                new_board.red_pawns &= ~(1ull << end);
-                new_board.blue_pawns |= (1ull << end);
-            } else if(new_board.red_red_knight >> end & 1){
-                new_board.red_red_knight &= ~(1ull << end);
-                new_board.red_blue_knight |= (1ull << end);
-            } else if(new_board.blue_red_knight >> end & 1){
-                new_board.blue_red_knight &= ~(1ull << end);
-                new_board.blue_blue_knight |= (1ull << end);
+            if(board.red_pawns >> end & 1){
+                board.red_pawns &= ~(1ull << end);
+                board.blue_pawns |= (1ull << end);
+            } else if(board.red_red_knight >> end & 1){
+                board.red_red_knight &= ~(1ull << end);
+                board.red_blue_knight |= (1ull << end);
+            } else if(board.blue_red_knight >> end & 1){
+                board.blue_red_knight &= ~(1ull << end);
+                board.blue_blue_knight |= (1ull << end);
             }
         } else {
-            if(new_board.blue_pawns >> end & 1){
-                new_board.blue_pawns &= ~(1ull << end);
-                new_board.blue_blue_knight |= (1ull << end);
+            if(board.blue_pawns >> end & 1){
+                board.blue_pawns &= ~(1ull << end);
+                board.blue_blue_knight |= (1ull << end);
             } else {
-                new_board.blue_pawns |= (1ull << end);
+                board.blue_pawns |= (1ull << end);
             }
         }
         break;
     case 4: // red_pawns
-        new_board.red_pawns &= ~(1ull << start);
+        board.red_pawns &= ~(1ull << start);
         if (take){
-            if(new_board.blue_pawns >> end & 1){
-                new_board.blue_pawns &= ~(1ull << end);
-                new_board.red_pawns |= (1ull << end);
-            } else if(new_board.blue_blue_knight >> end & 1){
-                new_board.blue_blue_knight &= ~(1ull << end);
-                new_board.blue_red_knight |= (1ull << end);
-            } else if(new_board.red_blue_knight >> end & 1){
-                new_board.red_blue_knight &= ~(1ull << end);
-                new_board.red_red_knight |= (1ull << end);
+            if(board.blue_pawns >> end & 1){
+                board.blue_pawns &= ~(1ull << end);
+                board.red_pawns |= (1ull << end);
+            } else if(board.blue_blue_knight >> end & 1){
+                board.blue_blue_knight &= ~(1ull << end);
+                board.blue_red_knight |= (1ull << end);
+            } else if(board.red_blue_knight >> end & 1){
+                board.red_blue_knight &= ~(1ull << end);
+                board.red_red_knight |= (1ull << end);
             }
         } else {
-            if(new_board.red_pawns >> end & 1){
-                new_board.red_pawns &= ~(1ull << end);
-                new_board.red_red_knight |= (1ull << end);
+            if(board.red_pawns >> end & 1){
+                board.red_pawns &= ~(1ull << end);
+                board.red_red_knight |= (1ull << end);
             } else {
-                new_board.red_pawns |= (1ull << end);
+                board.red_pawns |= (1ull << end);
             }
         }
         break;
     case 5: // red_red_knights
-        new_board.red_red_knight &= ~(1ull << start);
-        new_board.red_pawns |= (1ull << start);
+        board.red_red_knight &= ~(1ull << start);
+        board.red_pawns |= (1ull << start);
         if (take){
-            if(new_board.blue_pawns >> end & 1){
-                new_board.blue_pawns &= ~(1ull << end);
-                new_board.red_pawns |= (1ull << end);
-            } else if(new_board.blue_blue_knight >> end & 1){
-                new_board.blue_blue_knight &= ~(1ull << end);
-                new_board.blue_red_knight |= (1ull << end);
-            } else if(new_board.red_blue_knight >> end & 1){
-                new_board.red_blue_knight &= ~(1ull << end);
-                new_board.red_red_knight |= (1ull << end);
+            if(board.blue_pawns >> end & 1){
+                board.blue_pawns &= ~(1ull << end);
+                board.red_pawns |= (1ull << end);
+            } else if(board.blue_blue_knight >> end & 1){
+                board.blue_blue_knight &= ~(1ull << end);
+                board.blue_red_knight |= (1ull << end);
+            } else if(board.red_blue_knight >> end & 1){
+                board.red_blue_knight &= ~(1ull << end);
+                board.red_red_knight |= (1ull << end);
             }
         } else {
-            if(new_board.red_pawns >> end & 1){
-                new_board.red_pawns &= ~(1ull << end);
-                new_board.red_red_knight |= (1ull << end);
+            if(board.red_pawns >> end & 1){
+                board.red_pawns &= ~(1ull << end);
+                board.red_red_knight |= (1ull << end);
             } else {        
-                new_board.red_pawns |= (1ull << end);
+                board.red_pawns |= (1ull << end);
             }
         }
         break;
     case 6: // blue_red_knights
-        new_board.blue_red_knight &= ~(1ull << start);
-        new_board.blue_pawns |= (1ull << start);
+        board.blue_red_knight &= ~(1ull << start);
+        board.blue_pawns |= (1ull << start);
         if (take){
-            if(new_board.blue_pawns >> end & 1){
-                new_board.blue_pawns &= ~(1ull << end);
-                new_board.red_pawns |= (1ull << end);
-            } else if(new_board.blue_blue_knight >> end & 1){
-                new_board.blue_blue_knight &= ~(1ull << end);
-                new_board.blue_red_knight |= (1ull << end);
-            } else if(new_board.red_blue_knight >> end & 1){
-                new_board.red_blue_knight &= ~(1ull << end);
-                new_board.red_red_knight |= (1ull << end);
+            if(board.blue_pawns >> end & 1){
+                board.blue_pawns &= ~(1ull << end);
+                board.red_pawns |= (1ull << end);
+            } else if(board.blue_blue_knight >> end & 1){
+                board.blue_blue_knight &= ~(1ull << end);
+                board.blue_red_knight |= (1ull << end);
+            } else if(board.red_blue_knight >> end & 1){
+                board.red_blue_knight &= ~(1ull << end);
+                board.red_red_knight |= (1ull << end);
             }
         } else {
-            if(new_board.red_pawns >> end & 1){
-                new_board.red_pawns &= ~(1ull << end);   
-                new_board.red_red_knight |= (1ull << end);
+            if(board.red_pawns >> end & 1){
+                board.red_pawns &= ~(1ull << end);   
+                board.red_red_knight |= (1ull << end);
             } else {
-                new_board.red_pawns |= (1ull << end);
+                board.red_pawns |= (1ull << end);
             }
         }
         break;
@@ -301,9 +311,69 @@ bitboard Moves::updateBoard(bitboard board, uint16_t move){
         break;
     }
 
-    new_board.turn = !board.turn;
-    return new_board;
+    board.turn = !board.turn;
+    // return the move that can be used to undo the move
+    // 0-5 end, 6-11 start, 12-14 type of piece moved,  | 16-18 type of piece taken (111 if no piece taken)
+    // move 0-15 
+    // move , remove last bit and append end_piece, fill rest with 0
+    // remove last bit from move
+    //print out binary of end_piece
+    // uint32_t undo_move = move | (end_piece << 16);
+
+    return end_piece;
 }
+
+void Moves::undoMove(bitboard &board, uint16_t move,  uint16_t type_end){
+    if (move == 0) return;
+    undo_counter++;
+
+    uint16_t type = (move >> 12) & 0x7;
+    uint16_t start = (move >> 6) & 0x3f;
+    uint16_t end = move & 0x3f;
+
+    // std:: cout << "start: " << start << " end: " << end << " start_piece: " << type << " end_piece: " << type_end << "\n";
+
+
+    // check what is currently on the end field and remove it
+    
+    board.blue_pawns &= ~(1ull << end);
+    board.blue_blue_knight &= ~(1ull << end);
+    board.red_blue_knight &= ~(1ull << end);
+    board.red_pawns &= ~(1ull << end);
+    board.red_red_knight &= ~(1ull << end);
+    board.blue_red_knight &= ~(1ull << end);
+    
+    
+    // check what is currently on the start field and remove it
+    board.blue_pawns &= ~(1ull << start);
+    board.blue_blue_knight &= ~(1ull << start);
+    board.red_blue_knight &= ~(1ull << start);
+    board.red_pawns &= ~(1ull << start);
+    board.red_red_knight &= ~(1ull << start);
+    board.blue_red_knight &= ~(1ull << start);
+    
+   
+    if(type == 0){board.blue_pawns |= (1ull << start);}
+    else if(type == 1){board.blue_blue_knight |= (1ull << start);}
+    else if(type == 2){board.red_blue_knight |= (1ull << start);}
+    else if(type == 4){board.red_pawns |= (1ull << start);}
+    else if(type == 5){board.red_red_knight |= (1ull << start);}
+    else if(type == 6){board.blue_red_knight |= (1ull << start);}
+    
+    // add the pieces back to the board
+    if(type_end == 0){board.blue_pawns |= (1ull << end);}
+    else if(type_end == 1){board.blue_blue_knight |= (1ull << end);}
+    else if(type_end == 2){board.red_blue_knight |= (1ull << end);}
+    else if(type_end == 4){board.red_pawns |= (1ull << end);}
+    else if(type_end == 5){board.red_red_knight |= (1ull << end);}
+    else if(type_end == 6){board.blue_red_knight |= (1ull << end);}
+    
+    
+
+
+    board.turn = !board.turn;
+}
+
 
 void Moves::printMoves(std::vector<uint16_t> moves){
     // std::cout << "Number of Moves: " << moves.size() << "\n";
@@ -331,4 +401,3 @@ void Moves::printMoves(std::vector<uint16_t> moves){
         std::cout << format[start] << " -> " << format[end] << " Type: " << figures[figure] << " Take: " << take << "\n";
     }
     
-}
