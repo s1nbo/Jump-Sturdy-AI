@@ -7,9 +7,10 @@ int Ai::rate_board(bitboard &board){
     // if red pawn in row 8 return Min
     uint64_t red = board.red_pawns | board.red_red_knight | board.blue_red_knight;
     uint64_t blue = board.blue_pawns |board.red_blue_knight | board.blue_blue_knight;
+    int turn = board.turn ? 1 : -1;
     // if one player has piece on the last row
-    //if(blue & 0xff) return board.turn ? 10000000 : -10000000;
-    //if(red & 0xff00000000000000) return board.turn ? -10000000 : 10000000;
+    if(blue & 0xff) return 10000000*turn;
+    if(red & 0xff00000000000000) return -10000000*turn;
     
 
     int blue_score = 0;
@@ -27,18 +28,16 @@ int Ai::rate_board(bitboard &board){
     //std::cout << "Blue score: " << blue_score << "\n";
     //std::cout << "Red score: " << red_score << "\n";
   
-    int score = 0;
-    if (board.turn) score =  blue_score - red_score;
-    else score = red_score - blue_score;
-    
+    int score =  blue_score - red_score;
+
     //
-    //int turn = board.turn ? 1 : -1;
+    
     
     // std::cout << "Score: " << score << " Score*turn: " << score * turn << " Turn: " << turn << "\n";
 
 
 
-    return score;
+    return score*turn;
 }
 
 
@@ -156,21 +155,29 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth){
     analyzed_nodes = 0;
     bool max_player = board.turn;
 
+    // add iterative deepening
     auto childNodes = m.generateMoves(board);
-    for (auto child : childNodes){
-        uint16_t move_made = m.updateBoard(board, child);
-        int value = alphabetaMin(search_depth-1, alpha, beta, board, m, max_player);
-        m.undoMove(board, child, move_made);
-        if(value > best_value){
-            best_value = value;
-            best_move = child;
+    for(int cur_depth = 1; cur_depth <= search_depth; cur_depth++){
+        
+        for (auto child : childNodes){
+            uint16_t move_made = m.updateBoard(board, child);
+            int value = alphabetaMin(cur_depth-1, alpha, beta, board, m, max_player);
+            m.undoMove(board, child, move_made);
+            if(value > best_value){
+                best_value = value;
+                best_move = child;
+            }
+            alpha = std::max(best_value, alpha);
+            if(alpha >= beta){
+                break;
+            }
         }
-        alpha = std::max(best_value, alpha);
-        if(alpha >= beta){
-            break;
-        }
+        // take best move and put it in the front of childNodes
+        childNodes.erase(std::remove(childNodes.begin(), childNodes.end(), best_move), childNodes.end());
+        childNodes.insert(childNodes.begin(), best_move);
+        std::cout << "Best value: " << best_value << "\n";
     }
-    std::cout << "Best value: " << best_value << "\n";
+    
     return best_move;
 };
 

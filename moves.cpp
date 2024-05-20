@@ -390,7 +390,7 @@ void Moves::printMoves(std::vector<uint16_t> moves){
         
     };
     std::vector<std::string> figures = {
-        "blue_pawns", "blue_blue_knights", "red_blue_knight", "error", "red_pawns", "red_red_knights", "red_blue_knights"
+        "blue_pawns", "blue_blue_knights", "red_blue_knight", "error", "red_pawns", "red_red_knights", "blue_red_knight"
     };
     
     for(auto move : moves){
