@@ -3,6 +3,7 @@
 #include "moves.hpp"
 #include "connect.hpp"
 #include "test.hpp"
+#include "tt.hpp"
 
 #include <string>
 #include <cassert>
@@ -29,7 +30,18 @@
 
 
 int main(){
+
+    // Connect to Server
+    boost::asio::io_service ios;
+    Connect client(ios, "127.0.0.1", "62303");
+    client.send("get");
+    std::cout << "Over" << std::endl;
+    Tt table;
+
+
+    /*
     Test test;
+    
     // Milestone 1
     bitboard current_board;
     Board board("6/3b0b03/3r02bb1/b0b03bb2/rrrr1bb2rr1/3b0b01r01/2r01r02r0/4r01 r", current_board);
@@ -40,6 +52,7 @@ int main(){
     // 6/3b0b03/3r02bb1/b0b03bb2/rrrr1bb2rr1/3r0b01r01/2r04r0/4r01 b
     std::cout << "Milestone 1\n" << "Test Ai vs Ai\n";
     test.test_game(6,"6/4bbb02/b02b01b02/1b02b03/2b01rrrr2/6r01/r01r0r0r03/5r0 r");
+    */
     /*
     // test updateBoard and undoMove
     for (int i = 0; i < 13; i++) {

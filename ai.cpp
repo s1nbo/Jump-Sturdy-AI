@@ -1,6 +1,5 @@
 #include "ai.hpp"
 
-
 int Ai::rate_board(bitboard &board){
 
     // if blue pawn in row 1 return Max
@@ -12,10 +11,8 @@ int Ai::rate_board(bitboard &board){
     if(blue & 0xff) return 10000000*turn;
     if(red & 0xff00000000000000) return -10000000*turn;
     
-
     int blue_score = 0;
     int red_score = 0;
-
 
     for(auto i : getBits(board.blue_pawns)) blue_score += 100 * (8 - (i / 8));
     for(auto i : getBits(board.blue_blue_knight)) blue_score += 120 * (8 - (i / 8));
@@ -24,22 +21,11 @@ int Ai::rate_board(bitboard &board){
     for(auto i : getBits(board.red_pawns)) red_score += 100 * (i / 8);
     for(auto i : getBits(board.red_red_knight)) red_score += 120 * (i / 8);
     for(auto i : getBits(board.blue_red_knight)) red_score += 120 * (i / 8);
-
-    //std::cout << "Blue score: " << blue_score << "\n";
-    //std::cout << "Red score: " << red_score << "\n";
   
     int score =  blue_score - red_score;
 
-    //
-    
-    
-    // std::cout << "Score: " << score << " Score*turn: " << score * turn << " Turn: " << turn << "\n";
-
-
-
     return score*turn;
 }
-
 
 std::vector<uint16_t> Ai::getBits(uint64_t board){
     std::vector<uint16_t> ans;
@@ -52,59 +38,145 @@ std::vector<uint16_t> Ai::getBits(uint64_t board){
     return ans;
 }
 
+
+// Negamax with Iterative Deepening
 uint16_t Ai::negamax_handler(bitboard &board, int search_depth){
-    int alpha = -1000;
-    int beta = 1000;
-    int best_value = -1000;
+    int alpha = INT_MIN;
+    int beta = INT_MAX;
+    int best_value = INT_MIN;
     std::uint16_t best_move = 0;
     Moves m;
     analyzed_nodes = 0;
     auto childNodes = m.generateMoves(board);
 
-    for (auto child : childNodes){
-        // make a move
-        int value = -negamax(child, search_depth-1, -beta, -alpha, board, m);
-        // undo the move
-        if(value > best_value){
-            best_value = value;
-            best_move = child;
+    for(int cur_depth = 1; cur_depth <= search_depth; cur_depth++){
+        for (size_t i = 0; i < childNodes.size(); i++){
+            uint16_t move_made = m.updateBoard(board, childNodes[i]); // make a move
+            int value = negamax(search_depth-1, alpha, beta, board, m); // go into the tree
+            m.undoMove(board, childNodes[i], move_made); // undo the move
+            if(value > best_value){ // if the value is better than the best value
+                best_value = value;
+                best_move = i;
+            }
+            alpha = std::max(best_value, alpha);
+            if(alpha >= beta) break;
         }
-        alpha = std::max(best_value, alpha);
-        if(alpha >= beta){
-            break;
-        }
+        // take best move and put it in the front of childNodes
+        std::swap(childNodes[0], childNodes[best_move]);
     }
     return best_move;
 }
 
-int Ai::negamax(uint16_t move, int depth, int alpha, int beta, bitboard &board, Moves m){
-
+int Ai::negamax(int depth, int alpha, int beta, bitboard &board, Moves m){
     analyzed_nodes++;
-    if(depth == 0){
-        return rate_board(board);
-    }
+    if(depth == 0) return rate_board(board);
     auto childNodes = m.generateMoves(board);
-    int value = -1000;
-    for(auto child : childNodes){
-        // make a move
-        value = std::max(value, -negamax(child, depth-1, -beta, -alpha, board, m));
-        // undo the move
+    int value = INT_MIN;
+
+    for(size_t i = 0; i < childNodes.size(); i++) {
+        uint16_t move_made = m.updateBoard(board, childNodes[i]); // make a move
+        value = std::max(value, -negamax(depth-1, -beta, -alpha, board, m));
+        m.undoMove(board, childNodes[i], move_made); // undo the move
         alpha = std::max(alpha, value);
-        if(alpha >= beta){
-            break;
-        }
+        if(alpha >= beta) break;
     }
     return value;
 }
 
 
+// Alpha Beta with Iterative Deepening
+uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
+    int alpha = INT_MIN;
+    int beta = INT_MAX;
+    int best_value = INT_MIN;
+    std::uint16_t best_move = 0;
+    Moves m;
+    analyzed_nodes = 0;
+    auto hash = table.zorbist_hash(board);
+
+    // add iterative deepening
+    if(table.probe(hash, board.turn)) return table.probe(hash, board.turn);
+    auto childNodes = m.generateMoves(board);
+    for(int cur_depth = 1; cur_depth <= search_depth; cur_depth++){
+        for (size_t i = 0; i < childNodes.size(); i++){
+            uint16_t move_made = m.updateBoard(board, childNodes[i]);
+            int value = alphabetaMin(cur_depth-1, alpha, beta, board, m, table);
+            m.undoMove(board, childNodes[i], move_made);
+            auto hash = table.zorbist_hash(board);
+            if(value > best_value){
+                best_value = value;
+                best_move = i;
+                table.store(hash, best_move);
+            }
+            alpha = std::max(best_value, alpha);
+
+            if(alpha >= beta) break;
+        }
+        // take best move and put it in the front of childNodes
+        std::swap(childNodes[0], childNodes[best_move]);
+        
+    }
+    return best_move;
+};
+
+int Ai::alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
+    analyzed_nodes++;
+    if(depth == 0) return rate_board(board);
+    auto hash = table.zorbist_hash(board);
+    uint16_t best_move = 0;
+    if(table.probe(hash, board.turn)) return table.probe(hash, board.turn);
+    for(auto child : m.generateMoves(board)){
+        uint16_t move_made = m.updateBoard(board, child);
+        int score = alphabetaMin(depth-1, alpha, beta, board, m, table);
+
+        m.undoMove(board, child, move_made);
+
+        if(score >= beta){
+            table.store(hash, child, board.turn);
+            return beta;
+        }
+        if(score > alpha){
+            best_move = child;
+            alpha = score;
+        }
+    }
+    table.store(hash, best_move, board.turn);
+    return alpha;
+};
+
+int Ai::alphabetaMin(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
+    analyzed_nodes++;
+    if(depth == 0) return -rate_board(board);
+    auto hash = table.zorbist_hash(board);
+    if(table.probe(hash, board.turn)) return table.probe(hash, board.turn);
+    uint16_t best_move = 0;
+    if(table.probe(hash, board.turn)) return table.probe(hash, board.turn);
+    for(auto child : m.generateMoves(board)){
+        uint16_t move_made = m.updateBoard(board, child);
+        int score = alphabetaMax(depth-1, alpha, beta, board, m, table);
+        m.undoMove(board, child, move_made);
+        if(score <= alpha){
+            table.store(hash, child, board.turn);
+            return alpha;
+        }
+        if(score < beta){
+            beta = score;
+            best_move = child;
+        }
+    }
+    table.store(hash, best_move, board.turn);
+    return beta;
+};
+
+
+// Not as important, does not have Iterative deepening
 uint16_t Ai::minimax_handler(bitboard &board, int search_depth){
     int best_value = INT_MIN;
     uint16_t best_move = 0;
     Moves m;
     analyzed_nodes = 0;
-    
     auto childNodes = m.generateMoves(board);
+
     for(auto child : childNodes){
         uint16_t move_made = m.updateBoard(board, child);
         int value = maxi(search_depth-1, board, m);
@@ -114,13 +186,10 @@ uint16_t Ai::minimax_handler(bitboard &board, int search_depth){
             best_move = child;
         }
     }
-    
     return best_move;
-
 };
 
 int Ai::maxi(int depth, bitboard &board, Moves m){
-    
     analyzed_nodes++;
     if (depth == 0) return rate_board(board);
     int max = INT_MIN;
@@ -133,7 +202,6 @@ int Ai::maxi(int depth, bitboard &board, Moves m){
 };
 
 int Ai::mini(int depth, bitboard &board, Moves m){
-    
     analyzed_nodes++;
     if (depth == 0) return -rate_board(board);
     int min = INT_MAX;
@@ -145,72 +213,4 @@ int Ai::mini(int depth, bitboard &board, Moves m){
     return min;
 };
 
-
-uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth){
-    int alpha = INT_MIN;
-    int beta = INT_MAX;
-    int best_value = INT_MIN;
-    std::uint16_t best_move = 0;
-    Moves m;
-    analyzed_nodes = 0;
-    bool max_player = board.turn;
-
-    // add iterative deepening
-    auto childNodes = m.generateMoves(board);
-    for(int cur_depth = 1; cur_depth <= search_depth; cur_depth++){
-        
-        for (auto child : childNodes){
-            uint16_t move_made = m.updateBoard(board, child);
-            int value = alphabetaMin(cur_depth-1, alpha, beta, board, m, max_player);
-            m.undoMove(board, child, move_made);
-            if(value > best_value){
-                best_value = value;
-                best_move = child;
-            }
-            alpha = std::max(best_value, alpha);
-            if(alpha >= beta){
-                break;
-            }
-        }
-        // take best move and put it in the front of childNodes
-        childNodes.erase(std::remove(childNodes.begin(), childNodes.end(), best_move), childNodes.end());
-        childNodes.insert(childNodes.begin(), best_move);
-        std::cout << "Best value: " << best_value << "\n";
-    }
-    
-    return best_move;
-};
-
-
-
-int Ai::alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, bool max_player){
-
-    analyzed_nodes++;
-    if(depth == 0) return rate_board(board);
-
-    for(auto child : m.generateMoves(board)){
-        uint16_t move_made = m.updateBoard(board, child);
-        int score = alphabetaMin(depth-1, alpha, beta, board, m, max_player);
-        m.undoMove(board, child, move_made);
-        if(score >= beta) return beta;
-        alpha = std::max(alpha, score);
-    }
-    return alpha;
-};
-
-int Ai::alphabetaMin(int depth, int alpha, int beta, bitboard &board, Moves &m, bool max_player){
-
-    analyzed_nodes++;
-    if(depth == 0) return -rate_board(board);
-
-    for(auto child : m.generateMoves(board)){
-        uint16_t move_made = m.updateBoard(board, child);
-        int score = alphabetaMax(depth-1, alpha, beta, board, m, max_player);
-        m.undoMove(board, child, move_made);
-        if(score <= alpha) return alpha;
-        beta = std::min(beta, score);
-    }
-    return beta;
-   
-};
 
