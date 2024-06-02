@@ -106,7 +106,7 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
             if(value > best_value){
                 best_value = value;
                 best_move = i;
-                table.store(hash, best_move);
+                table.store(hash, best_move, board.turn);
             }
             alpha = std::max(best_value, alpha);
 

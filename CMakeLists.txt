@@ -10,6 +10,6 @@ set(CMAKE_CPP_COMPILER g++)
 find_package(Boost REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
-add_executable(jumpsturdy main.cpp ai.cpp board.cpp moves.cpp connect.cpp test.cpp tt.cpp)
+add_executable(jumpsturdy main.cpp tt.cpp ai.cpp board.cpp moves.cpp connect.cpp test.cpp )
 target_include_directories(jumpsturdy PRIVATE ${CMAKE_SOURCE_DIR} ${Boost_INCLUDE_DIRS})
 target_link_libraries(jumpsturdy ${Boost_LIBRARIES} nlohmann_json::nlohmann_json)

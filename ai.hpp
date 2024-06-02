@@ -1,9 +1,10 @@
 #ifndef AI_HPP
 #define AI_HPP
 
+#include "tt.hpp"
 #include "moves.hpp"
 #include "board.hpp"
-#include "tt.hpp"
+
 
 #include <cstdint>
 #include <vector>

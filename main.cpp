@@ -33,10 +33,35 @@ int main(){
 
     // Connect to Server
     boost::asio::io_service ios;
-    Connect client(ios, "127.0.0.1", "62303");
+    Connect client(ios, "localhost", "5555");
     client.send("get");
-    std::cout << "Over" << std::endl;
-    Tt table;
+    nlohmann::json player;
+    while(1){
+        nlohmann::json player = client.start();
+        std::cout << "Connected\n";
+        break;
+    }
+    std::cout << player << "\n";
+    if (player == 0){
+        std::cout << "Player 0\n";
+    } else {
+        std::cout << "Player 1\n";
+    }
+
+    
+    while(1){
+        try {
+            client.send("E7-F7");
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+    
+    
+
+
+    // Tt table;
 
 
     /*

@@ -4,6 +4,7 @@
 #include "board.hpp"
 #include "moves.hpp"
 #include "ai.hpp"
+#include "tt.hpp"
 
 #include <vector>
 #include <string>
@@ -24,10 +25,10 @@ public:
     // Milestone 2
     void test_rate_board(int amount, int board_number); // test rate_board, time taken per rate_board
     void test_search_depth_minimax(int depth, int board_number); // search depth performance for minimax
-    void test_search_depth_alphabeta(int depth, int board_number); // search depth performance for alphabeta
+    void test_search_depth_alphabeta(int depth, int board_number, Tt &table); // search depth performance for alphabeta
     void show_results();
     void test_search_depth_minimax_performance(int depth, int board_number, int amount); // search depth performance for minimax
-    void test_search_depth_alphabeta_performance(int depth, int board_number, int amount); // search depth performance for alphabeta
+    void test_search_depth_alphabeta_performance(int depth, int board_number, int amount, Tt &table); // search depth performance for alphabeta
     
     // look at position per second
     // * Saved time with Alphabeta pruning

@@ -5,13 +5,14 @@ void Test::test_game(int depth, std::string board_number){
     Board board(board_number, current_board);
     Moves moves;
     Ai ai;
+    Tt table;
 
     float move_count = 0;
     auto start = std::chrono::high_resolution_clock::now();
         
     while(move_count < 100) {
         std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
-        uint16_t move = ai.alphabeta_handler(current_board, depth);
+        uint16_t move = ai.alphabeta_handler(current_board, depth, table);
         std::cout << " Move: " << move << " ";
         move_count++;
         moves.printMoves({move});
@@ -108,12 +109,12 @@ void Test::test_search_depth_minimax_performance(int depth, int board_number, in
     std::cout << "\n";
 }
 
-void Test::test_search_depth_alphabeta_performance(int depth, int board_number, int amount){
+void Test::test_search_depth_alphabeta_performance(int depth, int board_number, int amount, Tt &table){
     bitboard bitboard;
     Board board(test[board_number], bitboard);
     Ai ai;
     auto start = std::chrono::high_resolution_clock::now();
-    for(int i = 0; i < amount; i++) ai.alphabeta_handler(bitboard, depth);
+    for(int i = 0; i < amount; i++) ai.alphabeta_handler(bitboard, depth, table);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Runtime: " << elapsed.count() << " s\n";
@@ -122,13 +123,13 @@ void Test::test_search_depth_alphabeta_performance(int depth, int board_number, 
     std::cout << "\n";
 }
 
-void Test::test_search_depth_alphabeta(int depth, int board_number){
+void Test::test_search_depth_alphabeta(int depth, int board_number, Tt &table){
     bitboard bitboard;
     Board board(test[board_number], bitboard);
     Moves moves;
     Ai ai;
     auto start = std::chrono::high_resolution_clock::now();
-    uint16_t best_move = ai.alphabeta_handler(bitboard, depth);
+    uint16_t best_move = ai.alphabeta_handler(bitboard, depth, table);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Runtime: " << elapsed.count() << " s\n";

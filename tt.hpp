@@ -1,9 +1,9 @@
 #ifndef TT_HPP
 #define TT_HPP
 
-#include "moves.hpp"
+
 #include "board.hpp"
-#include "ai.hpp"
+
 
 #include <unordered_map>
 
