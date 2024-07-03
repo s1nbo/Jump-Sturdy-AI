@@ -26,46 +26,9 @@
 8. Close connection
 */
 
-
-
-
-int main(){
-    /*
-    // Connect to Server
-    boost::asio::io_service ios;
-    Connect client(ios, "localhost", "5555");
-    client.send("get");
-    nlohmann::json player;
-    while(1){
-        nlohmann::json player = client.start();
-        std::cout << "Connected\n";
-        break;
-    }
-    std::cout << player << "\n";
-    if (player == 0){
-        std::cout << "Player 0\n";
-    } else {
-        std::cout << "Player 1\n";
-    }
-
-    
-    while(1){
-        try {
-            client.send("E7-F7");
-        } catch (std::exception& e) {
-            std::cerr << e.what() << std::endl;
-        }
-        // five seconds stop
-        std::this_thread::sleep_for(std::chrono::seconds(5));
-    }
-    */
-    
-
+void milestone12(){
 
     Tt table;
-
-
-    
     Test test;
     
     // Milestone 1
@@ -103,7 +66,6 @@ int main(){
         }
     }
    
-
     std::cout << "Test Move Generation\n";
     test.test_move_generation(false);
     std::cout << "Test Move Generation Performance\n";
@@ -172,15 +134,39 @@ int main(){
     test.test_search_depth_alphabeta_performance(5, 0, 1000, table);
     test.test_search_depth_alphabeta_performance(5, 10, 1000, table);
     test.test_search_depth_alphabeta_performance(5, 11, 1000, table);
-    return 0;
 }
 
 
 
+int main(){
 
+    // Connect to Server
+    boost::asio::io_service ios;
+    Connect client(ios, "localhost", "5555");
+    client.send("get");
+    nlohmann::json player;
+    while(1){
+        nlohmann::json player = client.start();
+        std::cout << "Connected\n";
+        break;
+    }
+    std::cout << player << "\n";
+    if (player == 0){
+        std::cout << "Player 0\n";
+    } else {
+        std::cout << "Player 1\n";
+    }
 
-
-
+    
+    while(1){
+        try {
+            client.send("E7-F7");
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+        // five seconds stop
+    }
+}
 
 
 /*
