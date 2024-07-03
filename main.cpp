@@ -30,7 +30,7 @@
 
 
 int main(){
-
+    /*
     // Connect to Server
     boost::asio::io_service ios;
     Connect client(ios, "localhost", "5555");
@@ -55,16 +55,17 @@ int main(){
         } catch (std::exception& e) {
             std::cerr << e.what() << std::endl;
         }
+        // five seconds stop
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
+    */
     
+
+
+    Tt table;
+
+
     
-
-
-    // Tt table;
-
-
-    /*
     Test test;
     
     // Milestone 1
@@ -77,8 +78,7 @@ int main(){
     // 6/3b0b03/3r02bb1/b0b03bb2/rrrr1bb2rr1/3r0b01r01/2r04r0/4r01 b
     std::cout << "Milestone 1\n" << "Test Ai vs Ai\n";
     test.test_game(6,"6/4bbb02/b02b01b02/1b02b03/2b01rrrr2/6r01/r01r0r0r03/5r0 r");
-    */
-    /*
+
     // test updateBoard and undoMove
     for (int i = 0; i < 13; i++) {
         bitboard current_board;
@@ -118,62 +118,61 @@ int main(){
     test.test_rate_board(10000, 11);
     std::cout << "Test Search Depth 3\n";
     test.test_search_depth_minimax(3, 0);
-    test.test_search_depth_alphabeta(3, 0);
+    test.test_search_depth_alphabeta(3, 0, table);
     test.show_results();
     test.test_search_depth_minimax(3, 0);
-    test.test_search_depth_alphabeta(3, 0);
+    test.test_search_depth_alphabeta(3, 0, table);
     test.show_results();
     test.test_search_depth_minimax(3, 10);
-    test.test_search_depth_alphabeta(3, 10);
+    test.test_search_depth_alphabeta(3, 10, table);
     test.show_results();
     test.test_search_depth_minimax(3, 11);
-    test.test_search_depth_alphabeta(3, 11);
+    test.test_search_depth_alphabeta(3, 11, table);
     test.show_results();
     std::cout << "Test Search Depth 4\n";
     test.test_search_depth_minimax(4, 0);
-    test.test_search_depth_alphabeta(4, 0);
+    test.test_search_depth_alphabeta(4, 0, table);
     test.show_results();
     test.test_search_depth_minimax(4, 10);
-    test.test_search_depth_alphabeta(4, 10);
+    test.test_search_depth_alphabeta(4, 10, table);
     test.show_results();
     test.test_search_depth_minimax(4, 11);
-    test.test_search_depth_alphabeta(4, 11);
+    test.test_search_depth_alphabeta(4, 11, table);
     test.show_results();
     std::cout << "Test Search Depth 5\n";
     test.test_search_depth_minimax(5, 0);
-    test.test_search_depth_alphabeta(5, 0);
+    test.test_search_depth_alphabeta(5, 0, table);
     test.show_results();
     test.test_search_depth_minimax(5, 10);
-    test.test_search_depth_alphabeta(5, 10);
+    test.test_search_depth_alphabeta(5, 10, table);
     test.show_results();
     test.test_search_depth_minimax(5, 11);
-    test.test_search_depth_alphabeta(5, 11);
+    test.test_search_depth_alphabeta(5, 11, table);
     test.show_results();
     std::cout << "Test Search Depth 6\n";
-    test.test_search_depth_alphabeta(6, 0);
+    test.test_search_depth_alphabeta(6, 0, table);
 
     std::cout << "Test Search Depth Performance 3\n";
     test.test_search_depth_minimax_performance(3, 0, 1000);
-    test.test_search_depth_alphabeta_performance(3, 0, 1000);
+    test.test_search_depth_alphabeta_performance(3, 0, 1000, table);
     test.test_search_depth_minimax_performance(3, 10, 1000);
-    test.test_search_depth_alphabeta_performance(3, 10, 1000);
+    test.test_search_depth_alphabeta_performance(3, 10, 1000, table);
     test.test_search_depth_minimax_performance(3, 11, 1000);
-    test.test_search_depth_alphabeta_performance(3, 11, 1000);
+    test.test_search_depth_alphabeta_performance(3, 11, 1000, table);
 
     std::cout << "Test Search Depth Performance 4\n";
     test.test_search_depth_minimax_performance(4, 0, 1000);
-    test.test_search_depth_alphabeta_performance(4, 0, 1000);
+    test.test_search_depth_alphabeta_performance(4, 0, 1000, table);
     test.test_search_depth_minimax_performance(4, 10, 1000);
-    test.test_search_depth_alphabeta_performance(4, 10, 1000);
+    test.test_search_depth_alphabeta_performance(4, 10, 1000, table);
     test.test_search_depth_minimax_performance(4, 11, 1000);
-    test.test_search_depth_alphabeta_performance(4, 11, 1000);
+    test.test_search_depth_alphabeta_performance(4, 11, 1000, table);
 
     std::cout << "Test Search Depth Performance 5\n";
-    test.test_search_depth_alphabeta_performance(5, 0, 1000);
-    test.test_search_depth_alphabeta_performance(5, 10, 1000);
-    test.test_search_depth_alphabeta_performance(5, 11, 1000);
+    test.test_search_depth_alphabeta_performance(5, 0, 1000, table);
+    test.test_search_depth_alphabeta_performance(5, 10, 1000, table);
+    test.test_search_depth_alphabeta_performance(5, 11, 1000, table);
     return 0;
-     */
 }
 
 
