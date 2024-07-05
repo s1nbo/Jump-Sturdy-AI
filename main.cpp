@@ -137,7 +137,6 @@ void milestone12(){
 }
 
 
-
 int main(){
 
     // Connect to Server
@@ -150,13 +149,8 @@ int main(){
         std::cout << "Connected\n";
         break;
     }
-    std::cout << player << "\n";
-    if (player == 0){
-        std::cout << "Player 0\n";
-    } else {
-        std::cout << "Player 1\n";
-    }
-
+    // Get player color
+    
     
     while(1){
         try {
