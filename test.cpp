@@ -1,5 +1,5 @@
 #include "test.hpp"
-#include <cassert>
+
 
 void Test::test_game(int depth, std::string board_fen){
     bitboard current_board;
@@ -152,7 +152,7 @@ void Test::test_search_depth_alphabeta(int depth, int board_number, Tt &table){
 void Test::show_results(){
     std::cout << "Minimax: " << minimax_score << " Nodes\n";
     std::cout << "Alphabeta: " << alphabeta_score << " Nodes\n";
-    float improvement = minimax_score / alphabeta_score;
+    float improvement = double (minimax_score) / alphabeta_score;
     std::cout << "Improvement: " << improvement << "\n"; 
     std::cout << "\n";
     alphabeta_score = 0;
