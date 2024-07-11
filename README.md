@@ -1,7 +1,7 @@
 Wie fuehre ich das Programm aus?
 
 1. Terminal oeffnen
-2. In den Ordner navigieren, in den build ordner navigieren
+2. In den build ordner navigieren
 3. cmake ..
 4. make -j
 5. ./jumpsturdy
