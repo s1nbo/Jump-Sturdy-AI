@@ -16,6 +16,8 @@ class Test {
 public:
     Test() = default;
 
+    void test_make_unmake_move(); // test make and unmake move
+
     // Milestone 1
     void test_game(int depth, std::string board_number); // play a game with test[0] AI vs AI
     void test_move_generation(bool print_moves); // unit test different position and the move generation
@@ -65,7 +67,7 @@ public:
         24,
         8,
         25,
-        0
+        24
     };
 
     int minimax_score = 0;

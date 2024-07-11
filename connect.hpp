@@ -1,26 +1,30 @@
 #ifndef CONNECT_HPP
 #define CONNECT_HPP
 
+#include <iostream>
 #include <boost/asio.hpp>
 #include <nlohmann/json.hpp>
-#include <string>
-#include <iostream>
+#include <thread>
+#include <chrono>
 
-class Connect {
+using boost::asio::ip::tcp;
+using json = nlohmann::json;
 
+class Network {
 public:
-    Connect(boost::asio::io_service& ios, const std::string& ip, const std::string& port);
+    Network(const std::string& server, int port);
 
-    void send(const nlohmann::json& j);
-    nlohmann::json start();
-    std::string receive_board();
-
-
+    std::string getP();
+    std::string send(const std::string& data);
 
 private:
-    boost::asio::io_service& ios;
-    boost::asio::ip::tcp::socket endpoint;
+    std::string readResponse();
 
+    boost::asio::io_service io_service;
+    tcp::socket socket;
+    std::string server;
+    int port;
+    std::string p;
 };
 
 #endif

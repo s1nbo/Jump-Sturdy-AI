@@ -161,10 +161,12 @@ uint16_t Moves::updateBoard(bitboard &board, uint16_t move){
 
     // check what is currently on the end field
     uint16_t end_piece = 7;
-    const std::array<uint64_t, 7> end_pieces = {board.blue_pawns, board.blue_blue_knight, board.red_blue_knight, 7, board.red_pawns, board.red_red_knight, board.blue_red_knight};
+    const std::array<uint64_t, 7> end_pieces = {board.blue_pawns, board.blue_blue_knight, board.red_blue_knight, board.red_pawns, board.red_red_knight, board.blue_red_knight};
     for (int i = 0; i < 7; i++){
+
         if (end_pieces[i] >> end & 1){
-            end_piece = i;
+            if(i > 2) end_piece = i + 1;
+            else end_piece = i;
             break;
         }
     }
@@ -172,7 +174,7 @@ uint16_t Moves::updateBoard(bitboard &board, uint16_t move){
     switch (type)
     {
     case 0: // blue_pawns
-        board.blue_pawns &= ~(1ull << start);
+        board.blue_pawns &= ~(1ull << start); // remove blue pawn from start field
         if (take){
             if(board.red_pawns >> end & 1){
                 board.red_pawns &= ~(1ull << end);
@@ -401,4 +403,22 @@ void Moves::printMoves(std::vector<uint16_t> moves){
         std::cout << format[start] << " -> " << format[end] << " Type: " << figures[figure] << " Take: " << take << "\n";
     }
     
+}
+
+std::string Moves::translateMoves(uint16_t moves){
+    std::vector<std::string> format = {
+        "A8", "B8", "C8", "D8", "E8", "F8", "G8", "H8",
+        "A7", "B7", "C7", "D7", "E7", "F7", "G7", "H7",
+        "A6", "B6", "C6", "D6", "E6", "F6", "G6", "H6",
+        "A5", "B5", "C5", "D5", "E5", "F5", "G5", "H5",
+        "A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4",
+        "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3",
+        "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2",
+        "A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1"
+        
+    };
+    printMoves({moves});
+    int start = (moves >> 6) & 0x3f;
+    int end = moves & 0x3f;
+    return format[start] + "-" + format[end];
 }

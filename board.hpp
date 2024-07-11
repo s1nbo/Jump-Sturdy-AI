@@ -37,6 +37,7 @@ public:
     void printBitboard(bitboard board);
     std::string bitboardFen(bitboard &board);
     std::string addCounter(int &counter);
+    void flushBoard(bitboard &board);
 };
 
 

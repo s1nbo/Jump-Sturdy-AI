@@ -5,7 +5,7 @@ Board::Board(std::string fen, bitboard &board) {
 
 }
 void Board::fenBitboard(std::string fen, bitboard &board){
-
+    // Example: b0b0bb1b0b0/1b0b0b01bbb01/8/8/8/6r01/1r0r0r0r0r0r01/r0r0r01r0r0 r
     board.turn = (fen[fen.size()-1] == 'b');
     //std::string fen = fen.substr(0, fen.size()-2);
     int pos = 0;
@@ -133,5 +133,15 @@ std::string Board::addCounter(int &counter){
         
     }
     return "";
-};
+}
 
+void Board::flushBoard(bitboard &board){
+    board.blue_pawns = 0u;
+    board.red_pawns = 0u;
+    board.blue_blue_knight = 0u;
+    board.red_red_knight = 0u;
+    board.red_blue_knight = 0u;
+    board.blue_red_knight = 0u;
+    board.blocked_fields = 9295429630892703873u;
+    board.turn = 0;
+}

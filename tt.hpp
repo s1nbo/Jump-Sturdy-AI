@@ -7,6 +7,9 @@
 
 #include <unordered_map>
 
+// Transposition table class
+
+
 class Tt{
 public:
     Tt() = default;

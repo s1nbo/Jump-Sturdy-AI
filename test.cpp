@@ -1,8 +1,9 @@
 #include "test.hpp"
+#include <cassert>
 
-void Test::test_game(int depth, std::string board_number){
+void Test::test_game(int depth, std::string board_fen){
     bitboard current_board;
-    Board board(board_number, current_board);
+    Board board(board_fen, current_board);
     Moves moves;
     Ai ai;
     Tt table;
@@ -10,17 +11,24 @@ void Test::test_game(int depth, std::string board_number){
     float move_count = 0;
     auto start = std::chrono::high_resolution_clock::now();
         
-    while(move_count < 100) {
-        std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
-        uint16_t move = ai.alphabeta_handler(current_board, depth, table);
-        std::cout << " Move: " << move << " ";
-        move_count++;
-        moves.printMoves({move});
-        moves.updateBoard(current_board, move);
-        if(moves.gameOver(current_board, legal_moves)) break;
+    while(move_count < 1000) {
         
+        
+        std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
+        //board.printBitboard(current_board);
+        uint16_t move = ai.alphabeta_handler(current_board, depth, table);
+        //board.printBitboard(current_board);
+
+        std::cout << " Move: " << move << " ";
+        moves.printMoves({move});
+        
+        moves.updateBoard(current_board, move);
+        // board.printBitboard(current_board);
+     
+
+        move_count++;
+        if(moves.gameOver(current_board, legal_moves)) break;
     }
-    board.printBitboard(current_board);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     
@@ -149,4 +157,32 @@ void Test::show_results(){
     std::cout << "\n";
     alphabeta_score = 0;
     minimax_score = 0;
+}
+
+void Test::test_make_unmake_move(){
+    for (int i = 0; i < 13; i++) {
+        bitboard current_board;
+        Board board(Test::test[i], current_board);
+        Moves moves;
+        std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
+        for (auto move : legal_moves) {
+            bitboard old_board = current_board; 
+            
+            auto temp = moves.updateBoard(current_board, move);
+            moves.undoMove(current_board, move, temp);
+
+            assert(old_board.red_pawns == current_board.red_pawns);
+            assert(old_board.blue_pawns == current_board.blue_pawns);
+            assert(old_board.red_blue_knight == current_board.red_blue_knight);
+            assert(old_board.blue_blue_knight == current_board.blue_blue_knight);
+            assert(old_board.red_red_knight == current_board.red_red_knight);
+            assert(old_board.blue_red_knight == current_board.blue_red_knight);
+
+        }
+        // print all the moves
+        moves.printMoves(legal_moves);
+        
+
+    }
+
 }

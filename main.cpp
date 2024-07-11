@@ -4,163 +4,72 @@
 #include "connect.hpp"
 #include "test.hpp"
 #include "tt.hpp"
+#include "milestone.hpp"
 
+#include <cstdlib>
+#include <iostream>
 #include <string>
 #include <cassert>
 #include <chrono>
 // Main function
 
-/*
-. Connect to Server  (TODO)
-1a. Start Game (TODO)
-2. Get FEN from Server (TODO)
-
-3. Convert FEN to Board (DONE)
-3a. Check if game is over (DONE)
 
 
-4. Get legal moves from Board (DONE)
-5. Choose a move from legal moves (TODO) (AI)
-6. Send move to Server (TODO)
-7. Repeat from 2 until game is over
-8. Close connection
-*/
 
-void milestone12(){
 
-    Tt table;
-    Test test;
-    
-    // Milestone 1
+//5. Choose a move from legal moves (TODO) (AI)
+
+void mainloop(){
     bitboard current_board;
-    Board board("6/3b0b03/3r02bb1/b0b03bb2/rrrr1bb2rr1/3b0b01r01/2r01r02r0/4r01 r", current_board);
     Moves moves;
-    auto legal = moves.generateMoves(current_board);
-    moves.printMoves(legal);
-    board.printBitboard(current_board);
-    // 6/3b0b03/3r02bb1/b0b03bb2/rrrr1bb2rr1/3r0b01r01/2r04r0/4r01 b
-    std::cout << "Milestone 1\n" << "Test Ai vs Ai\n";
-    test.test_game(6,"6/4bbb02/b02b01b02/1b02b03/2b01rrrr2/6r01/r01r0r0r03/5r0 r");
+    Ai ai;
+    Tt table;
+    int depth = 7;
 
-    // test updateBoard and undoMove
-    for (int i = 0; i < 13; i++) {
-        bitboard current_board;
-        Board board(test.test[i], current_board);
-        Moves moves;
-        std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
-        for (auto move : legal_moves) {
-            bitboard old_board = current_board; 
-            board.printBitboard(current_board);
-            auto temp = moves.updateBoard(current_board, move);
-            moves.undoMove(current_board, move, temp);
-            board.printBitboard(current_board);
-            moves.printMoves({move});
+    srand(time(0));
 
-            assert(old_board.red_pawns == current_board.red_pawns);
-            assert(old_board.blue_pawns == current_board.blue_pawns);
-            assert(old_board.red_blue_knight == current_board.red_blue_knight);
-            assert(old_board.blue_blue_knight == current_board.blue_blue_knight);
-            assert(old_board.red_red_knight == current_board.red_red_knight);
-            assert(old_board.blue_red_knight == current_board.blue_red_knight);
+    // Connect to server
+    Network network("localhost", 5555);
+    int player = std::stoi(network.getP());
+    std::cout << "You are player " << player << std::endl;
 
+    while(true){
+        // Get game data from server
+        
+        std::string game_data = network.send(json("get").dump());
+        auto game = json::parse(game_data);
+        if(game["bothConnected"].get<bool>()){
+            // if it is the players turn
+            
+            if((player == 0 && game["player1"].get<bool>()) || (player == 1 && game["player2"].get<bool>())){
+                // Get the board from the server
+                std::cout << "Reading Board" << std::endl;
+                std::string board_fen = game["board"].get<std::string>();
+                Board board(board_fen, current_board);
+
+                // Generate Response
+                std::cout << "Generating Response" << std::endl;
+                std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
+                uint16_t move = ai.alphabeta_handler(current_board, depth, table);
+                std::string response = moves.translateMoves(move);
+                std::cout << "Move: " << response << std::endl;
+                
+                // Send move to server
+                std::cout << "Sending Move" << std::endl;
+                network.send(json(response).dump());
+                
+                // Update board
+                board.flushBoard(current_board);
+            }
         }
     }
-   
-    std::cout << "Test Move Generation\n";
-    test.test_move_generation(false);
-    std::cout << "Test Move Generation Performance\n";
-    test.test_move_generation_performance(10000, 0);
-    test.test_move_generation_performance(10000, 10);
-    test.test_move_generation_performance(10000, 11);
-    
-    // Milestone 2
-    std::cout << "Milestone 2\n" << "Test Rate Board\n";
-    test.test_rate_board(10000, 0);
-    test.test_rate_board(10000, 10);
-    test.test_rate_board(10000, 11);
-    std::cout << "Test Search Depth 3\n";
-    test.test_search_depth_minimax(3, 0);
-    test.test_search_depth_alphabeta(3, 0, table);
-    test.show_results();
-    test.test_search_depth_minimax(3, 0);
-    test.test_search_depth_alphabeta(3, 0, table);
-    test.show_results();
-    test.test_search_depth_minimax(3, 10);
-    test.test_search_depth_alphabeta(3, 10, table);
-    test.show_results();
-    test.test_search_depth_minimax(3, 11);
-    test.test_search_depth_alphabeta(3, 11, table);
-    test.show_results();
-    std::cout << "Test Search Depth 4\n";
-    test.test_search_depth_minimax(4, 0);
-    test.test_search_depth_alphabeta(4, 0, table);
-    test.show_results();
-    test.test_search_depth_minimax(4, 10);
-    test.test_search_depth_alphabeta(4, 10, table);
-    test.show_results();
-    test.test_search_depth_minimax(4, 11);
-    test.test_search_depth_alphabeta(4, 11, table);
-    test.show_results();
-    std::cout << "Test Search Depth 5\n";
-    test.test_search_depth_minimax(5, 0);
-    test.test_search_depth_alphabeta(5, 0, table);
-    test.show_results();
-    test.test_search_depth_minimax(5, 10);
-    test.test_search_depth_alphabeta(5, 10, table);
-    test.show_results();
-    test.test_search_depth_minimax(5, 11);
-    test.test_search_depth_alphabeta(5, 11, table);
-    test.show_results();
-    std::cout << "Test Search Depth 6\n";
-    test.test_search_depth_alphabeta(6, 0, table);
-
-    std::cout << "Test Search Depth Performance 3\n";
-    test.test_search_depth_minimax_performance(3, 0, 1000);
-    test.test_search_depth_alphabeta_performance(3, 0, 1000, table);
-    test.test_search_depth_minimax_performance(3, 10, 1000);
-    test.test_search_depth_alphabeta_performance(3, 10, 1000, table);
-    test.test_search_depth_minimax_performance(3, 11, 1000);
-    test.test_search_depth_alphabeta_performance(3, 11, 1000, table);
-
-    std::cout << "Test Search Depth Performance 4\n";
-    test.test_search_depth_minimax_performance(4, 0, 1000);
-    test.test_search_depth_alphabeta_performance(4, 0, 1000, table);
-    test.test_search_depth_minimax_performance(4, 10, 1000);
-    test.test_search_depth_alphabeta_performance(4, 10, 1000, table);
-    test.test_search_depth_minimax_performance(4, 11, 1000);
-    test.test_search_depth_alphabeta_performance(4, 11, 1000, table);
-
-    std::cout << "Test Search Depth Performance 5\n";
-    test.test_search_depth_alphabeta_performance(5, 0, 1000, table);
-    test.test_search_depth_alphabeta_performance(5, 10, 1000, table);
-    test.test_search_depth_alphabeta_performance(5, 11, 1000, table);
 }
 
 
 int main(){
-
-    // Connect to Server
-    boost::asio::io_service ios;
-    Connect client(ios, "localhost", "5555");
-    client.send("get");
-    nlohmann::json player;
-    while(1){
-        nlohmann::json player = client.start();
-        std::cout << "Connected\n";
-        break;
-    }
-    // Get player color
-    
-    
-    while(1){
-        try {
-            client.send("E7-F7");
-        } catch (std::exception& e) {
-            std::cerr << e.what() << std::endl;
-        }
-        // five seconds stop
-    }
+    mainloop();
 }
+
 
 
 /*
@@ -177,8 +86,16 @@ bits 12-14 Type of Piece
         010: red_blue_knight 2
         110: blue_red_knigts 6
 
-bit 15: Does the move capture a piece (take)
 
+"A8", "B8", "C8", "D8", "E8", "F8", "G8", "H8",
+"A7", "B7", "C7", "D7", "E7", "F7", "G7", "H7",
+"A6", "B6", "C6", "D6", "E6", "F6", "G6", "H6",
+"A5", "B5", "C5", "D5", "E5", "F5", "G5", "H5",
+"A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4",
+"A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3",
+"A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2",
+"A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1"
+        
 
 00 01 02 03 04 05 06 07
 08 09 10 11 12 13 14 15
@@ -200,4 +117,3 @@ bit 15: Does the move capture a piece (take)
 "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
 "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
 */
-

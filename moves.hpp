@@ -98,7 +98,7 @@ public:
     int move_counter = 0;
     int undo_counter = 0;
 
-    
+    std::string translateMoves(uint16_t moves);
 };
 
 #endif
