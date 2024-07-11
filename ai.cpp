@@ -18,7 +18,6 @@ int value(int pos, bool turn){
     // blue gets * 2 for 40-47, red gets * 2 for 16-23
     // blue gets * 1 for 48-55, red gets * 1 for 8-15
     // blue gets * 1 for 56-63, red gets * 1 for 0-7
-    return 1;
     if(turn) return pos < 16 ? 6 : pos < 24 ? 5 : pos < 32 ? 4 : pos < 40 ? 3 : pos < 48 ? 2 : pos < 56 ? 1 : 1;
     return pos < 8 ? 1 : pos < 16 ? 1 : pos < 24 ? 2 : pos < 32 ? 3 : pos < 40 ? 4 : pos < 48 ? 5 : pos < 56 ? 6 : 7;
 
@@ -53,48 +52,24 @@ int Ai::rate_board(bitboard &board){
     auto blue_pawns = getBits(board.blue_pawns);
     auto red_pawns = getBits(board.red_pawns);
 
-    for(auto pawn : blue_pawns){
-        materialScore += pawnWt * value(pawn, board.turn);
-    }
-    for(auto pawn : red_pawns){
-        materialScore -= pawnWt * value(pawn, board.turn);
-    }
+    for(auto pawn : blue_pawns)materialScore += pawnWt * value(pawn, board.turn);
+    for(auto pawn : red_pawns)materialScore -= pawnWt * value(pawn, board.turn);
 
     // get fields of the knights, to close to the edge the more valuable
     auto blue_blue_knight = getBits(board.blue_blue_knight);
     auto red_red_knight = getBits(board.red_red_knight);
 
-    for(auto knight : blue_blue_knight){
-        materialScore += knightWt * value(knight, board.turn);
-    }
-
-    for(auto knight : red_red_knight){
-        materialScore -= knightWt * value(knight, board.turn);
-    }
+    for(auto knight : blue_blue_knight)materialScore += knightWt * value(knight, board.turn);
+    for(auto knight : red_red_knight)materialScore -= knightWt * value(knight, board.turn);
 
     // get fields of the knights, to close to the edge the more valuable
     auto blue_red_knight = getBits(board.blue_red_knight);
     auto red_blue_knight = getBits(board.red_blue_knight);
 
-    for(auto knight : red_blue_knight){
-        materialScore += knightWt * value(knight, board.turn);
-    }
+    for(auto knight : red_blue_knight)materialScore += knightWt * value(knight, board.turn);
+    for(auto knight : blue_red_knight) materialScore -= knightWt * value(knight, board.turn);
 
-    for(auto knight : blue_red_knight){
-        materialScore -= knightWt * value(knight, board.turn);
-    }
-
-    /* 
-    materialScore = kingWt  * (wK-bK)
-                + queenWt * (wQ-bQ)
-                + rookWt  * (wR-bR)
-                + knightWt* (wN-bN)
-                + bishopWt* (wB-bB)
-                + pawnWt  * (wP-bP)
-    */
     return (materialScore + mobilityScore) * who2Move;
-
-
 }
 
 std::vector<uint16_t> Ai::getBits(uint64_t board){
@@ -142,10 +117,10 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
             if(alpha >= beta) break;
         }
         std::swap(childNodes[0], childNodes[best_move_pos]);
+        alpha = INT_MIN;
+        beta = INT_MAX;
     }
-    // random move
-
-    return childNodes[rand() % childNodes.size()];
+    return childNodes[0];
 };
 
 int Ai::alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
@@ -277,3 +252,50 @@ int Ai::mini(int depth, bitboard &board, Moves m){
     }
     return min;
 };
+
+
+
+
+/*
+    // if blue pawn in row 1 return Max
+    // if red pawn in row 8 return Min
+    uint64_t red = board.red_pawns | board.red_red_knight | board.blue_red_knight;
+    uint64_t blue = board.blue_pawns |board.red_blue_knight | board.blue_blue_knight;
+    int turn = board.turn ? 1 : -1;
+    // if one player has piece on the last row
+    if(blue & 0xff) return 10000000*turn;
+    if(red & 0xff00000000000000) return -10000000*turn;
+    
+    int blue_score = 0;
+    int red_score = 0;
+    // store temporary board to later assert
+    
+    for(auto i : getBits(board.blue_pawns)) blue_score += 100 * (8 - (i / 8));
+    for(auto i : getBits(board.blue_blue_knight)) blue_score += 120 * (8 - (i / 8));
+    for(auto i : getBits(board.red_blue_knight)) blue_score += 120 * (8 - (i / 8));
+
+    for(auto i : getBits(board.red_pawns)) red_score += 100 * (i / 8);
+    for(auto i : getBits(board.red_red_knight)) red_score += 120 * (i / 8);
+    for(auto i : getBits(board.blue_red_knight)) red_score += 120 * (i / 8);
+    
+    // New rating system
+    for(auto i : getBits(board.blue_pawns)) blue_score += 100;
+    for(auto i : getBits(board.blue_blue_knight)) blue_score += 200;
+    for(auto i : getBits(board.red_blue_knight)) blue_score += 200;
+
+    for(auto i : getBits(board.red_pawns)) red_score += 100;
+    for(auto i : getBits(board.red_red_knight)) red_score += 200;
+    for(auto i : getBits(board.blue_red_knight)) red_score += 200;
+  
+    int score =  red_score - red_score;
+
+    // check if temp board is the same as the current board
+    // Instead of flipping the entire score based on the turn, adjust the interpretation of the score
+    if (!board.turn) { // Assuming 0 is for blue and 1 is for red
+        return score; // For blue, a positive score is good
+    } else {
+        return -score; // For red, a positive score (which is now negative) is good
+    }
+
+
+*/

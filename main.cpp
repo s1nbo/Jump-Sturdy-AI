@@ -67,7 +67,9 @@ void mainloop(){
 
 
 int main(){
-    mainloop();
+    //mainloop();
+    Test test;
+    test.test_alpha_beta();
 }
 
 

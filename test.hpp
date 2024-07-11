@@ -31,7 +31,7 @@ public:
     void show_results();
     void test_search_depth_minimax_performance(int depth, int board_number, int amount); // search depth performance for minimax
     void test_search_depth_alphabeta_performance(int depth, int board_number, int amount, Tt &table); // search depth performance for alphabeta
-    
+    void test_alpha_beta();
     // look at position per second
     // * Saved time with Alphabeta pruning
 
@@ -72,6 +72,15 @@ public:
 
     int minimax_score = 0;
     int alphabeta_score = 0;
+
+
+    const std::array<std::string, 4> ab_data = {
+        "1bb4/1b0b05/b01b0bb4/1b01b01b02/3r01rr2/b0r0r02rr2/4r01rr1/4r0r0 b",
+        "1bb4/1b0b05/b01b0bb4/1b01b01b02/3r01rr2/b0r0r02rr2/4r01rr1/4r0r0 r",
+        "6/3b0b03/3r02bb1/b0b03bb2/rrrr1bb2rr1/2b01b03/2r01r01r0r0/4r01 b",
+        "6/3b0b03/3r02bb1/b0b03bb2/rrrr1bb2rr1/2b01b01r01/2r01r02r0/4r01 r"
+    };
+    //const std::array<int, 14> ab_answer = {};
 
 };
 
