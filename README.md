@@ -29,10 +29,10 @@ Main
 
 
 Connect
-- Connect to Server (TODO)
-- Start Game (TODO)
-- Receive FEN from Server (TODO)
-- Send Fen to Server (TODO)
+- Connect to Server (DONE)
+- Start Game (DONE)
+- Receive FEN from Server (DONE)
+- Send Fen to Server (DONE)
 
 
 Board
@@ -48,7 +48,7 @@ Moves
 
 AI
 - Rate a Board (DONE)
-- AI to choose a Move (MiniMax) (DONE)
+- AI to choose a Move (MiniMax) (TODO)
 
 
 
