@@ -9,6 +9,5 @@ set(CMAKE_CPP_COMPILER g++)
 set(EXPORT_COMPILE_COMMANDS ON)
 
 
-
 add_executable(jumpsturdy main.cpp tt.cpp ai.cpp board.cpp moves.cpp connect.cpp test.cpp milestone.cpp)
 target_include_directories(jumpsturdy PRIVATE ${CMAKE_SOURCE_DIR})

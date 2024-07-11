@@ -2,8 +2,8 @@
 #define CONNECT_HPP
 
 #include <iostream>
-#include <boost/asio.hpp>
-#include <nlohmann/json.hpp>
+#include "asio.hpp"
+#include "json.hpp"
 #include <thread>
 #include <chrono>
 

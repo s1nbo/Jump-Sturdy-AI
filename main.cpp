@@ -24,7 +24,7 @@ void mainloop(){
     Moves moves;
     Ai ai;
     Tt table;
-    int depth = 7;
+    int depth = 5;
 
     srand(time(0));
 
@@ -67,9 +67,9 @@ void mainloop(){
 
 
 int main(){
-    //mainloop();
-    Test test;
-    test.test_alpha_beta();
+    mainloop();
+    //Test test;
+    //test.test_alpha_beta();
 }
 
 
