@@ -120,7 +120,7 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
         alpha = INT_MIN;
         beta = INT_MAX;
     }
-    return childNodes[0];
+    return childNodes[rand() % childNodes.size()];
 };
 
 int Ai::alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
