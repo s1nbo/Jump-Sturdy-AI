@@ -24,11 +24,11 @@ int value(int pos, bool turn){
 }
 
 int Ai::rate_board(bitboard &board){
-
+    
     // Check if game is over
     uint64_t red = board.red_pawns | board.red_red_knight | board.blue_red_knight;
     uint64_t blue = board.blue_pawns |board.red_blue_knight | board.blue_blue_knight;
-
+    /*
     if (board.turn == 1){
         if(blue & 0xff || red == 0) return INT_MAX;
         if(red & 0xff00000000000000 || blue == 0) return INT_MIN;
@@ -70,7 +70,45 @@ int Ai::rate_board(bitboard &board){
     for(auto knight : blue_red_knight) materialScore -= knightWt * value(knight, board.turn);
 
     return (materialScore + mobilityScore) * who2Move;
+    */
+
+    // if blue pawn in row 1 return Max
+    // if red pawn in row 8 return Min
+    int turn = board.turn ? 1 : -1;
+    // if one player has piece on the last row
+    if(blue & 0xff) return 10000000*turn;
+    if(red & 0xff00000000000000) return -10000000*turn;
+    
+
+    int blue_score = 0;
+    int red_score = 0;
+
+
+    for(auto i : getBits(board.blue_pawns)) blue_score += 100 * (8 - (i / 8));
+    for(auto i : getBits(board.blue_blue_knight)) blue_score += 120 * (8 - (i / 8));
+    for(auto i : getBits(board.red_blue_knight)) blue_score += 120 * (8 - (i / 8));
+
+    for(auto i : getBits(board.red_pawns)) red_score += 100 * (i / 8);
+    for(auto i : getBits(board.red_red_knight)) red_score += 120 * (i / 8);
+    for(auto i : getBits(board.blue_red_knight)) red_score += 120 * (i / 8);
+
+    //std::cout << "Blue score: " << blue_score << "\n";
+    //std::cout << "Red score: " << red_score << "\n";
+  
+    int score =  blue_score - red_score;
+
+    //
+    
+    
+    // std::cout << "Score: " << score << " Score*turn: " << score * turn << " Turn: " << turn << "\n";
+
+
+
+    return score*turn;
 }
+
+
+
 
 std::vector<uint16_t> Ai::getBits(uint64_t board){
     std::vector<uint16_t> ans;

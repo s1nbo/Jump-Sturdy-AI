@@ -69,7 +69,7 @@ void mainloop(){
 int main(){
     //mainloop();
     Test test;
-    test.test_alpha_beta();
+    test.test_alpha_beta(4);
 }
 
 

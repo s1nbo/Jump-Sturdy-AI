@@ -32,7 +32,7 @@ public:
     void show_results();
     void test_search_depth_minimax_performance(int depth, int board_number, int amount); // search depth performance for minimax
     void test_search_depth_alphabeta_performance(int depth, int board_number, int amount, Tt &table); // search depth performance for alphabeta
-    void test_alpha_beta();
+    void test_alpha_beta(int depth);
     // look at position per second
     // * Saved time with Alphabeta pruning
 
