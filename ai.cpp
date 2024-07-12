@@ -117,10 +117,11 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
             if(alpha >= beta) break;
         }
         std::swap(childNodes[0], childNodes[best_move_pos]);
-        alpha = INT_MIN;
-        beta = INT_MAX;
+        //alpha = INT_MIN;
+        //beta = INT_MAX;
     }
-    return childNodes[rand() % childNodes.size()];
+    //return childNodes[rand() % childNodes.size()];
+    return childNodes[0];
 };
 
 int Ai::alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){

@@ -34,9 +34,6 @@ public:
     int mini(int depth, bitboard &board, Moves m);
 
    
-
-
-
 };
 
 #endif

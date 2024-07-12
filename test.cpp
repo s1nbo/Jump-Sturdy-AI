@@ -189,7 +189,8 @@ void Test::test_make_unmake_move(){
 
 void Test::test_alpha_beta(){
     for(auto current_board_fen : ab_data){
-        test_game(6, current_board_fen);
+        std::cout << current_board_fen << "\n";
+        test_game(12, current_board_fen);
         std::cout << "---------------------------------------------\n";
     }
 
