@@ -74,14 +74,7 @@ void mainloop(){
 
 
 int main(){
-
-
-    mainloop();
-    
-
-    //Test test;
-    //test.test_alpha_beta(10);
-    //test.test_game(8, "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b");
+    milestone12();
 }
 
 

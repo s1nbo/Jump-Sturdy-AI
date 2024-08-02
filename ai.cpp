@@ -176,7 +176,7 @@ uint16_t Ai::negamax_handler(bitboard &board, int search_depth){
             alpha = std::max(best_value, alpha);
             if(alpha >= beta) break;
         }
-        std::cout << "Depth: " << cur_depth << " Best move: " << childNodes[best_move] << " Best value: " << best_value << "\n";
+        // std::cout << "Depth: " << cur_depth << " Best move: " << childNodes[best_move] << " Best value: " << best_value << "\n";
         // take best move and put it in the front of childNodes
         std::swap(childNodes[0], childNodes[best_move]);
     }
