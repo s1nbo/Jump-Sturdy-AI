@@ -23,7 +23,7 @@ void Test::test_game(int depth, std::string board_fen){
         moves.printMoves({move});
         
         moves.updateBoard(current_board, move);
-        // board.printBitboard(current_board);
+        // board.printBitboard(current_board);aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
      
 
         move_count++;

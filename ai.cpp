@@ -1,8 +1,7 @@
 #include "ai.hpp"
 #include "board.hpp"
 #include <climits>
-#include <cstdlib>
-#include <utility>
+
 
 
 
@@ -18,17 +17,87 @@ int value(int pos, bool turn){
     // blue gets * 2 for 40-47, red gets * 2 for 16-23
     // blue gets * 1 for 48-55, red gets * 1 for 8-15
     // blue gets * 1 for 56-63, red gets * 1 for 0-7
-    if(turn) return pos < 16 ? 6 : pos < 24 ? 5 : pos < 32 ? 4 : pos < 40 ? 3 : pos < 48 ? 2 : pos < 56 ? 1 : 1;
-    return pos < 8 ? 1 : pos < 16 ? 1 : pos < 24 ? 2 : pos < 32 ? 3 : pos < 40 ? 4 : pos < 48 ? 5 : pos < 56 ? 6 : 7;
+
+    if(turn == 1){
+        if(pos < 16) return 6; // Row 8 and 7
+        if(pos < 24) return 5; // Row 6
+        if(pos < 32) return 4; // Row 5
+        if(pos < 40) return 3; // Row 4
+        if(pos < 48) return 2; // Row 3
+        return 1; // Row 2 and 1
+    } else {
+
+        if(pos < 16) return 1; // Row 8 and 7
+        if(pos < 24) return 2; // Row 6
+        if(pos < 32) return 3; // Row 5
+        if(pos < 40) return 4; // Row 4 
+        if(pos < 48) return 5; // Row 3
+        return 6; // Row 2 and 1
+    }
 
 }
 
 int Ai::rate_board(bitboard &board){
-    
+
+    uint64_t red = board.red_pawns | board.red_red_knight | board.blue_red_knight;
+    uint64_t blue = board.blue_pawns |board.red_blue_knight | board.blue_blue_knight;
+
+    int score = 0;
+    int pawnWt = 100;
+    int knightWt = 200;
+
+    if(board.turn) { // Blue
+        // Check if game is over
+        if(red & 0xff00000000000000 || blue == 0) return -10000000;//INT_MIN+10;
+        if(blue & 0xff || red == 0) return 10000000;//INT_MAX-10;
+
+
+        //return 0;
+
+        // Pawn values
+        for(auto pawn : getBits(board.blue_pawns)) score += pawnWt * value(pawn, 1);
+        for(auto pawn : getBits(board.red_pawns)) score -= pawnWt * value(pawn, 0);
+
+        // Knight values
+        for(auto knight : getBits(board.blue_blue_knight)) score += knightWt * value(knight, 1);
+        for(auto knight : getBits(board.red_red_knight)) score -= knightWt * value(knight, 0);
+
+        // Mixed knight values
+        for(auto knight : getBits(board.red_blue_knight)) score += knightWt * value(knight, 1);
+        for(auto knight : getBits(board.blue_red_knight)) score -= knightWt * value(knight, 0);
+
+        return score;
+
+
+
+    } else { // Red
+        // Check if game is over
+        if(blue & 0xff || red == 0) return -10000000;
+        if(red & 0xff00000000000000 || blue == 0) return 10000000;
+        
+        //return 0;
+
+        // Pawn values
+        for(auto pawn : getBits(board.red_pawns)) score += pawnWt * value(pawn, 0);
+        for(auto pawn : getBits(board.blue_pawns)) score -= pawnWt * value(pawn, 1);
+        // Knight values
+        for(auto knight : getBits(board.red_red_knight)) score += knightWt * value(knight, 0);
+        for(auto knight : getBits(board.blue_blue_knight)) score -= knightWt * value(knight, 1);
+
+        // Mixed knight values
+        for(auto knight : getBits(board.blue_red_knight)) score += knightWt * value(knight, 0);
+        for(auto knight : getBits(board.red_blue_knight)) score -= knightWt * value(knight, 1);
+
+        return score;
+    }
+
+
+
+
+    /*
     // Check if game is over
     uint64_t red = board.red_pawns | board.red_red_knight | board.blue_red_knight;
     uint64_t blue = board.blue_pawns |board.red_blue_knight | board.blue_blue_knight;
-    /*
     if (board.turn == 1){
         if(blue & 0xff || red == 0) return INT_MAX;
         if(red & 0xff00000000000000 || blue == 0) return INT_MIN;
@@ -71,44 +140,7 @@ int Ai::rate_board(bitboard &board){
 
     return (materialScore + mobilityScore) * who2Move;
     */
-
-    // if blue pawn in row 1 return Max
-    // if red pawn in row 8 return Min
-    int turn = board.turn ? 1 : -1;
-    // if one player has piece on the last row
-    if(blue & 0xff) return 10000000*turn;
-    if(red & 0xff00000000000000) return -10000000*turn;
-    
-
-    int blue_score = 0;
-    int red_score = 0;
-
-
-    for(auto i : getBits(board.blue_pawns)) blue_score += 100 * (8 - (i / 8));
-    for(auto i : getBits(board.blue_blue_knight)) blue_score += 120 * (8 - (i / 8));
-    for(auto i : getBits(board.red_blue_knight)) blue_score += 120 * (8 - (i / 8));
-
-    for(auto i : getBits(board.red_pawns)) red_score += 100 * (i / 8);
-    for(auto i : getBits(board.red_red_knight)) red_score += 120 * (i / 8);
-    for(auto i : getBits(board.blue_red_knight)) red_score += 120 * (i / 8);
-
-    //std::cout << "Blue score: " << blue_score << "\n";
-    //std::cout << "Red score: " << red_score << "\n";
-  
-    int score =  blue_score - red_score;
-
-    //
-    
-    
-    // std::cout << "Score: " << score << " Score*turn: " << score * turn << " Turn: " << turn << "\n";
-
-
-
-    return score*turn;
 }
-
-
-
 
 std::vector<uint16_t> Ai::getBits(uint64_t board){
     std::vector<uint16_t> ans;
@@ -120,88 +152,6 @@ std::vector<uint16_t> Ai::getBits(uint64_t board){
     }
     return ans;
 }
-
-// Alpha Beta with Iterative Deepening
-uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
-    int alpha = INT_MIN;
-    int beta = INT_MAX;
-    int best_value = INT_MIN;
-    int best_move_pos = 0;
-    Moves m;
-    analyzed_nodes = 0;
-    // auto hash = table.zorbist_hash(board);
-    
-    // if(table.probe(hash, board.turn)) return table.probe(hash, board.turn); // Transposition table
-    auto childNodes = m.generateMoves(board);
-    
-    for(int cur_depth = 1; cur_depth <= search_depth; cur_depth++){ // iterative deepening
-       for (size_t i = 0; i < childNodes.size(); i++) {
-            
-            auto move_made = m.updateBoard(board, childNodes[i]);
-            int value = alphabetaMin(cur_depth-1, alpha, beta, board, m, table);
-            
-            m.undoMove(board, childNodes[i], move_made);
-            //int value = 0;
-
-            // check if temp board is the same as the current board
-
-            
-            if(value > best_value) {
-                best_value = value;
-                best_move_pos = i;
-                // table.store(hash, best_move, board.turn);
-            }
-            alpha = std::max(best_value, alpha);
-            if(alpha >= beta) break;
-        }
-        std::swap(childNodes[0], childNodes[best_move_pos]);
-        //alpha = INT_MIN;
-        //beta = INT_MAX;
-    }
-    //return childNodes[rand() % childNodes.size()];
-    return childNodes[0];
-};
-
-int Ai::alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
-    analyzed_nodes++;
-    if(depth == 0) return rate_board(board);
-    for(auto child : m.generateMoves(board)){
-        uint16_t move_made = m.updateBoard(board, child);
-        int score = alphabetaMin(depth-1, alpha, beta, board, m, table);
-        m.undoMove(board, child, move_made);
-
-        if(score >= beta){
-            return beta;
-        }
-        if(score > alpha){
-            alpha = score;
-        }
-    }
-    return alpha;
-};
-
-int Ai::alphabetaMin(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
-    analyzed_nodes++;
-    if(depth == 0) return -rate_board(board);
-    for(auto child : m.generateMoves(board)){
-        
-        uint16_t move_made = m.updateBoard(board, child);
-        int score = alphabetaMax(depth-1, alpha, beta, board, m, table);
-        m.undoMove(board, child, move_made);
-        
-        if(score <= alpha){
-            return alpha;
-        }
-        if(score < beta){
-            beta = score;
-        }
-    }
-    return beta;
-};
-
-
-
-/* ------------------------- For testing purposes -------------------------  */
 
 // Negamax with Iterative Deepening
 uint16_t Ai::negamax_handler(bitboard &board, int search_depth){
@@ -216,6 +166,7 @@ uint16_t Ai::negamax_handler(bitboard &board, int search_depth){
     for(int cur_depth = 1; cur_depth <= search_depth; cur_depth++){
         for (size_t i = 0; i < childNodes.size(); i++){
             uint16_t move_made = m.updateBoard(board, childNodes[i]); // make a move
+
             int value = negamax(search_depth-1, alpha, beta, board, m); // go into the tree
             m.undoMove(board, childNodes[i], move_made); // undo the move
             if(value > best_value){ // if the value is better than the best value
@@ -225,10 +176,11 @@ uint16_t Ai::negamax_handler(bitboard &board, int search_depth){
             alpha = std::max(best_value, alpha);
             if(alpha >= beta) break;
         }
+        std::cout << "Depth: " << cur_depth << " Best move: " << childNodes[best_move] << " Best value: " << best_value << "\n";
         // take best move and put it in the front of childNodes
         std::swap(childNodes[0], childNodes[best_move]);
     }
-    return best_move;
+    return childNodes[0];
 }
 
 int Ai::negamax(int depth, int alpha, int beta, bitboard &board, Moves m){
@@ -247,6 +199,84 @@ int Ai::negamax(int depth, int alpha, int beta, bitboard &board, Moves m){
     return value;
 }
 
+
+/* ------------------------- For testing purposes -------------------------  */
+
+// Alpha Beta with Iterative Deepening
+uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
+    int alpha = INT_MIN;
+    int beta = INT_MAX;
+    int best_value = INT_MIN;
+    int best_move_pos = 0;
+    Moves m;
+    analyzed_nodes = 0;
+    // auto hash = table.zorbist_hash(board);
+
+    
+    // if(table.probe(hash, board.turn)) return table.probe(hash, board.turn); // Transposition table
+    auto childNodes = m.generateMoves(board);
+
+    std::sort(childNodes.begin(), childNodes.end(), [](uint16_t a, uint16_t b){
+        return __builtin_popcountll(a) > __builtin_popcountll(b);
+    });
+    
+    for(int cur_depth = 0; cur_depth <= search_depth; cur_depth++){ // iterative deepening
+       for (size_t i = 0; i < childNodes.size(); i++) {
+            
+            auto move_made = m.updateBoard(board, childNodes[i]);
+            int value = alphabetaMin(cur_depth-1, alpha, beta, board, m, table);
+            
+            m.undoMove(board, childNodes[i], move_made);
+            //int value = 0;
+
+            // check if temp board is the same as the current board
+
+            
+            if(value > best_value) {
+                best_value = value;
+                best_move_pos = i;
+                // table.store(hash, best_move, board.turn);
+            }
+            alpha = std::max(best_value, alpha);
+            if(beta <= alpha) break;
+        }
+        std::cout << "Depth: " << cur_depth << " Best move: " << childNodes[best_move_pos] << " Best value: " << best_value << "\n";
+        std::swap(childNodes[0], childNodes[best_move_pos]);
+    }
+    //return childNodes[rand() % childNodes.size()];
+    return childNodes[0];
+};
+
+int Ai::alphabetaMax(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
+    analyzed_nodes++;
+    int score = INT_MIN;
+    if(depth <= 0) return rate_board(board);
+    for(auto child : m.generateMoves(board)){
+        uint16_t move_made = m.updateBoard(board, child);
+        score = std::max(alphabetaMin(depth-1, alpha, beta, board, m, table), score);
+        m.undoMove(board, child, move_made);
+        alpha = std::max(score, alpha);
+        if(alpha >= beta) break;
+    }
+    return alpha;
+};
+
+int Ai::alphabetaMin(int depth, int alpha, int beta, bitboard &board, Moves &m, Tt &table){
+    analyzed_nodes++;
+    int score = INT_MAX;
+    if(depth <= 0) return -rate_board(board);
+    for(auto child : m.generateMoves(board)){
+        
+        uint16_t move_made = m.updateBoard(board, child);
+        score = std::min(alphabetaMax(depth-1, alpha, beta, board, m, table), score);
+        m.undoMove(board, child, move_made);
+        beta = std::min(score, beta);
+        if(alpha >= beta) break;
+    }
+    return beta;
+};
+
+// MINIMAX
 
 // Not as important, does not have Iterative deepening
 uint16_t Ai::minimax_handler(bitboard &board, int search_depth){

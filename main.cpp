@@ -6,6 +6,8 @@
 #include "tt.hpp"
 #include "milestone.hpp"
 
+#include <climits>
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -13,7 +15,10 @@
 #include <chrono>
 // Main function
 
-
+int optimize_for_player(int player){
+    if(player == 0) return 4;
+    return 6;
+}
 
 
 
@@ -24,7 +29,7 @@ void mainloop(){
     Moves moves;
     Ai ai;
     Tt table;
-    int depth = 5;
+    int depth = 8;
 
     srand(time(0));
 
@@ -32,6 +37,8 @@ void mainloop(){
     Network network("localhost", 5555);
     int player = std::stoi(network.getP());
     std::cout << "You are player " << player << std::endl;
+    
+    //depth = optimize_for_player(player);
 
     while(true){
         // Get game data from server
@@ -49,7 +56,6 @@ void mainloop(){
 
                 // Generate Response
                 std::cout << "Generating Response" << std::endl;
-                std::vector<uint16_t> legal_moves = moves.generateMoves(current_board);
                 uint16_t move = ai.alphabeta_handler(current_board, depth, table);
                 std::string response = moves.translateMoves(move);
                 std::cout << "Move: " << response << std::endl;
@@ -66,20 +72,32 @@ void mainloop(){
 }
 
 
+
 int main(){
-    //mainloop();
-    Test test;
-    test.test_alpha_beta(4);
+
+
+    mainloop();
+    
+
+    //Test test;
+    //test.test_alpha_beta(10);
+    //test.test_game(8, "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b");
 }
 
 
 
+
 /*
+
+
+
+
 Moves are stored as an 16 bit Integer
 
 bits:0-5 End Position {0,...,63} \ {0, 7, 56, 63}
 bits 6-11 Start Position {0,...,63} \ {0, 7, 56, 63}
 bits 12-14 Type of Piece
+bit 15: Capture
 
         000: blue_pawns 0
         100: red_pawns 4
@@ -118,4 +136,33 @@ bits 12-14 Type of Piece
 "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3",
 "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
 "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
+
+
+
+
+
+Minor Test function:
+    for (int i = 0; i < 64; i++) {
+        uint64_t blue_pawns = UINT64_MAX - uint64_t(pow(2, i));
+        std::cout << i << " " << std::endl;
+
+        for(auto pawn : getBits(blue_pawns)){
+            std::cout << pawn << " ";
+        }
+        std::cout << "\n";
+    }
+
+
+std::vector<uint16_t> getBits(uint64_t board){
+    std::vector<uint16_t> ans;
+    //ans.reserve(64);
+    while(board){
+        uint16_t bit = __builtin_ctzll(board);
+        ans.push_back(bit);
+        board &= board - 1;
+    }
+    return ans;
+}
+
+
 */

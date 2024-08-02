@@ -5,11 +5,14 @@
 #include "moves.hpp"
 #include "board.hpp"
 
-
 #include <cstdint>
 #include <vector>
 #include <iostream>
 #include <limits.h>
+#include <algorithm>
+#include <climits>
+#include <cstdlib>
+#include <utility>
 
 class Ai{
 public:
