@@ -29,7 +29,7 @@ void mainloop(){
     Moves moves;
     Ai ai;
     Tt table;
-    int depth = 8;
+    int depth = 6;
 
     srand(time(0));
 
@@ -74,15 +74,14 @@ void mainloop(){
 
 
 int main(){
-    milestone12();
+    milestone34();
+    // mainloop();
 }
 
 
 
 
 /*
-
-
 
 
 Moves are stored as an 16 bit Integer

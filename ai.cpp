@@ -199,21 +199,21 @@ int Ai::negamax(int depth, int alpha, int beta, bitboard &board, Moves m){
     return value;
 }
 
-
-/* ------------------------- For testing purposes -------------------------  */
-
 // Alpha Beta with Iterative Deepening
 uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
-    int alpha = INT_MIN;
-    int beta = INT_MAX;
     int best_value = INT_MIN;
     int best_move_pos = 0;
+    //int alpha = INT_MIN;
+    //int beta = INT_MAX;
+    int alpha = -1000;  // Start with a narrow aspiration window
+    int beta = 1000;
+        
     Moves m;
     analyzed_nodes = 0;
-    // auto hash = table.zorbist_hash(board);
+    auto hash = table.zorbist_hash(board);
 
     
-    // if(table.probe(hash, board.turn)) return table.probe(hash, board.turn); // Transposition table
+    if(table.probe(hash, board.turn)) return table.probe(hash, board.turn); // Transposition table  (Comment out for performance)
     auto childNodes = m.generateMoves(board);
 
     std::sort(childNodes.begin(), childNodes.end(), [](uint16_t a, uint16_t b){
@@ -221,27 +221,35 @@ uint16_t Ai::alphabeta_handler(bitboard &board, int search_depth, Tt &table){
     });
     
     for(int cur_depth = 0; cur_depth <= search_depth; cur_depth++){ // iterative deepening
-       for (size_t i = 0; i < childNodes.size(); i++) {
-            
+        
+        for (size_t i = 0; i < childNodes.size(); i++) {
+
             auto move_made = m.updateBoard(board, childNodes[i]);
             int value = alphabetaMin(cur_depth-1, alpha, beta, board, m, table);
-            
             m.undoMove(board, childNodes[i], move_made);
-            //int value = 0;
-
-            // check if temp board is the same as the current board
-
             
-            if(value > best_value) {
+            /* */
+            if(value <= alpha) {
+                // Fail-low: research with a wider window
+                alpha = INT_MIN;
+                beta = value;
+            } else if(value >= beta) {
+                // Fail-high: research with a wider window
+                alpha = value;
+                beta = INT_MAX;
+            } else {
+                if(value > best_value) {
                 best_value = value;
                 best_move_pos = i;
-                // table.store(hash, best_move, board.turn);
+                }
+                alpha = std::max(best_value, alpha);
+                if(beta <= alpha) break;
             }
-            alpha = std::max(best_value, alpha);
-            if(beta <= alpha) break;
+            
         }
-        std::cout << "Depth: " << cur_depth << " Best move: " << childNodes[best_move_pos] << " Best value: " << best_value << "\n";
+        std::cout << "Depth: " << cur_depth << " Best move: " << childNodes[best_move_pos] << " Best value: " << best_value << "\n"; // (Comment out for performance)
         std::swap(childNodes[0], childNodes[best_move_pos]);
+        table.store(hash, childNodes[0], board.turn);
     }
     //return childNodes[rand() % childNodes.size()];
     return childNodes[0];

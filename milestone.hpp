@@ -8,7 +8,7 @@
 
 
 void milestone12();
+void milestone34();
 void performance();
-void ubuntuTestsAlphaBeta();
 
 #endif

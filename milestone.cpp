@@ -91,15 +91,27 @@ void milestone12(){
     test.test_search_depth_alphabeta_performance(5, 11, 1000, table);
 }
 
-void ubuntuTestsAlphaBeta(){
-    std::string inital_board = "b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b";
-
-    //inital_board = "6/4bbb02/b02b01b02/1b02b03/2b01rrrr2/6r01/r01r0r0r03/6 r";
+void milestone34() {
+    Tt table;
     Test test;
-    test.test_make_unmake_move();
-    test.test_game(5, inital_board);
 
-    
+    std::cout << "Milestone 3\n" << "Test Search Depth 5\n";
+    test.test_search_depth_alphabeta(5, 0, table);
+    test.test_search_depth_alphabeta(5, 10, table);
+    test.test_search_depth_alphabeta(5, 11, table);
 
+    std::cout << "Milestone 3\n" << "Test Search Depth 6\n";
+    test.test_search_depth_alphabeta(6, 0, table);
+    test.test_search_depth_alphabeta(6, 10, table);
+    test.test_search_depth_alphabeta(6, 11, table);
 
+    std::cout << "Milestone 3\n" << "Test Search Depth 7\n";
+    test.test_search_depth_alphabeta(7, 0, table);
+    test.test_search_depth_alphabeta(7, 10, table);
+    test.test_search_depth_alphabeta(7, 11, table);
+
+    std::cout << "Milestone 3\n" << "Test Search Depth 8\n";
+    test.test_search_depth_alphabeta(8, 0, table);
+    test.test_search_depth_alphabeta(8, 10, table);
+    test.test_search_depth_alphabeta(8, 11, table);
 }

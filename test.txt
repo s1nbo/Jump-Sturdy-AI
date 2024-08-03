@@ -1,0 +1,237 @@
+Test Move Generation Performance
+Generated 10000 times moves from board b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b in 0.00145589s
+Boards per second: 6.86865e+06
+Seconds per board: 1.45589e-07
+
+Generated 10000 times moves from board 3b02/2bb2b02/5b0bb1/2r0b04/2rb3b01/1rr1rr2r0r0/5r02/2rr3 b in 0.00126666s
+Boards per second: 7.89477e+06
+Seconds per board: 1.26666e-07
+
+Generated 10000 times moves from board 6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b in 0.00106214s
+Boards per second: 9.41493e+06
+Seconds per board: 1.06214e-07
+
+Milestone 2
+Test Rate Board
+Rated 10000 times the board b0b0b0b0b0b0/1b0b0b0b0b0b01/8/8/8/8/1r0r0r0r0r0r01/r0r0r0r0r0r0 b in 0.000838429 s
+Boards rated per second: 1.19271e+07
+Seconds per board: 8.38429e-08
+
+Rated 10000 times the board 3b02/2bb2b02/5b0bb1/2r0b04/2rb3b01/1rr1rr2r0r0/5r02/2rr3 b in 0.000738429 s
+Boards rated per second: 1.35423e+07
+Seconds per board: 7.38429e-08
+
+Rated 10000 times the board 6/2b02b02/2r02r02/8/8/2b02b02/2r02r02/6 b in 0.00068595 s
+Boards rated per second: 1.45783e+07
+Seconds per board: 6.8595e-08
+
+Test Search Depth 3
+Runtime: 0.00406532 s
+Nodes analyzed: 37434
+Nodes per second: 9.20814e+06
+Best move: b2 -> a2 Type: blue_pawns Take: 0
+
+Runtime: 0.000923641 s
+Nodes analyzed: 9900
+Nodes per second: 1.07185e+07
+Best move: g1 -> f1 Type: blue_pawns Take: 0
+
+Minimax: 37434 Nodes
+Alphabeta: 9900 Nodes
+Improvement: 3.78121
+
+Runtime: 0.00415665 s
+Nodes analyzed: 37434
+Nodes per second: 9.00581e+06
+Best move: b2 -> a2 Type: blue_pawns Take: 0
+
+Runtime: 0.00093361 s
+Nodes analyzed: 9900
+Nodes per second: 1.0604e+07
+Best move: g1 -> f1 Type: blue_pawns Take: 0
+
+Minimax: 37434 Nodes
+Alphabeta: 9900 Nodes
+Improvement: 3.78121
+
+Runtime: 0.00151437 s
+Nodes analyzed: 13176
+Nodes per second: 8.70065e+06
+Best move: c5 -> e6 Type: red_blue_knight Take: 0
+
+Runtime: 0.000145135 s
+Nodes analyzed: 1426
+Nodes per second: 9.82534e+06
+Best move: g3 -> h5 Type: blue_blue_knights Take: 0
+
+Minimax: 13176 Nodes
+Alphabeta: 1426 Nodes
+Improvement: 9.23983
+
+Runtime: 9.7094e-05 s
+Nodes analyzed: 916
+Nodes per second: 9.43416e+06
+Best move: c6 -> d6 Type: blue_pawns Take: 0
+
+Runtime: 3.692e-05 s
+Nodes analyzed: 420
+Nodes per second: 1.13759e+07
+Best move: f2 -> g2 Type: blue_pawns Take: 0
+
+Minimax: 916 Nodes
+Alphabeta: 420 Nodes
+Improvement: 2.18095
+
+Test Search Depth 4
+Runtime: 0.136348 s
+Nodes analyzed: 1173790
+Nodes per second: 8.60879e+06
+Best move: b2 -> a2 Type: blue_pawns Take: 0
+
+Runtime: 0.00128386 s
+Nodes analyzed: 12916
+Nodes per second: 1.00603e+07
+Best move: g2 -> g3 Type: blue_pawns Take: 0
+
+Minimax: 1173790 Nodes
+Alphabeta: 12916 Nodes
+Improvement: 90.8788
+
+Runtime: 0.0351303 s
+Nodes analyzed: 298456
+Nodes per second: 8.49569e+06
+Best move: d4 -> d5 Type: blue_pawns Take: 0
+
+Runtime: 0.000323273 s
+Nodes analyzed: 3253
+Nodes per second: 1.00627e+07
+Best move: g5 -> h6 Type: blue_pawns Take: 1
+
+Minimax: 298456 Nodes
+Alphabeta: 3253 Nodes
+Improvement: 91.7479
+
+Runtime: 0.00106463 s
+Nodes analyzed: 9988
+Nodes per second: 9.38167e+06
+Best move: c2 -> d2 Type: blue_pawns Take: 0
+
+Runtime: 6.328e-05 s
+Nodes analyzed: 682
+Nodes per second: 1.07775e+07
+Best move: f2 -> g2 Type: blue_pawns Take: 0
+
+Minimax: 9988 Nodes
+Alphabeta: 682 Nodes
+Improvement: 14.6452
+
+
+
+
+
+
+
+Test Search Depth 5
+
+
+Runtime: 0.0327681 s
+Nodes analyzed: 362417
+Nodes per second: 1.10601e+07
+Best move: g1 -> f1 Type: blue_pawns Take: 0
+
+
+
+
+
+Runtime: 0.00573011 s
+Nodes analyzed: 59890
+Nodes per second: 1.04518e+07
+Best move: g3 -> h5 Type: blue_blue_knights Take: 0
+
+
+
+
+Runtime: 0.000798153 s
+Nodes analyzed: 9842
+Nodes per second: 1.2331e+07
+Best move: f2 -> g2 Type: blue_pawns Take: 0
+
+
+
+
+
+
+
+
+
+
+Test Search Depth 6
+Runtime: 0.0477089 s
+Nodes analyzed: 516773
+Nodes per second: 1.08318e+07
+Best move: g2 -> g3 Type: blue_pawns Take: 0
+
+Test Search Depth Performance 3
+Runtime: 3.4882 s
+Runtime per move: 0.0034882 s
+Nodes per second: 10731.6
+
+Runtime: 0.744623 s
+Runtime per move: 0.000744623 s
+Nodes per second: 13295.3
+
+Runtime: 1.2954 s
+Runtime per move: 0.0012954 s
+Nodes per second: 10171.4
+
+Runtime: 0.111091 s
+Runtime per move: 0.000111091 s
+Nodes per second: 12836.3
+
+Runtime: 0.0766109 s
+Runtime per move: 7.66109e-05 s
+Nodes per second: 11956.5
+
+Runtime: 0.0287469 s
+Runtime per move: 2.87469e-05 s
+Nodes per second: 14610.3
+
+Test Search Depth Performance 4
+Runtime: 116.378 s
+Runtime per move: 0.116378 s
+Nodes per second: 10086
+
+Runtime: 1.08559 s
+Runtime per move: 0.00108559 s
+Nodes per second: 11897.7
+
+Runtime: 30.1713 s
+Runtime per move: 0.0301713 s
+Nodes per second: 9892.07
+
+Runtime: 0.279622 s
+Runtime per move: 0.000279622 s
+Nodes per second: 11633.6
+
+Runtime: 0.992067 s
+Runtime per move: 0.000992067 s
+Nodes per second: 10067.9
+
+Runtime: 0.0565727 s
+Runtime per move: 5.65727e-05 s
+Nodes per second: 12055.3
+
+
+
+Test Search Depth Performance 5
+Runtime: 30.2086 s
+Runtime per move: 0.0302086 s
+Nodes per second: 11997.2
+
+Runtime: 4.91101 s
+Runtime per move: 0.00491101 s
+Nodes per second: 12195.1
+
+Runtime: 0.682808 s
+Runtime per move: 0.000682808 s
+Nodes per second: 14414
