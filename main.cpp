@@ -15,6 +15,7 @@
 #include <chrono>
 // Main function
 
+// Play around with depth
 int optimize_for_player(int player){
     if(player == 0) return 4;
     return 6;
@@ -29,7 +30,7 @@ void mainloop(){
     Moves moves;
     Ai ai;
     Tt table;
-    int depth = 6;
+    int depth = 8;
 
     srand(time(0));
 
@@ -74,8 +75,8 @@ void mainloop(){
 
 
 int main(){
-    milestone34();
-    // mainloop();
+    // milestone34();
+    mainloop();
 }
 
 
