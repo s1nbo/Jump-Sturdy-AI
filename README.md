@@ -29,54 +29,30 @@ University Project
 8. Close connection
 
 
-Other things TODO
-- Benchmarks 
-- Video
-- Fen String Tests
-- Performance-Measurements for Turn Generation
-
-
 
 Functions Required:
 
 Main
 
-
 Connect
-- Connect to Server (DONE)
-- Start Game (DONE)
-- Receive FEN from Server (DONE)
-- Send Fen to Server (DONE)
+- Connect to Server
+- Start Game
+- Receive FEN from Server 
+- Send Fen to Server
 
 
 Board
-- Fen to Board (DONE)
-- Board to Fen (DONE)
-- Print Board (DONE)
-- Translate Move to Algebraic Notation (DONE)
+- Fen to Board 
+- Board to Fen 
+- Print Board
+- Translate Move to Algebraic Notation 
 
 Moves
-- Check if Game is over (DONE)
-- Update Board with Move (DONE)
-- Get Legal Moves from Board (DONE)
+- Check if Game is over 
+- Update Board with Move
+- Undo Move
+- Get Legal Moves from Board 
 
 AI
-- Rate a Board (DONE)
-- AI to choose a Move (MiniMax) (TODO)
-
-
-
-
-
-Next Steps:
-
-- Negamax
-- Iterative Deepening
-- Imporve Evaluation Function
-- Code Cleanup
-- Add Comments
-- Move order optimization
-- Transposition Table
-- Quiescence Search / Null Moves / Aspiration Windows
-- Documentation
-- Rate moves with a neural network
+- Rate a Board
+- AI to choose a Move
