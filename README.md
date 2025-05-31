@@ -1,7 +1,7 @@
 How to use:
 
 1. Open terminal
-2.Navigate to Build Directory
+2. Navigate to Build Directory
 3. cmake ..
 4. make -j
 5. ./jumpsturdy
